@@ -54,6 +54,7 @@ jobs:
 
       - name: Run Gemini code review
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: 'true'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           ADDITIONAL_CONTEXT: ${{ inputs.additional_context }}
