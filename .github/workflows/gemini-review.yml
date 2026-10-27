@@ -82,7 +82,13 @@ jobs:
                 }
               },
               "tools": {
-                "core": []
+                "core": [
+                  "list_directory",
+                  "read_file",
+                  "read_many_files",
+                  "grep_search",
+                  "glob"
+                ]
               }
             }
           extensions: |-
