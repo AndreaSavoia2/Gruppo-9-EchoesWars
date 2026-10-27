@@ -42,7 +42,16 @@ jobs:
           REPOSITORY: '${{ github.repository }}'
           PULL_REQUEST_NUMBER: '${{ github.event.pull_request.number }}'
           ADDITIONAL_CONTEXT: '${{ inputs.additional_context }}'
-
+      - name: 'Verify checked-out repository'
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Pull request: $PR_NUMBER"
+          echo "Working directory:"
+          pwd
+          echo "Tracked files:"
+          git ls-files | head -30
+        env:
+          PR_NUMBER: '${{ github.event.pull_request.number }}'
       - name: 'Run Gemini pull request review'
         id: 'gemini_pr_review'
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
@@ -50,6 +59,10 @@ jobs:
           GEMINI_CLI_TRUST_WORKSPACE: 'true'
           GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
           GITHUB_TOKEN: '${{ github.token }}'
+
+          REPOSITORY: '${{ github.repository }}'
+          PULL_REQUEST_NUMBER: '${{ github.event.pull_request.number }}'
+          ADDITIONAL_CONTEXT: '${{ inputs.additional_context }}'
         with:
           gemini_model: '${{ vars.GEMINI_MODEL }}'
           gemini_api_key: '${{ secrets.GEMINI_API_KEY }}'
