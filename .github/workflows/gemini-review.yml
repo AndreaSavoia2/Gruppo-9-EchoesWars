@@ -111,10 +111,10 @@ jobs:
             < "$RUNNER_TEMP/pr.diff" \
             > "$RUNNER_TEMP/review.json"
 
-          jq -e \
-            '.response | strings | select(length > 0)' \
-            "$RUNNER_TEMP/review.json" \
-            > "$RUNNER_TEMP/review.md"
+          jq -r -e \
+          '.response | strings | select(length > 0)' \
+          "$RUNNER_TEMP/review.json" \
+          > "$RUNNER_TEMP/review.md"
 
           echo "Gemini review generated"
 
