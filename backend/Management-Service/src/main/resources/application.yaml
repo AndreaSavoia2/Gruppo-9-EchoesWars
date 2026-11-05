@@ -1,3 +1,23 @@
 spring:
   application:
     name: Management-Service
+  datasource:
+    # Le credenziali database arrivano dall'ambiente, mai dal repository.
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      # Hibernate verifica che le entita' corrispondano alle migrazioni senza modificare lo schema.
+      ddl-auto: update
+    open-in-view: false
+  #flyway:
+    # Le modifiche strutturali vengono applicate in modo versionato da db/migration.
+    #enabled: true
+security:
+  jwt:
+    issuer: ${JWT_ISSUER}
+    audience: ${JWT_AUDIENCE}
+    access-token-ttl: PT15M
+    private-key-location: ${JWT_PRIVATE_KEY_LOCATION}
+    public-key-location: ${JWT_PUBLIC_KEY_LOCATION}
