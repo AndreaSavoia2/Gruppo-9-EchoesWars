@@ -11,7 +11,7 @@ import java.time.Duration;
 /**
  * Contains configuration required to issue and validate RS256 access tokens.
  *
- * <p>Key resources must be supplied externally and must never be stored in the repository.</p>
+ * <p>The key pair is stored in an external PKCS#12 key store and must never be committed.</p>
  */
 @Validated
 @ConfigurationProperties(prefix = "security.jwt")
@@ -19,7 +19,15 @@ public record JwtProperties(
         @NotBlank String issuer,
         @NotBlank String audience,
         @NotNull Duration accessTokenTtl,
-        @NotNull Resource privateKeyLocation,
-        @NotNull Resource publicKeyLocation
+        @NotNull Resource keyStoreLocation,
+        @NotBlank String keyStorePassword,
+        @NotBlank String keyAlias
 ) {
+
+    @Override
+    public String toString() {
+        return "JwtProperties[issuer=%s, audience=%s, accessTokenTtl=%s, "
+                + "keyStoreLocation=%s, keyStorePassword=<redacted>, keyAlias=%s]"
+                .formatted(issuer, audience, accessTokenTtl, keyStoreLocation, keyAlias);
+    }
 }

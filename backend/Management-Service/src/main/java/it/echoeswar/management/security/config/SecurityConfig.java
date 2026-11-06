@@ -15,6 +15,7 @@ import it.echoeswar.management.security.userdetails.CustomUserDetailsService;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import it.echoeswar.management.security.jwt.converter.CustomJwtAuthenticationConverter;
 
 /**
  * Configures the HTTP security pipeline for the management REST API.
@@ -33,15 +34,20 @@ public class SecurityConfig {
     // Writes the standard JSON response for authenticated users without sufficient permissions.
     private final RestAccessDeniedHandler restAccessDeniedHandler;
 
+    // Converts validated JWTs into the application-specific authenticated principal.
+    private final CustomJwtAuthenticationConverter customJwtAuthenticationConverter;
+
     /**
-     * Creates the configuration with handlers that serialize security failures as API responses.
+     * Creates the configuration with handlers and JWT principal conversion support.
      */
     public SecurityConfig(
             RestAuthenticationEntryPoint restAuthenticationEntryPoint,
-            RestAccessDeniedHandler restAccessDeniedHandler
+            RestAccessDeniedHandler restAccessDeniedHandler,
+            CustomJwtAuthenticationConverter customJwtAuthenticationConverter
     ) {
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
         this.restAccessDeniedHandler = restAccessDeniedHandler;
+        this.customJwtAuthenticationConverter = customJwtAuthenticationConverter;
     }
 
     /**
@@ -111,6 +117,13 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(restAuthenticationEntryPoint)
                         .accessDeniedHandler(restAccessDeniedHandler)
+                )
+                // Validates Bearer JWTs and exposes CustomUserDetails as the authenticated principal.
+                .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
+                        .authenticationEntryPoint(restAuthenticationEntryPoint)
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(customJwtAuthenticationConverter)
+                        )
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         // API documentation is publicly readable.

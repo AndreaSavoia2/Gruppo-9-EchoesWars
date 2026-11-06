@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 /**
  * Loads immutable security principals from persistent user accounts.
  */
@@ -27,5 +29,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userRepository.findByEmailIgnoreCaseWithRole(email)
                 .map(CustomUserDetails::forPasswordAuthentication)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password."));
+    }
+
+    /**
+     * Loads a current user snapshot by JWT subject for bearer token authentication.
+     */
+    @Transactional(readOnly = true)
+    public CustomUserDetails loadUserById(UUID userId) {
+        return userRepository.findByIdWithRole(userId)
+                .map(CustomUserDetails::forJwtAuthentication)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "Authenticated user is no longer available."
+                ));
     }
 }

@@ -17,4 +17,12 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             where lower(u.email) = lower(:email)
             """)
     Optional<User> findByEmailIgnoreCaseWithRole(@Param("email") String email);
+
+    @Query("""
+            select u
+            from User u
+            join fetch u.role
+            where u.id = :id
+            """)
+    Optional<User> findByIdWithRole(@Param("id") UUID id);
 }
