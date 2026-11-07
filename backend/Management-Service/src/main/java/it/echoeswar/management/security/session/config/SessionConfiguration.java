@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
  * Registers configuration properties used by authentication sessions.
  */
 @Configuration
-@EnableConfigurationProperties(RefreshTokenProperties.class)
+@EnableConfigurationProperties({
+        RefreshTokenProperties.class,
+        RefreshTokenCookieProperties.class
+})
 public class SessionConfiguration {
 }

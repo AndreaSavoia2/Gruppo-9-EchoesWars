@@ -1,5 +1,6 @@
 package it.echoeswar.management.security.jwt.converter;
 
+import it.echoeswar.management.security.session.service.AuthenticationSessionService;
 import it.echoeswar.management.security.userdetails.CustomUserDetails;
 import it.echoeswar.management.security.userdetails.CustomUserDetailsService;
 import org.springframework.core.convert.converter.Converter;
@@ -20,18 +21,23 @@ public class CustomJwtAuthenticationConverter
         implements Converter<Jwt, AbstractAuthenticationToken> {
 
     private static final String INVALID_ACCESS_TOKEN_MESSAGE = "Invalid access token.";
+    private static final String SESSION_ID_CLAIM = "sid";
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final AuthenticationSessionService authenticationSessionService;
 
     public CustomJwtAuthenticationConverter(
-            CustomUserDetailsService customUserDetailsService) {
-
+            CustomUserDetailsService customUserDetailsService,
+            AuthenticationSessionService authenticationSessionService
+    ) {
         this.customUserDetailsService = customUserDetailsService;
+        this.authenticationSessionService = authenticationSessionService;
     }
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         UUID userId = parseUserId(jwt.getSubject());
+        UUID sessionId = parseSessionId(jwt);
 
         CustomUserDetails userDetails;
         try {
@@ -51,6 +57,10 @@ public class CustomJwtAuthenticationConverter
             throw new InvalidBearerTokenException(INVALID_ACCESS_TOKEN_MESSAGE);
         }
 
+        if (!authenticationSessionService.isSessionActive(userId, sessionId)) {
+            throw new InvalidBearerTokenException(INVALID_ACCESS_TOKEN_MESSAGE);
+        }
+
         return new PreAuthenticatedAuthenticationToken(
                 userDetails,
                 null,
@@ -59,12 +69,26 @@ public class CustomJwtAuthenticationConverter
     }
 
     private UUID parseUserId(String subject) {
-        if (subject == null || subject.isBlank()) {
+        return parseUuid(subject);
+    }
+
+    private UUID parseSessionId(Jwt jwt) {
+        Object sessionIdClaim = jwt.getClaim(SESSION_ID_CLAIM);
+
+        if (!(sessionIdClaim instanceof String sessionIdValue)) {
+            throw new InvalidBearerTokenException(INVALID_ACCESS_TOKEN_MESSAGE);
+        }
+
+        return parseUuid(sessionIdValue);
+    }
+
+    private UUID parseUuid(String value) {
+        if (value == null || value.isBlank()) {
             throw new InvalidBearerTokenException(INVALID_ACCESS_TOKEN_MESSAGE);
         }
 
         try {
-            return UUID.fromString(subject);
+            return UUID.fromString(value);
         } catch (IllegalArgumentException exception) {
             throw new InvalidBearerTokenException(
                     INVALID_ACCESS_TOKEN_MESSAGE,

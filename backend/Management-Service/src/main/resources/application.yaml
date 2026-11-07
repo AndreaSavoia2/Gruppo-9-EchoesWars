@@ -25,3 +25,9 @@ security:
   refresh-token:
     # Each newly issued refresh token remains valid for seven days.
     ttl: P7D
+    cookie:
+      name: ECHOESWAR_REFRESH_TOKEN
+      path: /api/v1/auth
+      # FALSE ONLY IN DEV
+      secure: ${REFRESH_TOKEN_COOKIE_SECURE:true}
+      same-site: ${REFRESH_TOKEN_COOKIE_SAME_SITE:Lax}

@@ -1,6 +1,7 @@
 package it.echoeswar.management.security.jwt.service;
 
 import it.echoeswar.management.security.jwt.config.JwtProperties;
+import it.echoeswar.management.security.jwt.token.IssuedAccessToken;
 import it.echoeswar.management.security.userdetails.CustomUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -36,7 +37,7 @@ public class JwtTokenService {
     /**
      * Creates an RS256 access token for an authenticated user session.
      */
-    public String generateAccessToken(
+    public IssuedAccessToken generateAccessToken(
             CustomUserDetails userDetails,
             UUID sessionId
     ) {
@@ -61,6 +62,10 @@ public class JwtTokenService {
                 .claim(ROLES_CLAIM, roles)
                 .build();
 
-        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        String accessToken = jwtEncoder.encode(
+                JwtEncoderParameters.from(claims)
+        ).getTokenValue();
+
+        return new IssuedAccessToken(accessToken, expiresAt);
     }
 }

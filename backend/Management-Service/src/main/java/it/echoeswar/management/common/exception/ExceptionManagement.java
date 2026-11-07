@@ -7,8 +7,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -16,6 +14,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -25,6 +28,25 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionManagement {
+
+    private static final String INVALID_CREDENTIALS_MESSAGE =
+            "Invalid email or password.";
+
+    @ExceptionHandler(ResourceConflictException.class)
+    public ResponseEntity<?> resourceConflictExceptionManagement(
+            ResourceConflictException ex
+    ) {
+        HttpStatus status = HttpStatus.CONFLICT;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, status);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundExceptionManagement(ResourceNotFoundException ex){
@@ -104,29 +126,24 @@ public class ExceptionManagement {
         return new ResponseEntity<>(response, status);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> badCredentialsExceptionManagement(BadCredentialsException ex){
-        HttpStatus status = HttpStatus.FORBIDDEN;
+    @ExceptionHandler({
+            BadCredentialsException.class,
+            DisabledException.class,
+            LockedException.class,
+            UsernameNotFoundException.class
+    })
+    public ResponseEntity<?> authenticationFailureExceptionManagement(
+            AuthenticationException exception
+    ) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
 
         ResponseApi<?> response = ResponseApi.builder()
                 .timestamp(LocalDateTime.now())
                 .httpStatus(status)
                 .error(status.getReasonPhrase())
-                .message(ex.getMessage())
+                .message(INVALID_CREDENTIALS_MESSAGE)
                 .build();
-        return new ResponseEntity<>(response, status);
-    }
 
-    @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<?> disabledExceptionManagement(DisabledException ex){
-        HttpStatus status = HttpStatus.FORBIDDEN;
-
-        ResponseApi<?> response = ResponseApi.builder()
-                .timestamp(LocalDateTime.now())
-                .httpStatus(status)
-                .error(status.getReasonPhrase())
-                .message(ex.getMessage())
-                .build();
         return new ResponseEntity<>(response, status);
     }
 
