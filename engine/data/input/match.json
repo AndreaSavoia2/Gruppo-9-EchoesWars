@@ -1,0 +1,37 @@
+{
+  "matchId": "match-123",
+  "rulesVersion": "1.0",
+  "seed": 123456,
+  "players": [
+    {
+      "playerId": "player-1",
+      "deck": [
+        { "cardId": "C001", "quantity": 30 },
+        { "cardId": "C002", "quantity": 2 }
+      ]
+    },
+    {
+      "playerId": "player-2",
+      "deck": [
+        { "cardId": "C001", "quantity": 1 },
+        { "cardId": "C002", "quantity": 1 }
+      ]
+    }
+  ],
+  "cardDefinitions": [
+    {
+      "cardId": "C001",
+      "attack": 13,
+      "defense": 4,
+      "cost": 4,
+      "effect": "FURIA"
+    },
+    {
+      "cardId": "C002",
+      "attack": 3,
+      "defense": 4,
+      "cost": 4,
+      "effect": "RESISTENZA"
+    }
+  ]
+}
