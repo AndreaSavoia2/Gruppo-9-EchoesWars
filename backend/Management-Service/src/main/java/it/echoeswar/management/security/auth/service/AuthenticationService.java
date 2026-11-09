@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.Instant;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,30 @@ public class AuthenticationService {
     private final AuthenticationSessionService authenticationSessionService;
     private final JwtTokenService jwtTokenService;
     private final CustomUserDetailsService customUserDetailsService;
+
+
+    public void logout(
+            UUID userId,
+            UUID sessionId
+    ) {
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(sessionId, "sessionId must not be null");
+
+        authenticationSessionService.revokeSession(
+                userId,
+                sessionId,
+                SessionRevocationReason.LOGOUT
+        );
+    }
+
+    public void logoutAll(UUID userId) {
+        Objects.requireNonNull(userId, "userId must not be null");
+
+        authenticationSessionService.revokeAllSessions(
+                userId,
+                SessionRevocationReason.LOGOUT_ALL
+        );
+    }
 
     @Transactional
     public AuthenticationResult login(

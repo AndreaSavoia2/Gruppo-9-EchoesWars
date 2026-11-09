@@ -2,6 +2,7 @@ package it.echoeswar.management.common.exception;
 
 
 import it.echoeswar.management.common.api.ResponseApi;
+import it.echoeswar.management.security.session.exception.InvalidRefreshTokenException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.data.core.PropertyReferenceException;
@@ -31,6 +32,9 @@ public class ExceptionManagement {
 
     private static final String INVALID_CREDENTIALS_MESSAGE =
             "Invalid email or password.";
+
+    private static final String INVALID_REFRESH_TOKEN_MESSAGE =
+            "Refresh token is invalid or expired.";
 
     @ExceptionHandler(ResourceConflictException.class)
     public ResponseEntity<?> resourceConflictExceptionManagement(
@@ -142,6 +146,22 @@ public class ExceptionManagement {
                 .httpStatus(status)
                 .error(status.getReasonPhrase())
                 .message(INVALID_CREDENTIALS_MESSAGE)
+                .build();
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<?> invalidRefreshTokenExceptionManagement(
+            InvalidRefreshTokenException exception
+    ) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message(INVALID_REFRESH_TOKEN_MESSAGE)
                 .build();
 
         return new ResponseEntity<>(response, status);

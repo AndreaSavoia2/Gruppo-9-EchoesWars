@@ -14,6 +14,7 @@ import it.echoeswar.management.user.repository.RoleRepository;
 import it.echoeswar.management.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,10 @@ public class UserService {
         }
     }
 
+    @PreAuthorize(
+            "hasRole('ADMIN') or "
+                    + "(hasRole('USER') and #p0 == authentication.principal.id)"
+    )
     @Transactional(readOnly = true)
     public UserResponse getUserById(UUID userId) {
         Objects.requireNonNull(userId, "userId must not be null");
