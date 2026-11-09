@@ -21,7 +21,7 @@ public class Main {
             ObjectMapper mapper = new ObjectMapper();
 
             JsonNode root = mapper.readTree(
-                    Path.of("engine/data/input/match.json").toFile());
+                    Path.of("backend/engine/data/input/match.json").toFile());
 
             String matchId = root.get("matchId").asText();
             long seed = root.get("seed").asLong();
@@ -137,7 +137,7 @@ public class Main {
             outputMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
             // Save the match result to a JSON file
-            File outputFile = new File("engine/data/output/match-result.json");
+            File outputFile = new File("backend/engine/data/output/match-result.json");
 
             outputMapper.writeValue(outputFile, result);
 
