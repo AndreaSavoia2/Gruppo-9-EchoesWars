@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import it.echoeswar.management.security.handler.RestAuthenticationEntryPoint;
@@ -114,6 +115,8 @@ public class SecurityConfig {
             HttpSecurity http,
             CookieCsrfTokenRepository csrfTokenRepository) throws Exception {
         return http
+                // Applies the allowlist in CorsConfig before authentication and CSRF checks.
+                .cors(Customizer.withDefaults())
                 // TODO: Replace this with cookie-based CSRF protection before enabling refresh-token cookies.
                 //.csrf(AbstractHttpConfigurer::disable)
                 .csrf(csrf -> csrf

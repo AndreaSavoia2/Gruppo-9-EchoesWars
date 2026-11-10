@@ -1,6 +1,7 @@
 package it.echoeswar.management.security.auth.service;
 
 import it.echoeswar.management.common.utils.FormatterString;
+import it.echoeswar.management.security.auth.dto.request.ChangePasswordRequest;
 import it.echoeswar.management.security.auth.dto.request.LoginRequest;
 import it.echoeswar.management.security.auth.password.PasswordPolicy;
 import it.echoeswar.management.security.jwt.service.JwtTokenService;
@@ -9,6 +10,7 @@ import it.echoeswar.management.security.session.service.AuthenticationSessionSer
 import it.echoeswar.management.security.session.token.IssuedRefreshToken;
 import it.echoeswar.management.security.userdetails.CustomUserDetails;
 import it.echoeswar.management.user.enumerated.AccountStatus;
+import it.echoeswar.management.user.entity.User;
 import it.echoeswar.management.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,7 @@ import it.echoeswar.management.security.session.exception.InvalidRefreshTokenExc
 import it.echoeswar.management.security.session.token.RefreshTokenRotationResult;
 import it.echoeswar.management.security.userdetails.CustomUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -44,6 +47,7 @@ public class AuthenticationService {
     private final AuthenticationSessionService authenticationSessionService;
     private final JwtTokenService jwtTokenService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
 
     public void logout(
@@ -78,6 +82,9 @@ public class AuthenticationService {
         Objects.requireNonNull(request, "request must not be null");
 
         String normalizedEmail = FormatterString.normalizeEmail(request.email());
+
+        validateLoginPassword(request.password());
+        lockUserForLogin(normalizedEmail);
 
         Authentication authentication = authenticate(
                 normalizedEmail,
@@ -119,6 +126,72 @@ public class AuthenticationService {
                 issuedAccessToken,
                 issuedRefreshToken
         );
+    }
+
+    /**
+     * Replaces the authenticated user's password and invalidates every existing login session.
+     *
+     * <p>No replacement session is issued: the user must authenticate again with the new
+     * password. The transaction makes the password update and global revocation atomic.</p>
+     */
+    @Transactional
+    public void changePassword(
+            UUID userId,
+            ChangePasswordRequest request
+    ) {
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(request, "request must not be null");
+
+        validateCurrentPassword(request.currentPassword());
+        passwordPolicy.validateForRegistration(request.newPassword());
+
+        User user = userRepository.findByIdForUpdate(userId)
+                .orElseThrow(this::invalidCredentials);
+
+        if (!user.canAuthenticate(false)
+                || !passwordEncoder.matches(
+                        request.currentPassword(),
+                        user.getPassword()
+                )) {
+            throw invalidCredentials();
+        }
+
+        if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+            throw new IllegalArgumentException(
+                    "New password must differ from the current password."
+            );
+        }
+
+        Instant now = Instant.now();
+
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        user.setPasswordChangedAt(now);
+
+        authenticationSessionService.revokeAllSessions(
+                userId,
+                SessionRevocationReason.PASSWORD_CHANGE
+        );
+    }
+
+    private void lockUserForLogin(String normalizedEmail) {
+        userRepository.findByEmailIgnoreCaseForUpdate(normalizedEmail)
+                .orElseThrow(this::invalidCredentials);
+    }
+
+    private void validateLoginPassword(String rawPassword) {
+        try {
+            passwordPolicy.validateForAuthentication(rawPassword);
+        } catch (IllegalArgumentException exception) {
+            throw invalidCredentials();
+        }
+    }
+
+    private void validateCurrentPassword(String rawPassword) {
+        try {
+            passwordPolicy.validateForAuthentication(rawPassword);
+        } catch (IllegalArgumentException exception) {
+            throw invalidCredentials();
+        }
     }
 
     private CustomUserDetails loadActiveUserForRefresh(
@@ -178,8 +251,6 @@ public class AuthenticationService {
 
     private Authentication authenticate(String normalizedEmail, String rawPassword) {
         try {
-            passwordPolicy.validateForAuthentication(rawPassword);
-
             return authenticationManager.authenticate(
                     UsernamePasswordAuthenticationToken.unauthenticated(
                             normalizedEmail,

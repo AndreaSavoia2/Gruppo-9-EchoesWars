@@ -3,6 +3,7 @@ package it.echoeswar.management.security.auth.controller;
 import it.echoeswar.management.common.api.ResponseApi;
 import it.echoeswar.management.security.auth.dto.request.LoginRequest;
 import it.echoeswar.management.security.auth.dto.request.RegisterRequest;
+import it.echoeswar.management.security.auth.dto.request.ChangePasswordRequest;
 import it.echoeswar.management.security.auth.dto.response.AccessTokenResponse;
 import it.echoeswar.management.security.auth.dto.response.UserResponse;
 import it.echoeswar.management.security.auth.service.AuthenticationResult;
@@ -106,6 +107,18 @@ public class AuthenticationController {
         return buildAuthenticationResponse(
                 authenticationResult,
                 "Access token refreshed successfully."
+        );
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<ResponseApi<Void>> changePassword(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        authenticationService.changePassword(user.getId(), request);
+
+        return buildLogoutResponse(
+                "Password changed successfully. Please sign in again."
         );
     }
 
