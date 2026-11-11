@@ -1,6 +1,7 @@
 package it.echoeswar.management.school.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 /**
  * JPA entity representing a school, mapped to the {@code schools} table.
@@ -11,6 +12,12 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name="schools")
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
 public class School {
 
     /**
@@ -23,18 +30,18 @@ public class School {
     /**
      * School name in Italian (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_it")
     private String nameIt;
 
     /**
      * School name in English (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_en")
     private String nameEn;
 
     /**
      * URL of the school artwork (max 500 characters).
      */
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 500, name = "art_url")
     private String artUrl;
 }

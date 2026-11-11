@@ -1,6 +1,7 @@
 package it.echoeswar.management.tiar.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +17,12 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name="tiars")
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Tiar {
 
     /**
@@ -28,45 +35,45 @@ public class Tiar {
     /**
      * Business code that identifies the tiar (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "code")
     private String code;
 
     /**
      * Tiar name in Italian (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_it")
     private String nameIt;
 
     /**
      * Tiar name in English (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_en")
     private String nameEn;
 
     /**
      * Level of the tiar, persisted as its enum name (string) rather than its ordinal.
      */
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "level")
     private Level level;
 
     /**
      * Whether the tiar is enabled and available in the game.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, name = "enabled")
     private boolean enabled;
 
     /**
      * Timestamp of when the tiar was created; set automatically and never updated.
      */
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created")
     private LocalDateTime created;
 
     /**
      * Timestamp of the last update; refreshed automatically on every change.
      */
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, name = "updated")
     private LocalDateTime updated;
 }

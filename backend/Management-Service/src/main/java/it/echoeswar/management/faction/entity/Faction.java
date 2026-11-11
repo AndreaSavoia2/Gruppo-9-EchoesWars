@@ -1,6 +1,7 @@
 package it.echoeswar.management.faction.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 /**
  * JPA entity representing a faction, mapped to the {@code factions} table.
@@ -10,6 +11,12 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name="factions")
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Faction {
 
     /**
@@ -22,12 +29,12 @@ public class Faction {
     /**
      * Faction name in Italian (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_it")
     private String nameIt;
 
     /**
      * Faction name in English (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_en")
     private String nameEn;
 }

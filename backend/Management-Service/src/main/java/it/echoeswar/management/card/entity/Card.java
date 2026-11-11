@@ -3,9 +3,11 @@ package it.echoeswar.management.card.entity;
 import it.echoeswar.management.faction.entity.Faction;
 import it.echoeswar.management.school.entity.School;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
+import lombok.*;
 
 /**
  * JPA entity representing a collectible card, mapped to the {@code cards} table.
@@ -17,6 +19,12 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name="cards")
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Card {
 
     /**
@@ -24,107 +32,107 @@ public class Card {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     /**
      * Unique-looking business code that identifies the card (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "code")
     private String code;
 
     /**
      * Card name in Italian (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_it")
     private String nameIt;
 
     /**
      * Card name in English (max 100 characters).
      */
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "name_en")
     private String nameEn;
 
     /**
      * Card description in Italian (max 250 characters).
      */
-    @Column(nullable = false, length = 250)
+    @Column(nullable = false, length = 250, name = "description_it")
     private String descriptionIt;
 
     /**
      * Card description in English (max 250 characters).
      */
-    @Column(nullable = false, length = 250)
+    @Column(nullable = false, length = 250, name = "description_en")
     private String descriptionEn;
 
     /**
      * Attack value of the card.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, name = "attack")
     private byte attack;
 
     /**
      * Defense value of the card.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, name = "defense")
     private byte defense;
 
     /**
      * Cost required to play the card.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, name = "cost")
     private byte cost;
 
     /**
      * Faction the card belongs to. Loaded lazily; mandatory.
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "factionId", nullable = false)
+    @JoinColumn(nullable = false, name = "faction_id")
     private Faction faction;
 
     /**
      * School the card belongs to. Loaded lazily; mandatory.
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "schoolId", nullable = false)
+    @JoinColumn(nullable = false, name = "school_id")
     private School school;
 
     /**
      * Tiar associated with the card. Loaded lazily; mandatory.
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "tiarId", nullable = false)
+    @JoinColumn(nullable = false, name = "tiar_id")
     private Tiar tiar;
 
     /**
      * Effect triggered by the card. Loaded lazily; mandatory.
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "effectId", nullable = false)
+    @JoinColumn(nullable = false, name = "effect_id")
     private Effect effect;
 
     /**
      * URL of the card artwork (max 500 characters).
      */
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 500, name = "art_url")
     private String artUrl;
 
     /**
      * Whether the card is enabled and available in the game.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, name = "enabled")
     private boolean enabled;
 
     /**
      * Timestamp of when the card was created; set automatically and never updated.
      */
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created")
     private LocalDateTime created;
 
     /**
      * Timestamp of the last update; refreshed automatically on every change.
      */
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, name = "updated")
     private LocalDateTime updated;
 }
