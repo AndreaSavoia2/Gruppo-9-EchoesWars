@@ -2,6 +2,7 @@ package it.echoeswar.management.card.entity;
 
 import it.echoeswar.management.faction.entity.Faction;
 import it.echoeswar.management.school.entity.School;
+import it.echoeswar.management.tiar.entity.Tiar;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
