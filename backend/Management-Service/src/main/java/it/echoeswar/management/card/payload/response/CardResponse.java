@@ -2,8 +2,35 @@ package it.echoeswar.management.card.payload.response;
 
 import it.echoeswar.management.card.entity.Card;
 
-import java.time.LocalDateTime;
+import it.echoeswar.management.common.utils.FormatterString;
 
+/**
+ * Response payload representing a card together with its related faction,
+ * school and tiar information.
+ *
+ * <p>Text fields are returned with the first letter capitalized
+ * (see {@link FormatterString#capitalizeFirstLetter(String)}).</p>
+ *
+ * @param id             unique identifier of the card
+ * @param code           unique code of the card
+ * @param nameIt         card name in Italian
+ * @param nameEn         card name in English
+ * @param descriptionIt  card description in Italian
+ * @param descriptionEn  card description in English
+ * @param attack         attack value of the card
+ * @param defense        defense value of the card
+ * @param cost           cost required to play the card
+ * @param artUrl         URL of the card artwork
+ * @param enabled        whether the card is enabled
+ * @param factionId      identifier of the faction the card belongs to
+ * @param factionNameIt  faction name in Italian
+ * @param factionNameEn  faction name in English
+ * @param schoolId       identifier of the school the card belongs to
+ * @param schoolNameIt   school name in Italian
+ * @param schoolNameEn   school name in English
+ * @param tiarLevel      level of the tiar associated with the card
+ * @param tiarEnabled    whether the tiar associated with the card is enabled
+ */
 public record CardResponse(
         //card
         long id,
@@ -17,8 +44,6 @@ public record CardResponse(
         byte cost,
         String artUrl,
         boolean enabled,
-        LocalDateTime created,
-        LocalDateTime updated,
 
         //faction
         byte factionId,
@@ -30,44 +55,46 @@ public record CardResponse(
         String schoolNameIt,
         String schoolNameEn,
         String tiarLevel,
-        boolean tiarEnabled,
-        LocalDateTime tiarCreated,
-        LocalDateTime tiarUpdated
+        boolean tiarEnabled
 ) {
+    /**
+     * Builds a {@link CardResponse} from a {@link Card} entity, flattening the
+     * related faction, school and tiar data into a single object.
+     *
+     * @param card the card entity to convert; its faction, school and tiar
+     *             must not be {@code null}
+     * @return a new {@code CardResponse} populated from the given entity
+     */
     public static CardResponse from(Card card){
         return new CardResponse(
                 card.getId(),
-                card.getCode(),
-                card.getNameIt(),
-                card.getNameEn(),
-                card.getDescriptionIt(),
-                card.getDescriptionEn(),
+                FormatterString.capitalizeFirstLetter(card.getCode()),
+                FormatterString.capitalizeFirstLetter(card.getNameIt()),
+                FormatterString.capitalizeFirstLetter(card.getNameEn()),
+                FormatterString.capitalizeFirstLetter(card.getDescriptionIt()),
+                FormatterString.capitalizeFirstLetter(card.getDescriptionEn()),
                 card.getAttack(),
                 card.getAttack(),
                 card.getDefense(),
                 card.getCost(),
-                card.getArtUrl(),
+                FormatterString.capitalizeFirstLetter(card.getArtUrl()),
                 card.isEnabled(),
-                card.getCreated(),
-                card.getUpdated(),
 
                 card.getFaction().getId(),
-                card.getFaction().getNameIt(),
-                card.getFaction().getNameEn(),
+                FormatterString.capitalizeFirstLetter(card.getFaction().getNameIt()),
+                FormatterString.capitalizeFirstLetter(card.getFaction().getNameEn()),
 
                 card.getSchool().getId(),
-                card.getSchool().getNameIt(),
-                card.getSchool().getNameEn(),
-                card.getSchool().getArtUrl(),
+                FormatterString.capitalizeFirstLetter(card.getSchool().getNameIt()),
+                FormatterString.capitalizeFirstLetter(card.getSchool().getNameEn()),
+                FormatterString.capitalizeFirstLetter(card.getSchool().getArtUrl()),
 
                 card.getTiar().getId(),
-                card.getTiar().getCode(),
-                card.getTiar().getNameIt(),
-                card.getTiar().getNameEn(),
-                card.getTiar().getLevel().name(),
-                card.getTiar().isEnabled(),
-                card.getTiar().getCreated(),
-                card.getTiar().getUpdated()
+                FormatterString.capitalizeFirstLetter(card.getTiar().getCode()),
+                FormatterString.capitalizeFirstLetter(card.getTiar().getNameIt()),
+                FormatterString.capitalizeFirstLetter(card.getTiar().getNameEn()),
+                FormatterString.capitalizeFirstLetter(card.getTiar().getLevel().name()),
+                card.getTiar().isEnabled()
         );
     }
 }
