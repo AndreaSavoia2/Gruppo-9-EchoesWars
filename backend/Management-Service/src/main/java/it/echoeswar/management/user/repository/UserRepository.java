@@ -31,6 +31,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             select u
             from User u
             join fetch u.role
+            left join fetch u.selectedAvatar
             where u.id = :id
             """)
     Optional<User> findByIdWithRole(@Param("id") UUID id);

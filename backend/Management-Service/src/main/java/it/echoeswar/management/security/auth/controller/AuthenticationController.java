@@ -4,6 +4,7 @@ import it.echoeswar.management.common.api.ResponseApi;
 import it.echoeswar.management.security.auth.dto.request.LoginRequest;
 import it.echoeswar.management.security.auth.dto.request.RegisterRequest;
 import it.echoeswar.management.security.auth.dto.request.ChangePasswordRequest;
+import it.echoeswar.management.security.auth.dto.request.SelectAvatarRequest;
 import it.echoeswar.management.security.auth.dto.response.AccessTokenResponse;
 import it.echoeswar.management.security.auth.dto.response.UserResponse;
 import it.echoeswar.management.security.auth.service.AuthenticationResult;
@@ -173,6 +174,23 @@ public class AuthenticationController {
                 HttpStatus.OK,
                 userResponse,
                 "Current user retrieved successfully."
+        );
+    }
+
+    @PutMapping("/me/selected-avatar")
+    public ResponseEntity<ResponseApi<UserResponse>> selectAvatar(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @Valid @RequestBody SelectAvatarRequest request
+    ) {
+        UserResponse userResponse = userService.selectAvatar(
+                user.getId(),
+                request.avatarId()
+        );
+
+        return ResponseApi.buildResponse(
+                HttpStatus.OK,
+                userResponse,
+                "Selected avatar updated successfully."
         );
     }
 

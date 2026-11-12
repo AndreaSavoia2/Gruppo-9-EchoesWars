@@ -1,14 +1,14 @@
 package it.echoeswar.management.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import it.echoeswar.management.catalog.entity.Avatar;
+import it.echoeswar.management.common.persistence.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import it.echoeswar.management.user.enumerated.AccountStatus;
 
@@ -26,7 +26,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -45,6 +45,10 @@ public class User {
     private String password;
 
     @Builder.Default
+    @Column(name = "level", nullable = false)
+    private int level = 0;
+
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "account_status", nullable = false, length = 32)
     private AccountStatus accountStatus = AccountStatus.ACTIVE;
@@ -55,23 +59,15 @@ public class User {
     @Column(name = "deleted_at")
     private Instant deletedAt;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
-
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
 
     @Column(name = "password_changed_at")
     private Instant passwordChangedAt;
 
-        /*@JoinColumn(name = "avatar_id")
-        @ManyToOne
-    private Avatar avatar;*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "selected_avatar_id")
+    private Avatar selectedAvatar;
 
     @JoinColumn(name = "role_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

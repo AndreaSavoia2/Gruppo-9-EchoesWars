@@ -1,5 +1,8 @@
 package it.echoeswar.management.user.service;
 
+import it.echoeswar.management.collection.entity.UserAvatar;
+import it.echoeswar.management.collection.entity.UserAvatarId;
+import it.echoeswar.management.collection.repository.UserAvatarRepository;
 import it.echoeswar.management.common.exception.ResourceConflictException;
 import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.FormatterString;
@@ -31,6 +34,7 @@ public class UserService {
             "An account with the provided username or email already exists.";
 
     private final UserRepository userRepository;
+    private final UserAvatarRepository userAvatarRepository;
     private final RoleRepository roleRepository;
     private final PasswordPolicy passwordPolicy;
     private final PasswordEncoder passwordEncoder;
@@ -86,6 +90,41 @@ public class UserService {
                         "id",
                         userId
                 ));
+    }
+
+    /**
+     * Selects an avatar already unlocked by the authenticated user.
+     *
+     * <p>The ownership check gives the caller a useful validation error, while the composite
+     * foreign key on {@code users} is the final integrity guarantee at database level.</p>
+     */
+    @PreAuthorize("#p0 == authentication.principal.id")
+    @Transactional
+    public UserResponse selectAvatar(UUID userId, Long avatarId) {
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(avatarId, "avatarId must not be null");
+
+        if (avatarId <= 0) {
+            throw new IllegalArgumentException("avatarId must be positive");
+        }
+
+        User user = userRepository.findByIdForUpdate(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User",
+                        "id",
+                        userId
+                ));
+
+        UserAvatar userAvatar = userAvatarRepository.findByIdForUpdate(
+                        new UserAvatarId(userId, avatarId)
+                )
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Selected avatar is not unlocked by the user."
+                ));
+
+        user.setSelectedAvatar(userAvatar.getAvatar());
+
+        return UserResponse.toUserResponse(user);
     }
 
 }

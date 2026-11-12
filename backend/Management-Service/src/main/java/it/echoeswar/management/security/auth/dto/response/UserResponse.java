@@ -13,6 +13,7 @@ public record UserResponse(
         String email,
         RoleName role,
         AccountStatus accountStatus,
+        Long selectedAvatarId,
         Instant createdAt
 ) {
 
@@ -23,6 +24,9 @@ public record UserResponse(
                 user.getEmail(),
                 user.getRole().getRoleName(),
                 user.getAccountStatus(),
+                user.getSelectedAvatar() == null
+                        ? null
+                        : user.getSelectedAvatar().getId(),
                 user.getCreatedAt()
         );
     }
