@@ -8,7 +8,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import it.echoeswar.management.security.jwt.authentication.JwtSessionAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -61,10 +61,9 @@ public class CustomJwtAuthenticationConverter
             throw new InvalidBearerTokenException(INVALID_ACCESS_TOKEN_MESSAGE);
         }
 
-        return new PreAuthenticatedAuthenticationToken(
+        return new JwtSessionAuthenticationToken(
                 userDetails,
-                null,
-                userDetails.getAuthorities()
+                sessionId
         );
     }
 

@@ -1,10 +1,12 @@
 package it.echoeswar.management.security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import it.echoeswar.management.security.handler.RestAuthenticationEntryPoint;
@@ -16,6 +18,10 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import it.echoeswar.management.security.jwt.converter.CustomJwtAuthenticationConverter;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import it.echoeswar.management.security.session.config.RefreshTokenCookieProperties;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 /**
  * Configures the HTTP security pipeline for the management REST API.
@@ -25,7 +31,9 @@ import it.echoeswar.management.security.jwt.converter.CustomJwtAuthenticationCon
  *
  * <p>The API does not use form login, HTTP Basic authentication, or server-side HTTP sessions.</p>
  */
+@RequiredArgsConstructor
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     // Writes the standard JSON response for unauthenticated access attempts.
@@ -37,17 +45,22 @@ public class SecurityConfig {
     // Converts validated JWTs into the application-specific authenticated principal.
     private final CustomJwtAuthenticationConverter customJwtAuthenticationConverter;
 
-    /**
-     * Creates the configuration with handlers and JWT principal conversion support.
-     */
-    public SecurityConfig(
-            RestAuthenticationEntryPoint restAuthenticationEntryPoint,
-            RestAccessDeniedHandler restAccessDeniedHandler,
-            CustomJwtAuthenticationConverter customJwtAuthenticationConverter
-    ) {
-        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
-        this.restAccessDeniedHandler = restAccessDeniedHandler;
-        this.customJwtAuthenticationConverter = customJwtAuthenticationConverter;
+    private final RefreshTokenCookieProperties refreshTokenCookieProperties;
+
+    @Bean
+    public CookieCsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository csrfTokenRepository =
+                CookieCsrfTokenRepository.withHttpOnlyFalse();
+
+        csrfTokenRepository.setCookieCustomizer(cookie -> cookie
+                .path(refreshTokenCookieProperties.path())
+                .secure(Boolean.TRUE.equals(
+                        refreshTokenCookieProperties.secure()
+                ))
+                .sameSite(refreshTokenCookieProperties.sameSite())
+        );
+
+        return csrfTokenRepository;
     }
 
     /**
@@ -98,10 +111,24 @@ public class SecurityConfig {
      * <p>Authentication endpoints are explicitly public. Every other endpoint is protected by default.</p>
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            CookieCsrfTokenRepository csrfTokenRepository) throws Exception {
         return http
+                // Applies the allowlist in CorsConfig before authentication and CSRF checks.
+                .cors(Customizer.withDefaults())
                 // TODO: Replace this with cookie-based CSRF protection before enabling refresh-token cookies.
-                .csrf(AbstractHttpConfigurer::disable)
+                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .spa()
+                        .csrfTokenRepository(csrfTokenRepository)
+                        .requireCsrfProtectionMatcher(
+                                PathPatternRequestMatcher.pathPattern(
+                                        HttpMethod.POST,
+                                        "/api/v1/auth/refresh"
+                                )
+                        )
+                )
                 // Do not persist authentication in an HTTP session.
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -126,6 +153,10 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/v1/auth/csrf"
+                        ).permitAll()
                         // API documentation is publicly readable.
                         .requestMatchers(
                                 "/swagger-ui/**",

@@ -1,5 +1,6 @@
 package it.echoeswar.management.security.session.service;
 
+import it.echoeswar.management.security.session.dto.response.ActiveSessionResponse;
 import it.echoeswar.management.security.session.token.RefreshTokenRotationResult;
 import it.echoeswar.management.security.session.config.RefreshTokenProperties;
 import it.echoeswar.management.security.session.entity.AuthenticationSession;
@@ -273,6 +274,31 @@ public class AuthenticationSessionService {
                         expiresAt
                 )
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<ActiveSessionResponse> getActiveSessions(
+            UUID userId,
+            UUID currentSessionId
+    ) {
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(
+                currentSessionId,
+                "currentSessionId must not be null"
+        );
+
+        Instant now = Instant.now();
+
+        return authenticationSessionRepository
+                .findActiveByUserId(userId, now)
+                .stream()
+                .map(authenticationSession ->
+                        ActiveSessionResponse.from(
+                                authenticationSession,
+                                currentSessionId
+                        )
+                )
+                .toList();
     }
 
     private void handleUnconsumableRefreshToken(
