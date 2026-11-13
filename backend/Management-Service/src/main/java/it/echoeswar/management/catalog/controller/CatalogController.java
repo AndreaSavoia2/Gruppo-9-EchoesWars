@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +58,7 @@ public class CatalogController {
             )
     })
     @GetMapping("v1/public/catalogs")
-    public ResponseEntity<ResponseApi<Map<String, Object>>> getAllCards(
+    public ResponseEntity<?> getAllCards(
             @Parameter(
                     in = ParameterIn.QUERY,
                     description = "Zero-based index of the page to retrieve.",
@@ -68,19 +70,20 @@ public class CatalogController {
                     description = "Number of cards to include in each page.",
                     example = "6"
             )
-            @RequestParam(defaultValue = "6") int pageSize,
+            @RequestParam(defaultValue = "6") @Min(1) @Max(10) int pageSize,
             @Parameter(
                     in = ParameterIn.QUERY,
                     description = "Card property used to sort the result.",
                     example = "nameIt"
             )
-            @RequestParam(defaultValue = "nameIt") String sortBy,
+            @RequestParam(defaultValue = "id") String sortBy,
             @Parameter(
                     in = ParameterIn.QUERY,
                     description = "Sorting direction. Accepted values are ASC and DESC.",
                     example = "DESC"
             )
-            @RequestParam(defaultValue = "DESC") String direction) {
+            @RequestParam(defaultValue = "DESC") String direction
+    ) {
         Map<String, Object> result = cardService.getAllCards(pageNumber, pageSize, sortBy, direction);
         List<?> content = (List<?>) result.get("content");
         if (content.isEmpty())
