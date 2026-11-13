@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Base class for entities whose creation and last-update timestamps are maintained by Hibernate.
@@ -18,5 +19,5 @@ public abstract class AuditableEntity extends CreatedAtEntity {
 
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 }

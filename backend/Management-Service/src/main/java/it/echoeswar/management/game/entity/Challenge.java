@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Invitation to play issued by a user with a selected challenger deck.
@@ -62,14 +63,14 @@ public class Challenge extends CreatedAtEntity {
     private ChallengeStatus status = ChallengeStatus.PENDING;
 
     @Column(name = "accepted_at")
-    private Instant acceptedAt;
+    private LocalDateTime acceptedAt;
 
     @Column(name = "rejected_at")
-    private Instant rejectedAt;
+    private LocalDateTime rejectedAt;
 
     @Column(name = "cancelled_at")
-    private Instant cancelledAt;
+    private LocalDateTime cancelledAt;
 
     @Column(name = "expires_at")
-    private Instant expiresAt;
+    private LocalDateTime expiresAt;
 }

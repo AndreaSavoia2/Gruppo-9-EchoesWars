@@ -18,14 +18,7 @@ import lombok.Setter;
  * Catalog entry describing a purchasable package independently from its versions.
  */
 @Entity
-@Table(
-        name = "packages",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uq_packages_code", columnNames = "code"),
-                @UniqueConstraint(name = "uq_packages_name_it", columnNames = "name_it"),
-                @UniqueConstraint(name = "uq_packages_name_en", columnNames = "name_en")
-        }
-)
+@Table(name = "packages")
 @Getter
 @Setter
 @Builder

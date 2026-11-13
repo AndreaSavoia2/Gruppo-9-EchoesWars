@@ -30,15 +30,6 @@ public class Avatar extends AuditableEntity {
     @Column(name = "id", nullable = false, updatable = false)
     private long id;
 
-    @Column(name = "code", nullable = false, length = 100, unique = true)
-    private String code;
-
-    @Column(name = "name_it", nullable = false, length = 150)
-    private String nameIt;
-
-    @Column(name = "name_en", nullable = false, length = 150)
-    private String nameEn;
-
     @Column(name = "image_url", nullable = false, length = 500)
     private String imageUrl;
 

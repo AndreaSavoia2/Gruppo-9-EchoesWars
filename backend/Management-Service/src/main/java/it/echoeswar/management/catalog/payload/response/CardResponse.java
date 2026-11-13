@@ -21,7 +21,6 @@ import lombok.Builder;
  * @param defense        defense value of the card
  * @param cost           cost required to play the card
  * @param artUrl         URL of the card artwork
- * @param enabled        whether the card is enabled
  * @param echoesId      identifier of the faction the card belongs to
  * @param echoesNameIt  faction name in Italian
  * @param echoesNameEn  faction name in English
@@ -29,7 +28,6 @@ import lombok.Builder;
  * @param schoolNameIt   school name in Italian
  * @param schoolNameEn   school name in English
  * @param tierLevel      level of the tiar associated with the card
- * @param tierEnabled    whether the tiar associated with the card is enabled
  */
 @Builder
 public record CardResponse(
@@ -44,7 +42,6 @@ public record CardResponse(
         byte defense,
         byte cost,
         String artUrl,
-        boolean enabled,
 
         //faction
         byte echoesId,
@@ -55,8 +52,7 @@ public record CardResponse(
         byte schoolId,
         String schoolNameIt,
         String schoolNameEn,
-        int tierLevel,
-        boolean tierEnabled
+        int tierLevel
 ) {
     /**
      * Builds a {@link CardResponse} from a {@link Card} entity, flattening the
@@ -74,11 +70,10 @@ public record CardResponse(
                 .nameEn(FormatterString.capitalizeFirstLetter(card.getNameEn()))
                 .descriptionIt(FormatterString.capitalizeFirstLetter(card.getDescriptionIt()))
                 .descriptionEn(FormatterString.capitalizeFirstLetter(card.getDescriptionEn()))
-                .attack((byte) card.getAttack())
-                .defense((byte) card.getDefense())
-                .cost((byte) card.getPlayCost())
+                .attack(card.getAttack())
+                .defense(card.getDefense())
+                .cost(card.getPlayCost())
                 .artUrl(FormatterString.capitalizeFirstLetter(card.getImageUrl()))
-                .enabled(card.isActive())
                 .echoesId(card.getFaction().getId())
                 .echoesNameIt(FormatterString.capitalizeFirstLetter(card.getFaction().getNameIt()))
                 .echoesNameEn(FormatterString.capitalizeFirstLetter(card.getFaction().getNameEn()))
@@ -86,7 +81,6 @@ public record CardResponse(
                 .schoolNameIt(FormatterString.capitalizeFirstLetter(card.getSchool().getNameIt()))
                 .schoolNameEn(FormatterString.capitalizeFirstLetter(card.getSchool().getNameEn()))
                 .tierLevel(card.getTier().getLevel())
-                .tierEnabled(card.getTier().isActive())
                 .build();
     }
 }

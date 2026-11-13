@@ -47,17 +47,17 @@ public class Card extends AuditableEntity {
     private String descriptionEn;
 
     @Column(name = "attack", nullable = false)
-    private int attack;
+    private byte attack;
 
     @Column(name = "defense", nullable = false)
-    private int defense;
+    private byte defense;
 
     @Column(name = "play_cost", nullable = false)
-    private int playCost;
+    private byte playCost;
 
     @Builder.Default
     @Column(name = "max_copies_per_deck", nullable = false)
-    private int maxCopiesPerDeck = 3;
+    private int maxCopyDeck = 3;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "faction_id", nullable = false)

@@ -22,6 +22,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Queue record used to execute the simulation associated with a match.
@@ -55,16 +56,16 @@ public class SimulationJob extends AuditableEntity {
 
     @CreationTimestamp
     @Column(name = "available_at", nullable = false, updatable = false)
-    private Instant availableAt;
+    private LocalDateTime availableAt;
 
     @Column(name = "locked_at")
-    private Instant lockedAt;
+    private LocalDateTime lockedAt;
 
     @Column(name = "started_at")
-    private Instant startedAt;
+    private LocalDateTime startedAt;
 
     @Column(name = "completed_at")
-    private Instant completedAt;
+    private LocalDateTime completedAt;
 
     @Column(name = "last_error", columnDefinition = "TEXT")
     private String lastError;

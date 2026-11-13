@@ -1,6 +1,5 @@
 package it.echoeswar.management.catalog.repository;
 
-
 import it.echoeswar.management.catalog.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 

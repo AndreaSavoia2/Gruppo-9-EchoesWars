@@ -4,12 +4,17 @@ package it.echoeswar.management.catalog.service;
 import it.echoeswar.management.catalog.entity.Card;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.catalog.repository.CardRepository;
+import it.echoeswar.management.common.utils.BuildPageableResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Service providing read operations on cards.
@@ -24,29 +29,19 @@ public class CardService {
     private final CardRepository cardRepository;
 
     /**
-     * Retrieves a single card by its identifier.
+     * Retrieves one page of cards together with their related faction, school and tiar details.
      *
-     * @param id the identifier of the card to retrieve
-     * @return the card mapped to a {@link CardResponse}
-     * @throws EntityNotFoundException if no card exists with the given id
+     * @return page content together with pagination metadata
      */
     @Transactional(readOnly = true)
-    public CardResponse getCard(long id){
-        Card card = cardRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Card with id: " + id + " not found"));
-        return CardResponse.from(card);
-    }
+    public Map<String, Object> getAllCards(int pageNumber, int pageSize, String sortBy, String direction ){
+        Pageable pageable = PageRequest.of(
+                pageNumber,
+                pageSize,
+                Sort.Direction.valueOf(direction.toUpperCase()),
+                sortBy);
 
-    /**
-     * Retrieves all cards together with their related faction, school and tiar details.
-     *
-     * @return the list of all cards mapped to {@link CardResponse}; empty if there are none
-     */
-    @Transactional(readOnly = true)
-    public List<CardResponse> getCardDetails(){
-        return cardRepository.findAll()
-                .stream()
-                .map(CardResponse::from)
-                .toList();
+        return BuildPageableResponse.buildPage(
+                cardRepository.findAll(pageable).map(CardResponse::from));
     }
 }

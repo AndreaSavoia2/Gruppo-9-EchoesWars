@@ -170,6 +170,9 @@ public class SecurityConfig {
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/refresh"
                         ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/public/*"
+                        ).permitAll()
                         // Secure every new endpoint by default.
                         .anyRequest().authenticated()
                 )

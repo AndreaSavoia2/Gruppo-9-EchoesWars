@@ -1,13 +1,8 @@
 package it.echoeswar.management.catalog.entity;
 
+import it.echoeswar.management.catalog.enumerated.SchoolCode;
 import it.echoeswar.management.common.persistence.AuditableEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +22,10 @@ public class School extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private byte id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "code", nullable = false, length = 100, unique = true)
+    private SchoolCode code;
 
     @Column(name = "name_it", nullable = false, length = 100, unique = true)
     private String nameIt;

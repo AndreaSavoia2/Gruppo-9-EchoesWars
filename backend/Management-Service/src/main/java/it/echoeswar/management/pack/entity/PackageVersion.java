@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * A versioned commercial configuration of a {@link GamePackage}.
@@ -54,7 +55,7 @@ public class PackageVersion extends CreatedAtEntity {
     private boolean active = true;
 
     @Column(name = "published_at")
-    private Instant publishedAt;
+    private LocalDateTime publishedAt;
 
     @Column(name = "retired_at")
     private Instant retiredAt;

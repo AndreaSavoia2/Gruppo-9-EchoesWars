@@ -5,6 +5,7 @@ import it.echoeswar.management.user.enumerated.AccountStatus;
 import it.echoeswar.management.user.enumerated.RoleName;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record UserResponse(
@@ -14,7 +15,7 @@ public record UserResponse(
         RoleName role,
         AccountStatus accountStatus,
         Long selectedAvatarId,
-        Instant createdAt
+        LocalDateTime createdAt
 ) {
 
     public static UserResponse toUserResponse(User user) {

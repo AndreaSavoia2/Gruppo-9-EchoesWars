@@ -18,6 +18,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Outcome metadata for the opening of a package purchase.
@@ -42,7 +43,7 @@ public class PackageOpening {
 
     @CreationTimestamp
     @Column(name = "opened_at", nullable = false, updatable = false)
-    private Instant openedAt;
+    private LocalDateTime openedAt;
 
     @Column(name = "random_seed", length = 255)
     private String randomSeed;

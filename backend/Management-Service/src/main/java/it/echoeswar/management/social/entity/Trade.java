@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * A card-trade proposal between the two users of an accepted friendship.
@@ -61,7 +62,7 @@ public class Trade extends AuditableEntity {
     private Card recipientCard;
 
     @Column(name = "proposer_accepted_at")
-    private Instant proposerAcceptedAt;
+    private LocalDateTime proposerAcceptedAt;
 
     @Column(name = "recipient_accepted_at")
     private Instant recipientAcceptedAt;
@@ -72,14 +73,14 @@ public class Trade extends AuditableEntity {
     private TradeStatus status = TradeStatus.OPEN;
 
     @Column(name = "completed_at")
-    private Instant completedAt;
+    private LocalDateTime completedAt;
 
     @Column(name = "rejected_at")
-    private Instant rejectedAt;
+    private LocalDateTime rejectedAt;
 
     @Column(name = "cancelled_at")
-    private Instant cancelledAt;
+    private LocalDateTime cancelledAt;
 
     @Column(name = "expires_at")
-    private Instant expiresAt;
+    private LocalDateTime expiresAt;
 }

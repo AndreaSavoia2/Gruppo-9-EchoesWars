@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * A user-owned deck built under a specific {@link DeckRule}.
@@ -66,5 +67,5 @@ public class Deck extends AuditableEntity {
     private DeckStatus status = DeckStatus.DRAFT;
 
     @Column(name = "deleted_at")
-    private Instant deletedAt;
+    private LocalDateTime deletedAt;
 }

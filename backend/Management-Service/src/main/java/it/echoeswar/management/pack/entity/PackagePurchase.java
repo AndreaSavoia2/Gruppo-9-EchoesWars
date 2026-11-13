@@ -21,6 +21,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Immutable purchase of one package version by a user.
@@ -56,5 +57,5 @@ public class PackagePurchase {
 
     @CreationTimestamp
     @Column(name = "purchased_at", nullable = false, updatable = false)
-    private Instant purchasedAt;
+    private LocalDateTime purchasedAt;
 }

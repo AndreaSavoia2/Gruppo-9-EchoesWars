@@ -22,6 +22,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Represents the canonical, ordered pair of users participating in a friendship.
@@ -59,14 +60,14 @@ public class Friendship {
 
     @CreationTimestamp
     @Column(name = "requested_at", nullable = false, updatable = false)
-    private Instant requestedAt;
+    private LocalDateTime requestedAt;
 
     @Column(name = "accepted_at")
-    private Instant acceptedAt;
+    private LocalDateTime acceptedAt;
 
     @Column(name = "rejected_at")
-    private Instant rejectedAt;
+    private LocalDateTime rejectedAt;
 
     @Column(name = "removed_at")
-    private Instant removedAt;
+    private LocalDateTime removedAt;
 }

@@ -27,6 +27,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Persisted result and replay input of a challenge simulation.
@@ -93,8 +94,8 @@ public class Match extends CreatedAtEntity {
     private String failureReason;
 
     @Column(name = "started_at")
-    private Instant startedAt;
+    private LocalDateTime startedAt;
 
     @Column(name = "ended_at")
-    private Instant endedAt;
+    private LocalDateTime endedAt;
 }

@@ -18,6 +18,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Avatar that a user has unlocked and can therefore select.
@@ -46,5 +47,5 @@ public class UserAvatar {
 
     @CreationTimestamp
     @Column(name = "unlocked_at", nullable = false, updatable = false)
-    private Instant unlockedAt;
+    private LocalDateTime unlockedAt;
 }
