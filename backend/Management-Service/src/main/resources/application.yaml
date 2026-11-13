@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: Management-Service
+  datasource:
+    # Le credenziali database arrivano dall'ambiente, mai dal repository.
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      # Hibernate validates the schema created by Flyway and never changes it.
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    # Flyway applies versioned SQL migrations from db/migration.
+    enabled: true
+security:
+  cors:
+    # Comma-separated exact origins. Empty by default, so browser requests from other origins are denied.
+    # Local development: CORS_ALLOWED_ORIGINS=http://localhost:3000
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+  jwt:
+    issuer: ${JWT_ISSUER}
+    audience: ${JWT_AUDIENCE}
+    access-token-ttl: PT15M
+    key-store-location: ${JWT_KEY_STORE_LOCATION}
+    key-store-password: ${JWT_KEY_STORE_PASSWORD}
+    key-alias: ${JWT_KEY_ALIAS}
+  refresh-token:
+    # Each newly issued refresh token remains valid for seven days.
+    ttl: P7D
+    cookie:
+      name: ECHOESWAR_REFRESH_TOKEN
+      path: /api/v1/auth
+      # FALSE ONLY IN DEV
+      secure: ${REFRESH_TOKEN_COOKIE_SECURE:true}
+      same-site: ${REFRESH_TOKEN_COOKIE_SAME_SITE:Lax}

@@ -1,0 +1,145 @@
+package it.echoeswar.management.user.service;
+
+import it.echoeswar.management.collection.entity.UserAvatar;
+import it.echoeswar.management.collection.entity.UserAvatarId;
+import it.echoeswar.management.collection.repository.UserAvatarRepository;
+import it.echoeswar.management.common.exception.ResourceConflictException;
+import it.echoeswar.management.common.exception.ResourceNotFoundException;
+import it.echoeswar.management.common.utils.FormatterString;
+import it.echoeswar.management.security.auth.dto.request.RegisterRequest;
+import it.echoeswar.management.security.auth.dto.response.UserResponse;
+import it.echoeswar.management.security.auth.password.PasswordPolicy;
+import it.echoeswar.management.user.entity.Role;
+import it.echoeswar.management.user.entity.User;
+import it.echoeswar.management.user.enumerated.AccountStatus;
+import it.echoeswar.management.user.enumerated.RoleName;
+import it.echoeswar.management.user.repository.RoleRepository;
+import it.echoeswar.management.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.Objects;
+import java.util.UUID;
+
+/**
+ * Manages account registration and authenticated user-profile operations.
+ */
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+    private static final String ACCOUNT_CONFLICT_MESSAGE =
+            "An account with the provided username or email already exists.";
+
+    private final UserRepository userRepository;
+    private final UserAvatarRepository userAvatarRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordPolicy passwordPolicy;
+    private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Registers an active account with the default user role.
+     *
+     * <p>The email is normalized before uniqueness checks and persistence, and the password is
+     * validated and encoded before it is stored. The database constraint remains the final
+     * protection against concurrent duplicate registrations; its violation is exposed as the
+     * same domain conflict returned by the pre-check.</p>
+     */
+    @Transactional
+    public UserResponse register(RegisterRequest request) {
+        Objects.requireNonNull(request, "request must not be null");
+
+        String normalizedEmail = FormatterString.normalizeEmail(request.email());
+
+        passwordPolicy.validateForRegistration(request.password());
+
+        if (userRepository.existsByUsername(request.username())
+                || userRepository.existsByEmailIgnoreCase(normalizedEmail)) {
+            throw new ResourceConflictException(ACCOUNT_CONFLICT_MESSAGE);
+        }
+
+        Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Default user role is not configured."
+                ));
+
+        User user = User.builder()
+                .username(request.username())
+                .email(normalizedEmail)
+                .password(passwordEncoder.encode(request.password()))
+                .accountStatus(AccountStatus.ACTIVE)
+                .passwordChangedAt(Instant.now())
+                .role(userRole)
+                .build();
+
+        try {
+            User savedUser = userRepository.saveAndFlush(user);
+
+            return UserResponse.toUserResponse(savedUser);
+        } catch (DataIntegrityViolationException exception) {
+            throw new ResourceConflictException(ACCOUNT_CONFLICT_MESSAGE);
+        }
+    }
+
+    /**
+     * Retrieves an account only for that account's owner or an administrator.
+     */
+    @PreAuthorize(
+            "hasRole('ADMIN') or "
+                    + "(hasRole('USER') and #p0 == authentication.principal.id)"
+    )
+    @Transactional(readOnly = true)
+    public UserResponse getUserById(UUID userId) {
+        Objects.requireNonNull(userId, "userId must not be null");
+
+        return userRepository.findByIdWithRole(userId)
+                .map(UserResponse::toUserResponse)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User",
+                        "id",
+                        userId
+                ));
+    }
+
+    /**
+     * Selects an avatar already unlocked by the authenticated user.
+     *
+     * <p>Both rows are locked while the selection is changed. The ownership check gives the
+     * caller a useful validation error, while the composite foreign key on {@code users} is the
+     * final integrity guarantee at database level.</p>
+     */
+    @PreAuthorize("#p0 == authentication.principal.id")
+    @Transactional
+    public UserResponse selectAvatar(UUID userId, Long avatarId) {
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(avatarId, "avatarId must not be null");
+
+        if (avatarId <= 0) {
+            throw new IllegalArgumentException("avatarId must be positive");
+        }
+
+        User user = userRepository.findByIdForUpdate(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User",
+                        "id",
+                        userId
+                ));
+
+        UserAvatar userAvatar = userAvatarRepository.findByIdForUpdate(
+                        new UserAvatarId(userId, avatarId)
+                )
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Selected avatar is not unlocked by the user."
+                ));
+
+        user.setSelectedAvatar(userAvatar.getAvatar());
+
+        return UserResponse.toUserResponse(user);
+    }
+
+}
