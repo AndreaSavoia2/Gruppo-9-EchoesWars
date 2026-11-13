@@ -1,3 +1,4 @@
+
 name: Gemini PR Review
 
 on:
@@ -19,11 +20,16 @@ jobs:
   review:
     # Do not run with write permissions on code coming from a fork.
     if: github.event.pull_request.head.repo.full_name == github.repository
+
     uses: ./.github/workflows/gemini-review.yml
+
+    with:
+      additional_context: ${{ vars.GEMINI_REVIEW_RULES }}
+
     permissions:
       contents: read
       id-token: write
       issues: write
       pull-requests: write
-    secrets: inherit
 
+    secrets: inherit
