@@ -22,6 +22,7 @@ import lombok.Builder;
  * @param defense        defense value of the card
  * @param cost           cost required to play the card
  * @param artUrl         URL of the card artwork
+ * @param frameImageUrl  URL of the frame image associated with the card tier
  * @param echoesId       identifier of the faction the card belongs to
  * @param echoesNameIt   faction name in Italian
  * @param echoesNameEn   faction name in English
@@ -128,6 +129,15 @@ public record CardResponse(
         String artUrl,
 
         @Schema(
+                description = "URL of the frame image associated with the card tier, when available.",
+                example = "https://cdn.echoeswar.it/tiers/common-frame.png",
+                format = "uri",
+                nullable = true,
+                accessMode = Schema.AccessMode.READ_ONLY
+        )
+        String frameImageUrl,
+
+        @Schema(
                 description = "Identifier of the faction to which the card belongs.",
                 example = "1",
                 format = "int32",
@@ -211,6 +221,7 @@ public record CardResponse(
                 .defense(card.getDefense())
                 .cost(card.getPlayCost())
                 .artUrl(FormatterString.capitalizeFirstLetter(card.getImageUrl()))
+                .frameImageUrl(card.getTier().getImageUrl())
                 .echoesId(card.getFaction().getId())
                 .echoesNameIt(FormatterString.capitalizeFirstLetter(card.getFaction().getNameIt()))
                 .echoesNameEn(FormatterString.capitalizeFirstLetter(card.getFaction().getNameEn()))

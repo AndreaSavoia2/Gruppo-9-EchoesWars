@@ -36,6 +36,9 @@ public class Tier extends AuditableEntity {
     @Column(name = "level", nullable = false, unique = true)
     private int level;
 
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
+
     @Builder.Default
     @Column(name = "is_active", nullable = false)
     private boolean active = true;

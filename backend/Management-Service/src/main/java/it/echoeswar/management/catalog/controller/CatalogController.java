@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -79,12 +80,12 @@ public class CatalogController {
                     description = "Sorting direction. Accepted values are ASC and DESC.",
                     example = "DESC"
             )
-            @RequestParam(defaultValue = "DESC") String direction
-    ) {
-        return ResponseApi
-                .buildResponse(
-                        HttpStatus.OK,
-                        cardService.getAllCards(pageNumber, pageSize, sortBy, direction)
-                );
+            @RequestParam(defaultValue = "DESC") String direction) {
+        Map<String, Object> result = cardService.getAllCards(pageNumber, pageSize, sortBy, direction);
+        List<?> content = (List<?>) result.get("content");
+        if (content.isEmpty())
+            return ResponseApi.buildResponse(HttpStatus.OK, result, "No cards found for the requested page.");
+        else
+            return ResponseApi.buildResponse(HttpStatus.OK, result);
     }
 }

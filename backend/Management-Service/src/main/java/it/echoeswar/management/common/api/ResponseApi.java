@@ -36,12 +36,14 @@ public class ResponseApi<T> {
     )
     private HttpStatus httpStatus;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(
             description = "HTTP error reason when the request fails; null for successful responses.",
             example = "Bad Request"
     )
     private String error;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(
             description = "Human-readable outcome or error message.",
             example = "Operation completed successfully."
