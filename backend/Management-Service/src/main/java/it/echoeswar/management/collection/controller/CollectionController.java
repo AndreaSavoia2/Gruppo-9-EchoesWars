@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.echoeswar.management.collection.service.UserCardService;
 import it.echoeswar.management.common.api.ResponseApi;
 import it.echoeswar.management.security.userdetails.CustomUserDetails;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -102,7 +103,7 @@ public class CollectionController {
                     description = "Number of cards to include in each page.",
                     example = "6"
             )
-            @RequestParam(defaultValue = "6") @Min(1) @Min(10) int pageSize,
+            @RequestParam(defaultValue = "6") @Min(1) @Max(10) int pageSize,
             @Parameter(
                     in = ParameterIn.QUERY,
                     description = "Collection-card property used to sort the result. Nested card properties are supported.",
