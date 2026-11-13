@@ -107,7 +107,7 @@ public class ExceptionManagement {
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<?> constraintViolationExceptionManagement(ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
-        // Last node of the property path = the parameter/field name ("registrationUser.arg0" → "arg0").
+        // Use the final property-path segment as the parameter or field name.
         Map<String, String> errors = violations.stream()
                 .collect(Collectors.toMap(
                         v -> {

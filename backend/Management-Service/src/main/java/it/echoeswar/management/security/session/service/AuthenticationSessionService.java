@@ -23,7 +23,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Manages persistent authentication sessions and refresh token rotation.
+ * Manages persistent authentication sessions and refresh-token rotation.
+ *
+ * <p>Sessions provide server-side revocation for otherwise stateless access tokens. Refresh
+ * tokens are single-use credentials whose database records retain only a hash.</p>
  */
 @Service
 public class AuthenticationSessionService {
@@ -48,6 +51,12 @@ public class AuthenticationSessionService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Creates a session and its first refresh-token record for a user.
+     *
+     * <p>The raw refresh token is returned exactly once in the result; only its hash is stored in
+     * the database. The returned expiration is shared by the session and its first token.</p>
+     */
     @Transactional
     public IssuedRefreshToken createSession(
             UUID userId,
@@ -90,6 +99,12 @@ public class AuthenticationSessionService {
         );
     }
 
+    /**
+     * Revokes one active session owned by the supplied user and every token in its family.
+     *
+     * <p>The session is locked before it is changed. A missing, expired, or already revoked
+     * session is treated as a successful no-op so callers can safely repeat logout requests.</p>
+     */
     @Transactional
     public void revokeSession(
             UUID userId,
@@ -131,6 +146,12 @@ public class AuthenticationSessionService {
         refreshTokenRepository.revokeTokensBySessionId(sessionId, now);
     }
 
+    /**
+     * Revokes all active sessions for a user together with their refresh-token families.
+     *
+     * <p>Active sessions are locked before the bulk update. If none remain, the operation is a
+     * no-op.</p>
+     */
     @Transactional
     public void revokeAllSessions(
             UUID userId,
@@ -176,6 +197,12 @@ public class AuthenticationSessionService {
         refreshTokenRepository.revokeTokensBySessionIds(sessionIds, now);
     }
 
+    /**
+     * Checks whether a session is still active for a user at the current instant.
+     *
+     * <p>This is used while converting a bearer token so an otherwise valid JWT cannot outlive a
+     * server-side logout or session expiration.</p>
+     */
     @Transactional(readOnly = true)
     public boolean isSessionActive(
             UUID userId,
@@ -191,6 +218,14 @@ public class AuthenticationSessionService {
                 .isPresent();
     }
 
+    /**
+     * Consumes a refresh token exactly once and issues its replacement in the same session.
+     *
+     * <p>The presented token is conditionally consumed while the session is locked, then linked
+     * to the newly persisted replacement. Reusing an already consumed token revokes the whole
+     * session and its token family. {@link InvalidRefreshTokenException} intentionally does not
+     * trigger rollback, preserving that defensive revocation.</p>
+     */
     @Transactional(noRollbackFor = InvalidRefreshTokenException.class)
     public RefreshTokenRotationResult rotateRefreshToken(
             String rawRefreshToken
@@ -276,6 +311,9 @@ public class AuthenticationSessionService {
         );
     }
 
+    /**
+     * Returns the user's currently active sessions and marks the caller's session in each DTO.
+     */
     @Transactional(readOnly = true)
     public List<ActiveSessionResponse> getActiveSessions(
             UUID userId,

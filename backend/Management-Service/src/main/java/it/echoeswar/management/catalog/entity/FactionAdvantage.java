@@ -15,9 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Bonus d'attacco della fazione attaccante nei confronti di una fazione difensore.
- */
+/** Attack bonus granted to an attacking faction against a defending faction. */
 @Entity
 @Table(name = "faction_advantages")
 @Getter

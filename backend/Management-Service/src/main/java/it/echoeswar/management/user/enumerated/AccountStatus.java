@@ -1,6 +1,6 @@
 package it.echoeswar.management.user.enumerated;
 
-/** Stati che determinano se un account puo' ottenere o continuare a usare credenziali. */
+/** States that determine whether an account can obtain or continue using credentials. */
 public enum AccountStatus {
 
     PENDING_EMAIL_VERIFICATION,

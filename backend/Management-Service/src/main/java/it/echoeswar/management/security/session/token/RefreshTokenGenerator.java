@@ -30,6 +30,12 @@ public class RefreshTokenGenerator {
         this.secureRandom = new SecureRandom();
     }
 
+    /**
+     * Generates a URL-safe opaque token from 32 cryptographically random bytes and its hash.
+     *
+     * <p>The raw token is intended for the client only; callers persist or compare the returned
+     * hash instead.</p>
+     */
     public GeneratedRefreshToken generate() {
         byte[] tokenBytes = new byte[TOKEN_BYTE_LENGTH];
         secureRandom.nextBytes(tokenBytes);
@@ -46,6 +52,12 @@ public class RefreshTokenGenerator {
         }
     }
 
+    /**
+     * Produces the SHA-256 hexadecimal representation used as the refresh-token lookup value.
+     *
+     * <p>SHA-256 is appropriate here because generated tokens have high entropy; this is not a
+     * password-hashing operation.</p>
+     */
     public String hash(String rawToken) {
         Objects.requireNonNull(rawToken, "rawToken must not be null");
 

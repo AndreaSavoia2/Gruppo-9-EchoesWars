@@ -34,6 +34,18 @@ public class CustomJwtAuthenticationConverter
         this.authenticationSessionService = authenticationSessionService;
     }
 
+    /**
+     * Builds an authenticated principal only when the JWT still represents an active account and session.
+     *
+     * <p>Signature and standard JWT claims have already been verified by the resource server. This
+     * additional lookup prevents a token from remaining valid after an account is disabled or its
+     * server-side session is revoked.</p>
+     *
+     * @param jwt validated JWT supplied by the resource server
+     * @return application-specific authentication containing the user and session ID
+     * @throws InvalidBearerTokenException if the subject or session claim is invalid, the account
+     *                                     cannot authenticate, or the session is inactive
+     */
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         UUID userId = parseUserId(jwt.getSubject());

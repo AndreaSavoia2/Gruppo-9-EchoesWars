@@ -35,7 +35,11 @@ public class JwtTokenService {
     }
 
     /**
-     * Creates an RS256 access token for an authenticated user session.
+     * Creates an RS256 access token bound to an authenticated user session.
+     *
+     * <p>The token subject is the user's UUID and the {@code sid} claim identifies the
+     * server-side session used for revocation checks. It also contains the current authorities,
+     * configured issuer and audience, issue time, expiration, and a unique token identifier.</p>
      */
     public IssuedAccessToken generateAccessToken(
             CustomUserDetails userDetails,

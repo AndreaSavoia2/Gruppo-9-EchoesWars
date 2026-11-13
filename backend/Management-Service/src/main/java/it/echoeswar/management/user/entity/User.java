@@ -16,8 +16,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Modello persistente dell'account. Le informazioni sensibili restano nell'entita' e vengono
- * convertite in DTO dedicati prima di essere esposte dalle API.
+ * Persistent account model.
+ *
+ * <p>Sensitive data remains on the entity and is mapped to dedicated DTOs before it is exposed
+ * by the API.</p>
  */
 @Entity
 @Table(name = "users")
@@ -39,7 +41,7 @@ public class User extends AuditableEntity {
     @Column(name = "email", nullable = false, length = 255, unique = true)
     private String email;
 
-    // Contiene soltanto l'hash BCrypt; @JsonIgnore e i DTO impediscono esposizioni accidentali.
+    // Stores only the BCrypt hash; JsonIgnore and DTOs prevent accidental exposure.
     @Column(name = "password", nullable = false, length = 255)
     @JsonIgnore
     private String password;
@@ -74,8 +76,7 @@ public class User extends AuditableEntity {
     private Role role;
 
     public boolean canAuthenticate(boolean emailVerificationRequired) {
-        // Tutti i requisiti vengono concentrati qui cosi' login, refresh e validazione JWT
-        // applicano la stessa politica per account attivi, non eliminati e verificati se necessario.
+        // Centralizes these checks so login, refresh, and JWT validation apply the same account policy.
         return accountStatus == AccountStatus.ACTIVE
                 && deletedAt == null
                 && (!emailVerificationRequired || emailVerifiedAt != null);

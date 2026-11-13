@@ -9,9 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Movimento immutabile di crediti sul portafoglio di un utente.
- */
+/** Immutable credit movement recorded against a user's wallet. */
 @Entity
 @Table(name = "credit_transactions")
 @Getter

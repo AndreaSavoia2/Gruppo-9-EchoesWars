@@ -2,8 +2,17 @@ package it.echoeswar.management.common.utils;
 
 import java.util.Locale;
 
+/**
+ * Small formatting helpers shared by application-layer code.
+ */
 public class FormatterString {
 
+    /**
+     * Produces the canonical form used for email lookup and uniqueness checks.
+     *
+     * <p>Whitespace at both ends is removed and casing is normalized with {@link Locale#ROOT},
+     * so the result is independent of the server's default locale.</p>
+     */
     public static String normalizeEmail(String email) {
         return email.strip().toLowerCase(Locale.ROOT);
     }

@@ -4,19 +4,22 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.servers.Server;
-import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * Configures shared OpenAPI metadata and the JWT bearer authentication scheme.
+ *
+ * <p>Security is declared on individual protected operations so that public
+ * authentication and catalogue endpoints remain callable from Swagger UI.</p>
+ */
 @SecurityScheme(
         name = "bearerAuth",
-        description = "JWT user",
+        description = "JWT access token issued by the authentication endpoints.",
         scheme = "bearer",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
@@ -25,15 +28,17 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
+    /**
+     * Provides the metadata shared by every generated OpenAPI document.
+     *
+     * @return the configured OpenAPI document
+     */
     @Bean
     public OpenAPI defineOpenApi() {
 
         Server serverDev = new Server();
         serverDev.setUrl("http://localhost:8080");
-        serverDev.setDescription("Development");
-
-        SecurityRequirement security = new SecurityRequirement();
-        security.addList("bearerAuth");
+        serverDev.setDescription("Local development server");
 
         Info info = new Info()
                 .title("Echoes'War Management System API")
@@ -42,7 +47,6 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(info)
-                .servers(List.of(serverDev))
-                .security(List.of(security));
+                .servers(List.of(serverDev));
     }
 }

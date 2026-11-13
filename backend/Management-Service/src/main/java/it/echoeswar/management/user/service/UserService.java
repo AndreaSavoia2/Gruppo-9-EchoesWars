@@ -26,6 +26,9 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Manages account registration and authenticated user-profile operations.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -39,6 +42,14 @@ public class UserService {
     private final PasswordPolicy passwordPolicy;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Registers an active account with the default user role.
+     *
+     * <p>The email is normalized before uniqueness checks and persistence, and the password is
+     * validated and encoded before it is stored. The database constraint remains the final
+     * protection against concurrent duplicate registrations; its violation is exposed as the
+     * same domain conflict returned by the pre-check.</p>
+     */
     @Transactional
     public UserResponse register(RegisterRequest request) {
         Objects.requireNonNull(request, "request must not be null");
@@ -75,6 +86,9 @@ public class UserService {
         }
     }
 
+    /**
+     * Retrieves an account only for that account's owner or an administrator.
+     */
     @PreAuthorize(
             "hasRole('ADMIN') or "
                     + "(hasRole('USER') and #p0 == authentication.principal.id)"
@@ -95,8 +109,9 @@ public class UserService {
     /**
      * Selects an avatar already unlocked by the authenticated user.
      *
-     * <p>The ownership check gives the caller a useful validation error, while the composite
-     * foreign key on {@code users} is the final integrity guarantee at database level.</p>
+     * <p>Both rows are locked while the selection is changed. The ownership check gives the
+     * caller a useful validation error, while the composite foreign key on {@code users} is the
+     * final integrity guarantee at database level.</p>
      */
     @PreAuthorize("#p0 == authentication.principal.id")
     @Transactional

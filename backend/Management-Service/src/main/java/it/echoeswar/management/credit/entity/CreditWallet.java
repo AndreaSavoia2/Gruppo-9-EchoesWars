@@ -18,9 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Saldo crediti associato in modo univoco a un account utente.
- */
+/** Credit balance uniquely associated with a user account. */
 @Entity
 @Table(name = "credit_wallets")
 @Getter

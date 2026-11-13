@@ -23,6 +23,12 @@ public class RefreshTokenCookieFactory {
         this.cookieProperties = cookieProperties;
     }
 
+    /**
+     * Creates the HTTP-only cookie that transports a newly issued raw refresh token.
+     *
+     * <p>The cookie lifetime is derived from the token's absolute expiration so the browser does
+     * not retain it longer than the corresponding server-side session.</p>
+     */
     public ResponseCookie createIssuedCookie(
             IssuedRefreshToken issuedRefreshToken
     ) {
@@ -47,6 +53,12 @@ public class RefreshTokenCookieFactory {
                 .build();
     }
 
+    /**
+     * Creates a zero-age cookie with the configured scope to remove a stored refresh token.
+     *
+     * <p>Using the same name, path, secure flag, and SameSite policy as an issued cookie is
+     * required for browsers to replace it.</p>
+     */
     public ResponseCookie createDeletionCookie() {
         return cookieBuilder("")
                 .maxAge(Duration.ZERO)

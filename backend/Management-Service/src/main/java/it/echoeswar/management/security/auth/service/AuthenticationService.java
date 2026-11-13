@@ -32,6 +32,12 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Coordinates credential authentication with the stateful session and token lifecycle.
+ *
+ * <p>This service deliberately exposes the same authentication failure to callers for
+ * invalid credentials and unavailable accounts, so account state is not disclosed.</p>
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -49,7 +55,12 @@ public class AuthenticationService {
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-
+    /**
+     * Revokes one active session owned by the user and all refresh tokens issued for it.
+     *
+     * <p>The operation is intentionally idempotent: revoking an already inactive session has
+     * no effect.</p>
+     */
     public void logout(
             UUID userId,
             UUID sessionId
@@ -64,6 +75,11 @@ public class AuthenticationService {
         );
     }
 
+    /**
+     * Revokes every active session and refresh-token family belonging to the user.
+     *
+     * <p>The operation is intentionally idempotent when the user has no active sessions.</p>
+     */
     public void logoutAll(UUID userId) {
         Objects.requireNonNull(userId, "userId must not be null");
 
@@ -73,6 +89,14 @@ public class AuthenticationService {
         );
     }
 
+    /**
+     * Authenticates credentials and creates a new persistent session.
+     *
+     * <p>The user row is locked before authentication so the account-state check and the
+     * last-login update are serialized with concurrent account changes. On success, the result
+     * contains a short-lived access token and a raw refresh token; only the refresh-token hash
+     * is persisted by the session service.</p>
+     */
     @Transactional
     public AuthenticationResult login(
             LoginRequest request,
@@ -229,6 +253,14 @@ public class AuthenticationService {
         );
     }
 
+    /**
+     * Rotates the refresh token and issues a new access-token/refresh-token pair.
+     *
+     * <p>Rotation consumes the presented token before issuing its replacement. The current
+     * account state is then revalidated, and an unusable account causes the refreshed session to
+     * be revoked. {@link InvalidRefreshTokenException} does not roll back the transaction so a
+     * revocation caused by token reuse is retained.</p>
+     */
     @Transactional(noRollbackFor = InvalidRefreshTokenException.class)
     public AuthenticationResult refresh(String rawRefreshToken) {
         RefreshTokenRotationResult rotationResult =

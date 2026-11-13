@@ -29,12 +29,17 @@ public class CardService {
     private final CardRepository cardRepository;
 
     /**
-     * Retrieves one page of cards together with their related faction, school and tiar details.
+     * Retrieves one page of cards together with their related faction, school, and tier details.
      *
+     * @param pageNumber zero-based page index
+     * @param pageSize number of cards to return; must be positive
+     * @param sortBy card property used for sorting
+     * @param direction sorting direction accepted by {@link Sort.Direction}
      * @return page content together with pagination metadata
+     * @throws IllegalArgumentException if page parameters or the sort direction are invalid
      */
     @Transactional(readOnly = true)
-    public Map<String, Object> getAllCards(int pageNumber, int pageSize, String sortBy, String direction ){
+    public Map<String, Object> getAllCards(int pageNumber, int pageSize, String sortBy, String direction) {
         Pageable pageable = PageRequest.of(
                 pageNumber,
                 pageSize,
