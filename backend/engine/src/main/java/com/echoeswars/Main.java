@@ -1,5 +1,9 @@
 package com.echoeswars;
 
+import com.echoeswars.game.Game;
+import com.echoeswars.model.Card;
+import com.echoeswars.model.Player;
+import com.echoeswars.result.MatchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
