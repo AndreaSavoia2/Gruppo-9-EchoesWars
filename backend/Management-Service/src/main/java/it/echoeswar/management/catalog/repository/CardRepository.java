@@ -14,4 +14,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
             attributePaths = {"faction", "school", "tier"}
     )
     Page<Card> findAll(Pageable pageable);
+
+    boolean existsByCodeIgnoreCase(String code);
 }

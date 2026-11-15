@@ -2,10 +2,18 @@ package it.echoeswar.management.catalog.service;
 
 
 import it.echoeswar.management.catalog.entity.Card;
+import it.echoeswar.management.catalog.entity.Faction;
+import it.echoeswar.management.catalog.entity.School;
+import it.echoeswar.management.catalog.entity.Tier;
+import it.echoeswar.management.catalog.payload.request.CardRequest;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.catalog.repository.CardRepository;
+import it.echoeswar.management.catalog.repository.FactionRepository;
+import it.echoeswar.management.catalog.repository.SchoolRepository;
+import it.echoeswar.management.catalog.repository.TierRepository;
+import it.echoeswar.management.common.exception.ResourceConflictException;
+import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.BuildPageableResponse;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +35,9 @@ import java.util.Map;
 public class CardService {
 
     private final CardRepository cardRepository;
+    private final FactionRepository factionRepository;
+    private final SchoolRepository schoolRepository;
+    private final TierRepository tierRepository;
 
     /**
      * Retrieves one page of cards together with their related faction, school, and tier details.
@@ -48,5 +59,36 @@ public class CardService {
 
         return BuildPageableResponse.buildPage(
                 cardRepository.findAll(pageable).map(CardResponse::from));
+    }
+
+    @Transactional
+    public CardResponse createCard(CardRequest request){
+        if(cardRepository.existsByCodeIgnoreCase(request.code())){
+            throw new ResourceConflictException("Card code already exists: " + request.code());
+        }
+
+        Faction faction = factionRepository.findById(request.echoesId())
+                .orElseThrow(() -> new ResourceNotFoundException("Faction", "id", request.echoesId()));
+        School school = schoolRepository.findById(request.schoolId())
+                .orElseThrow(() -> new ResourceNotFoundException("School", "id", request.echoesId()));
+        Tier tier = tierRepository.findById(request.tierId())
+                .orElseThrow(() -> new ResourceNotFoundException("Tier", "id", request.echoesId()));
+
+        Card card = Card.builder()
+                .code(request.code())
+                .nameIt(request.nameIt())
+                .nameEn(request.nameEn())
+                .descriptionIt(request.descriptionIt())
+                .descriptionEn(request.descriptionEn())
+                .attack(request.attack())
+                .defense(request.defense())
+                .playCost(request.playCost())
+                .imageUrl(request.artUrl())
+                .faction(faction)
+                .school(school)
+                .tier(tier)
+                .build();
+
+        return CardResponse.from(cardRepository.save(card));
     }
 }
