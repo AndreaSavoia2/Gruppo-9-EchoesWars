@@ -89,15 +89,5 @@ class CardControllerTest {
         verifyNoInteractions(cardService);
     }
 
-    @Test
-    @Disabled("Serve @PreAuthorize/@EnableMethodSecurity o la SecurityFilterChain caricata nel test")
-    void createCard_unauthenticated_returns401() throws Exception {
-        mockMvc.perform(post(URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonMapper.writeValueAsString(validRequest()))
-                        .with(csrf()))
-                .andExpect(status().isUnauthorized());
 
-        verifyNoInteractions(cardService);
-    }
 }

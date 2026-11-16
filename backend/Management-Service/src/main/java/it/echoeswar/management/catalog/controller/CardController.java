@@ -3,7 +3,8 @@ package it.echoeswar.management.catalog.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,10 +65,12 @@ public class CardController {
                     )
             )
     })
+    @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("v1/cards")
+    @PostMapping("v1/private/cards")
     public ResponseEntity<?> createCard(@Valid @RequestBody CardRequest request){
         CardResponse card = cardService.createCard(request);
         return ResponseApi.buildResponse(HttpStatus.CREATED, card, "Card created succesfully");
     }
+
 }
