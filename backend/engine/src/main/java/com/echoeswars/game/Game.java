@@ -254,8 +254,8 @@ public class Game {
 
         // Both players must have an active card
         if (firstCard == null || secondCard == null) {
-            System.out.println("Combat cannot start: missing active card.");
-            return null;
+            throw new IllegalStateException(
+                    "Combat cannot start: missing active card.");
         }
 
         // Read both attack values before applying damage

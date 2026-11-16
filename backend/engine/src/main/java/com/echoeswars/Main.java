@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -21,11 +20,19 @@ public class Main {
     public static void main(String[] args) {
 
         try {
+            // Determine input and output file paths based on command-line arguments
+            Path inputPath = args.length > 0
+                    ? Path.of(args[0])
+                    : Path.of("backend/engine/data/input/match.json");
+
+            Path outputPath = args.length > 1
+                    ? Path.of(args[1])
+                    : Path.of("backend/engine/data/output/match-result.json");
             // Load match configuration
             ObjectMapper mapper = new ObjectMapper();
 
             JsonNode root = mapper.readTree(
-                    Path.of("backend/engine/data/input/match.json").toFile());
+                    inputPath.toFile());
 
             String matchId = root.get("matchId").asText();
             long seed = root.get("seed").asLong();
@@ -109,7 +116,7 @@ public class Main {
             Random random = new Random(seed);
 
             for (Player player : gamePlayers) {
-                Collections.shuffle(player.getDeck(), random);
+                player.shuffleDeck(random);
             }
 
             // Draw the initial active card for each player
@@ -141,15 +148,26 @@ public class Main {
             outputMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
             // Save the match result to a JSON file
-            File outputFile = new File("backend/engine/data/output/match-result.json");
+            File outputFile = new File(outputPath.toString());
 
             outputMapper.writeValue(outputFile, result);
 
             System.out.println("Match result saved to: " + outputFile.getPath());
 
         } catch (IOException e) {
-            System.out.println(
-                    "Error reading match: " + e.getMessage());
+            System.err.println(
+                    "File error: " + e.getMessage());
+            System.exit(1);
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.err.println(
+                    "Match error: " + e.getMessage());
+            System.exit(1);
+
+        } catch (RuntimeException e) {
+            System.err.println(
+                    "Unexpected engine error: " + e.getMessage());
+            System.exit(1);
         }
     }
 }

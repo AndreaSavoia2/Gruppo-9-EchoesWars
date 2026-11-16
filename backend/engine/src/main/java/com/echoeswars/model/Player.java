@@ -1,6 +1,8 @@
 package com.echoeswars.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class Player {
 
@@ -25,7 +27,11 @@ public class Player {
     }
 
     public ArrayList<Card> getDeck() {
-        return deck;
+        return new ArrayList<>(deck);
+    }
+
+    public void shuffleDeck(Random random) {
+        Collections.shuffle(deck, random);
     }
 
     public Card getActiveCard() {
