@@ -1,5 +1,7 @@
 package it.echoeswar.management.backoffice;
 
+import it.echoeswar.management.backoffice.payload.request.PackRequest;
+import it.echoeswar.management.backoffice.payload.response.PackResponse;
 import it.echoeswar.management.catalog.entity.Card;
 import it.echoeswar.management.catalog.entity.Faction;
 import it.echoeswar.management.catalog.entity.School;
@@ -13,6 +15,8 @@ import it.echoeswar.management.catalog.repository.TierRepository;
 import it.echoeswar.management.common.exception.ResourceConflictException;
 import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.FormatterString;
+import it.echoeswar.management.pack.entity.GamePackage;
+import it.echoeswar.management.pack.repository.GamePackageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +40,7 @@ public class BackofficeService {
 
     /** Repository used to look up the tiers (rarity levels) of a card. */
     private final TierRepository tierRepository;
+    private final GamePackageRepository gamePackageRepository;
 
     /**
      * Creates a new card in the catalog.
@@ -84,4 +89,36 @@ public class BackofficeService {
 
         return CardResponse.from(cardRepository.save(card));
     }
+
+    /**
+     * Creates a new pack in the catalog.
+     *
+     * <p>The method first verifies that no pack with the same code exists
+     * (case-insensitive), then builds a {@link GamePackage} from the request
+     * and persists it. String fields are normalized through
+     * {@link FormatterString#normalizeString(String)} before being saved.</p>
+     *
+     * @param request the payload containing the pack code, names and
+     *                optional descriptions
+     * @return the {@link PackResponse} representing the newly created pack
+     * @throws ResourceConflictException if a pack with the same code already exists
+     */
+    @Transactional
+    public PackResponse createPack(PackRequest request){
+        if(gamePackageRepository.existsByCodeIgnoreCase(request.code())){
+            throw new ResourceConflictException("Pack code already exists: " + request.code());
+        }
+
+        GamePackage gamePackage = GamePackage.builder()
+                .code(FormatterString.normalizeString(request.code()))
+                .nameIt(FormatterString.normalizeString(request.nameIt()))
+                .nameEn(FormatterString.normalizeString(request.nameEn()))
+                .descriptionIt(FormatterString.normalizeString(request.descriptionIt()))
+                .descriptionEn(FormatterString.normalizeString(request.descriptionEn()))
+                .build();
+
+        return PackResponse.from(gamePackageRepository.save(gamePackage));
+
+    }
+
 }
