@@ -38,11 +38,36 @@ public interface PackagePurchaseRepository extends JpaRepository<PackagePurchase
     List<PackagePurchase> findUnopenedByUserId(@Param("userId") UUID userId);
 
     /**
-     * Recupera e blocca un acquisto appartenente all'utente, così non può essere aperto due volte.
+     * Retrieves an unopened user purchase without applying a write lock.
+     * It is used only by read operations that report progress toward the
+     * guaranteed legendary.
      *
-     * @param purchaseId identificativo dell'acquisto
-     * @param userId proprietario autenticato dell'acquisto
-     * @return acquisto bloccato, se esiste e appartiene all'utente
+     * @param purchaseId purchase identifier
+     * @param userId authenticated owner of the purchase
+     * @return unopened purchase, if it belongs to the user
+     */
+    @Query("""
+            select purchase
+            from PackagePurchase purchase
+            where purchase.id = :purchaseId
+              and purchase.creditTransaction.wallet.user.id = :userId
+              and not exists (
+                  select 1
+                  from PackageOpening opening
+                  where opening.packagePurchase = purchase
+              )
+            """)
+    Optional<PackagePurchase> findUnopenedByIdAndUserId(
+            @Param("purchaseId") Long purchaseId,
+            @Param("userId") UUID userId
+    );
+
+    /**
+     * Retrieves and locks a purchase belonging to the user so it cannot be opened twice.
+     *
+     * @param purchaseId purchase identifier
+     * @param userId authenticated owner of the purchase
+     * @return locked purchase, if it exists and belongs to the user
      */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""

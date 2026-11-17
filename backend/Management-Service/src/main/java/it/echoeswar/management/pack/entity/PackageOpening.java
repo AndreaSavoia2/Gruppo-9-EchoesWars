@@ -52,7 +52,7 @@ public class PackageOpening {
     private long openingNumber;
 
     @Column(name = "cycle_position", nullable = false)
-    private short cyclePosition;
+    private int cyclePosition;
 
     @Builder.Default
     @Column(name = "was_guaranteed", nullable = false)

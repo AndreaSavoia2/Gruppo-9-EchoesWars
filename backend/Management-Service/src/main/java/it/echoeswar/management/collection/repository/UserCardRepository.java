@@ -21,15 +21,15 @@ public interface UserCardRepository extends JpaRepository<UserCard, UserCardId> 
     Page<UserCard> findAllByUserId(UUID userId, Pageable pageable);
 
     /**
-     * Aggiunge copie di una carta alla collezione, creandola se l'utente non la possiede ancora.
+     * Adds copies of a card to the collection, creating the record if the user does not yet own it.
      *
-     * <p>L'UPSERT viene eseguito direttamente da PostgreSQL per non perdere incrementi nel caso
-     * di aperture concorrenti.</p>
+     * <p>The UPSERT runs directly in PostgreSQL to avoid losing increments when openings happen
+     * concurrently.</p>
      *
-     * @param userId proprietario della collezione
-     * @param cardId carta da incrementare
-     * @param quantity numero positivo di copie da aggiungere
-     * @return numero di righe create o aggiornate
+     * @param userId collection owner
+     * @param cardId card to increment
+     * @param quantity positive number of copies to add
+     * @return number of rows created or updated
      */
     @Modifying(flushAutomatically = true)
     @Query(value = """

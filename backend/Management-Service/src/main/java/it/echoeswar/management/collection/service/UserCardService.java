@@ -69,13 +69,13 @@ public class UserCardService {
     }
 
     /**
-     * Accredita alla collezione le copie ottenute da un'apertura o da un'altra ricompensa.
+     * Credits the collection with copies obtained from an opening or another reward.
      *
-     * <p>Ogni quantità è applicata con un UPSERT atomico: se la riga esiste viene incrementata,
-     * altrimenti viene creata. Il metodo partecipa alla transazione del chiamante.</p>
+     * <p>Each quantity is applied using an atomic UPSERT: if the row exists, it is incremented;
+     * otherwise, it is created. The method participates in the caller's transaction.</p>
      *
-     * @param userId proprietario della collezione
-     * @param cardQuantities quantità da aggiungere, raggruppate per identificativo carta
+     * @param userId collection owner
+     * @param cardQuantities quantities to add, grouped by card identifier
      */
     @Transactional
     public void addCardsToCollection(UUID userId, Map<Long, Integer> cardQuantities) {
@@ -84,7 +84,7 @@ public class UserCardService {
                 throw new IllegalArgumentException("Card quantity must be positive.");
             }
 
-            // L'UPSERT evita di perdere copie quando più flussi aggiornano la stessa carta.
+            // The UPSERT prevents copy loss when multiple flows update the same card.
             userCardRepository.incrementQuantity(userId, cardId, quantity);
         });
     }

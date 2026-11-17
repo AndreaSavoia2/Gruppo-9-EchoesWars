@@ -12,15 +12,17 @@ import it.echoeswar.management.credit.enumerated.TransactionType;
 import it.echoeswar.management.credit.repository.CreditTransactionRepository;
 import it.echoeswar.management.credit.repository.CreditWalletRepository;
 import it.echoeswar.management.pack.entity.PackageOpening;
+import it.echoeswar.management.pack.entity.PackagePullRule;
 import it.echoeswar.management.pack.entity.PackagePurchase;
 import it.echoeswar.management.pack.entity.PackageVersion;
 import it.echoeswar.management.pack.payload.response.PackageOpeningResponse;
+import it.echoeswar.management.pack.payload.response.PackageLegendaryProgressResponse;
 import it.echoeswar.management.pack.payload.response.PackagePurchaseResponse;
 import it.echoeswar.management.pack.payload.response.UnopenedPackagePurchaseResponse;
 import it.echoeswar.management.pack.repository.PackageOpeningRepository;
+import it.echoeswar.management.pack.repository.PackagePullRuleRepository;
 import it.echoeswar.management.pack.repository.PackagePurchaseRepository;
 import it.echoeswar.management.pack.repository.PackageVersionRepository;
-import it.echoeswar.management.user.entity.User;
 import it.echoeswar.management.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,15 +51,10 @@ public class PackagePurchaseService {
 
     private static final String INSUFFICIENT_CREDITS_MESSAGE =
             "Insufficient credits to purchase this package.";
-    private static final int CARDS_PER_PACKAGE = 5;
-    private static final int GUARANTEED_COMMON_CARDS = 3;
-    private static final int GUARANTEED_RARE_CARDS = 1;
-    private static final int CYCLE_LENGTH = 10;
-    private static final int RANDOM_COMMON_THRESHOLD = 85;
-    private static final int RANDOM_RARE_THRESHOLD = 98;
     private static final SecureRandom SEED_GENERATOR = new SecureRandom();
 
     private final PackageVersionRepository packageVersionRepository;
+    private final PackagePullRuleRepository packagePullRuleRepository;
     private final CreditWalletRepository creditWalletRepository;
     private final CreditTransactionRepository creditTransactionRepository;
     private final PackagePurchaseRepository packagePurchaseRepository;
@@ -77,39 +75,28 @@ public class PackagePurchaseService {
      * @return confirmation of the persisted purchase and remaining credit balance
      * @throws ResourceNotFoundException if no active version is available for the package
      *                                    or the user has no wallet
-     * @throws ResourceConflictException if the wallet does not have enough credits
+     * @throws ResourceConflictException if the wallet does not have enough credits or the
+     *                                   selected version has no valid pull rule
      */
     @Transactional
     public PackagePurchaseResponse purchasePackage(UUID userId, Long gamePackageId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-
         PackageVersion packageVersion = packageVersionRepository
                 .findAvailableByGamePackageId(gamePackageId)
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Available package",
-                        "id",
-                        gamePackageId
-                ));
+                .orElseThrow(() -> new ResourceNotFoundException("Available package", "id", gamePackageId));
+
+        // The sale is allowed only when the version has a complete, immutable pull rule.
+        validatePullRule(findPullRuleForVersion(packageVersion));
 
         CreditWallet wallet = creditWalletRepository.findByUserIdForUpdate(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Credit wallet",
-                        "user id",
-                        userId
-                ));
+                .orElseThrow(() -> new ResourceNotFoundException("Credit wallet", "user id", userId));
 
         long price = packageVersion.getPriceCredits();
-        if (price <= 0) {
-            throw new ResourceConflictException(
-                    "The selected package is not available for purchase."
-            );
-        }
-        if (wallet.getBalance() < price) {
+        if (price <= 0)
+            throw new ResourceConflictException("The selected package is not available for purchase.");
+        if (wallet.getBalance() < price)
             throw new ResourceConflictException(INSUFFICIENT_CREDITS_MESSAGE);
-        }
 
         wallet.setBalance(wallet.getBalance() - price);
 
@@ -124,7 +111,6 @@ public class PackagePurchaseService {
 
         PackagePurchase packagePurchase = packagePurchaseRepository.saveAndFlush(
                 PackagePurchase.builder()
-
                         .packageVersion(packageVersion)
                         .creditTransaction(creditTransaction)
                         .pricePaidCredits(price)
@@ -149,70 +135,101 @@ public class PackagePurchaseService {
     }
 
     /**
-     * Apre un pacchetto acquistato e aggiunge immediatamente le carte alla collezione dell'utente.
+     * Calculates how many account openings remain until the next guaranteed legendary
+     * under the historical rule of an unopened purchase.
      *
-     * <p>Le prime nove aperture del ciclo ricevono tre comuni, una rara e uno slot casuale
-     * (85% comune, 13% rara, 2% leggendaria). La decima sostituisce lo slot casuale con una
-     * leggendaria garantita; il conteggio poi riparte automaticamente dal primo slot del ciclo.</p>
+     * <p>The counter is global to the account, as in the actual opening flow. The cycle,
+     * however, is read from the purchased package version: future catalog configuration
+     * changes therefore do not affect this calculation.</p>
      *
-     * @param userId identificativo dell'utente autenticato
-     * @param purchaseId identificativo dell'acquisto da aprire
-     * @return apertura persistita con le cinque carte estratte
-     * @throws ResourceNotFoundException se l'utente o l'acquisto non esistono
-     * @throws ResourceConflictException se l'acquisto è già aperto o manca una rarità attiva
+     * @param userId identifier of the authenticated user
+     * @param purchaseId identifier of the unopened purchase to inspect
+     * @return progress toward the next opening with a guaranteed legendary
+     * @throws ResourceNotFoundException if the purchase is already opened or does not belong to the user
+     * @throws ResourceConflictException if the purchased version has no valid pull rule
+     */
+    @Transactional(readOnly = true)
+    public PackageLegendaryProgressResponse getLegendaryGuaranteeProgress(UUID userId, Long purchaseId) {
+        // The read is limited to the unopened purchase owned by the authenticated user.
+        PackagePurchase packagePurchase = packagePurchaseRepository
+                .findUnopenedByIdAndUserId(purchaseId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Unopened package purchase", "id", purchaseId));
+
+        // Retrieve the immutable rule of the version that was actually purchased.
+        PackagePullRule pullRule = findPullRuleForVersion(packagePurchase.getPackageVersion());
+        validatePullRule(pullRule);
+
+        // Apply the same global progression used by openPackage.
+        long completedOpenings = packageOpeningRepository.countByUserId(userId);
+        int completedInCurrentCycle = (int) (completedOpenings % pullRule.getCycleLength());
+        int openingsUntilGuaranteedLegendary = pullRule.getCycleLength() - completedInCurrentCycle;
+        long guaranteedOpeningNumber = completedOpenings + openingsUntilGuaranteedLegendary;
+
+        return PackageLegendaryProgressResponse.builder()
+                .packagePurchaseId(packagePurchase.getId())
+                .packageVersionId(packagePurchase.getPackageVersion().getId())
+                .packageId(packagePurchase.getPackageVersion().getGamePackage().getId())
+                .cycleLength(pullRule.getCycleLength())
+                .completedOpenings(completedOpenings)
+                .completedOpeningsInCurrentCycle(completedInCurrentCycle)
+                .openingsUntilGuaranteedLegendary(openingsUntilGuaranteedLegendary)
+                .guaranteedOpeningNumber(guaranteedOpeningNumber)
+                .legendaryGuaranteedIfOpenedNext(openingsUntilGuaranteedLegendary == 1)
+                .build();
+    }
+
+    /**
+     * Opens a purchased package and immediately adds the drawn cards to the user's collection.
+     *
+     * <p>The quantities, cycle, and probabilities come from the immutable {@link PackagePullRule}
+     * of the {@link PackageVersion} stored on the purchase. New package versions therefore do not
+     * alter the outcome of packages that were already purchased.</p>
+     *
+     * @param userId identifier of the authenticated user
+     * @param purchaseId identifier of the purchase to open
+     * @return persisted opening with the drawn cards
+     * @throws ResourceNotFoundException if the user or purchase does not exist
+     * @throws ResourceConflictException if the purchase is already open, the rule is invalid,
+     *                                   or a required active rarity is missing
      */
     @Transactional
     public PackageOpeningResponse openPackage(UUID userId, Long purchaseId) {
-        // 1. Il lock dell'utente serializza le aperture dell'account e rende certo il decimo pacchetto.
+        // The user lock serializes account openings and makes the cycle calculation reliable.
         userRepository.findByIdForUpdate(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        // 2. Il lock dell'acquisto impedisce che lo stesso pacchetto venga aperto in parallelo due volte.
+        // The purchase lock prevents the same package from being opened twice in parallel.
         PackagePurchase packagePurchase = packagePurchaseRepository
                 .findByIdAndUserIdForUpdate(purchaseId, userId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Package purchase",
-                        "id",
-                        purchaseId
-                ));
+                .orElseThrow(() -> new ResourceNotFoundException("Package purchase", "id", purchaseId));
 
-        if (packageOpeningRepository.existsByPackagePurchaseId(purchaseId)) {
+        if (packageOpeningRepository.existsByPackagePurchaseId(purchaseId))
             throw new ResourceConflictException("This package has already been opened.");
-        }
 
-        // 3. Il contatore considera solo le aperture concluse: le leggendarie casuali non lo alterano.
+        // Only the rule of the purchased version is used, not the version currently active.
+        PackagePullRule pullRule = findPullRuleForVersion(packagePurchase.getPackageVersion());
+        validatePullRule(pullRule);
+
+        // Only completed openings are counted; randomly drawn legendaries do not affect the counter.
         long openingNumber = packageOpeningRepository.countByUserId(userId) + 1;
-        short cyclePosition = (short) (((openingNumber - 1) % CYCLE_LENGTH) + 1);
-        boolean legendaryGuaranteed = cyclePosition == CYCLE_LENGTH;
+        int cyclePosition = (int) (((openingNumber - 1) % pullRule.getCycleLength()) + 1);
+        boolean legendaryGuaranteed = cyclePosition == pullRule.getCycleLength();
 
-        // 4. Carichiamo una volta le tre pool attive; ogni indice estratto è uniforme nella sua rarità.
-        Map<TierCode, List<Card>> cardsByTier = loadActiveCardsByTier();
+        // Only required rarities are loaded; each draw is uniform within its rarity.
+        Map<TierCode, List<Card>> cardsByTier = loadActiveCardsByTier(pullRule, legendaryGuaranteed);
 
-        // 5. Un seed sicuro viene salvato per tracciare l'estrazione senza riusare lo stesso flusso casuale.
+        // A secure seed is stored to trace the draw without reusing the same random sequence.
         long randomSeed = SEED_GENERATOR.nextLong();
         Random random = new Random(randomSeed);
-        List<Card> drawnCards = new ArrayList<>(CARDS_PER_PACKAGE);
+        List<Card> drawnCards = drawCards(pullRule, cardsByTier, legendaryGuaranteed, random);
 
-        for (int index = 0; index < GUARANTEED_COMMON_CARDS; index++) {
-            drawnCards.add(drawCard(TierCode.COMMON, cardsByTier, random));
-        }
-        for (int index = 0; index < GUARANTEED_RARE_CARDS; index++) {
-            drawnCards.add(drawCard(TierCode.RARE, cardsByTier, random));
-        }
-
-        TierCode fifthSlotTier = legendaryGuaranteed
-                ? TierCode.LEGENDARY
-                : resolveRandomSlotTier(random);
-        drawnCards.add(drawCard(fifthSlotTier, cardsByTier, random));
-
-        // 6. I duplicati restano nella risposta, ma vengono sommati prima di aggiornare la collezione.
+        // Duplicates remain in the response but are aggregated before updating the collection.
         Map<Long, Integer> copiesByCardId = new LinkedHashMap<>();
-        for (Card card : drawnCards) {
+        for (Card card : drawnCards)
             copiesByCardId.merge(card.getId(), 1, Integer::sum);
-        }
         userCardService.addCardsToCollection(userId, copiesByCardId);
 
-        // 7. Salviamo l'apertura solo dopo l'accredito: l'intera operazione fa rollback in caso di errore.
+        // Save the opening only after crediting the collection; the whole operation rolls back on error.
         PackageOpening packageOpening = packageOpeningRepository.saveAndFlush(
                 PackageOpening.builder()
                         .packagePurchase(packagePurchase)
@@ -223,20 +240,68 @@ public class PackagePurchaseService {
                         .build()
         );
 
-        // 8. La risposta mantiene esattamente cinque slot e conserva anche eventuali carte duplicate.
+        // The response preserves slot order and any duplicate cards.
         return PackageOpeningResponse.from(packageOpening, drawnCards);
     }
 
-    private Map<TierCode, List<Card>> loadActiveCardsByTier() {
-        Map<TierCode, List<Card>> cardsByTier = new EnumMap<>(TierCode.class);
+    /**
+     * Draws guaranteed cards and all remaining slots defined by the historical rule.
+     * Remaining slots are random during ordinary openings and legendary at the end of the cycle.
+     */
+    private List<Card> drawCards(
+            PackagePullRule pullRule,
+            Map<TierCode, List<Card>> cardsByTier,
+            boolean legendaryGuaranteed,
+            Random random) {
+        List<Card> drawnCards = new ArrayList<>(pullRule.getCardsPerPackage());
 
-        for (TierCode tierCode : TierCode.values()) {
+        for (int index = 0; index < pullRule.getGuaranteedCommonCards(); index++)
+            drawnCards.add(drawCard(TierCode.COMMON, cardsByTier, random));
+
+        for (int index = 0; index < pullRule.getGuaranteedRareCards(); index++)
+            drawnCards.add(drawCard(TierCode.RARE, cardsByTier, random));
+
+
+        int variableSlots = pullRule.getCardsPerPackage()
+                - pullRule.getGuaranteedCommonCards()
+                - pullRule.getGuaranteedRareCards();
+        for (int index = 0; index < variableSlots; index++) {
+            TierCode tierCode = legendaryGuaranteed
+                    ? TierCode.LEGENDARY
+                    : resolveRandomSlotTier(pullRule, random);
+            drawnCards.add(drawCard(tierCode, cardsByTier, random));
+        }
+
+        return drawnCards;
+    }
+
+    /**
+     * Loads only the card pools required by the configuration applied to this opening.
+     */
+    private Map<TierCode, List<Card>> loadActiveCardsByTier(
+            PackagePullRule pullRule,
+            boolean legendaryGuaranteed
+    ) {
+        Map<TierCode, List<Card>> cardsByTier = new EnumMap<>(TierCode.class);
+        EnumSet<TierCode> requiredTiers = EnumSet.noneOf(TierCode.class);
+
+        if (pullRule.getGuaranteedCommonCards() > 0 ||
+                (!legendaryGuaranteed && pullRule.getRandomCommonThreshold() > 0))
+            requiredTiers.add(TierCode.COMMON);
+
+        if (pullRule.getGuaranteedRareCards() > 0 ||
+                (!legendaryGuaranteed && pullRule.getRandomRareThreshold() > pullRule.getRandomCommonThreshold())) {
+            requiredTiers.add(TierCode.RARE);
+        }
+        if (legendaryGuaranteed || (!legendaryGuaranteed && pullRule.getRandomRareThreshold() < 100))
+            requiredTiers.add(TierCode.LEGENDARY);
+
+
+        for (TierCode tierCode : requiredTiers) {
             List<Card> cards = cardRepository.findActiveByTierCode(tierCode);
-            if (cards.isEmpty()) {
-                throw new ResourceConflictException(
-                        "No active cards are available for rarity: " + tierCode + "."
-                );
-            }
+            if (cards.isEmpty())
+                throw new ResourceConflictException("No active cards are available for rarity: " + tierCode + ".");
+
             cardsByTier.put(tierCode, cards);
         }
 
@@ -252,15 +317,50 @@ public class PackagePurchaseService {
         return cards.get(random.nextInt(cards.size()));
     }
 
-    private TierCode resolveRandomSlotTier(Random random) {
+    /**
+     * Applies the cumulative thresholds stored in the rule: common, rare, or legendary.
+     */
+    private TierCode resolveRandomSlotTier(PackagePullRule pullRule, Random random) {
         int roll = random.nextInt(100);
-        if (roll < RANDOM_COMMON_THRESHOLD) {
+        if (roll < pullRule.getRandomCommonThreshold()) {
             return TierCode.COMMON;
         }
-        if (roll < RANDOM_RARE_THRESHOLD) {
+        if (roll < pullRule.getRandomRareThreshold()) {
             return TierCode.RARE;
         }
         return TierCode.LEGENDARY;
+    }
+
+    /**
+     * Retrieves only the rule associated with the version that was actually purchased.
+     */
+    private PackagePullRule findPullRuleForVersion(PackageVersion packageVersion) {
+        return packagePullRuleRepository.findByPackageVersionId(packageVersion.getId())
+                .orElseThrow(() -> new ResourceConflictException(
+                        "The selected package version has no pull rule."
+                ));
+    }
+
+    /**
+     * Additional safeguard against configurations inserted manually outside application constraints.
+     */
+    private void validatePullRule(PackagePullRule pullRule) {
+        long guaranteedCards = (long) pullRule.getGuaranteedCommonCards()
+                + pullRule.getGuaranteedRareCards();
+
+        boolean invalidCardDistribution = pullRule.getCardsPerPackage() <= guaranteedCards;
+        boolean invalidThresholds = pullRule.getRandomCommonThreshold() < 0
+                || pullRule.getRandomCommonThreshold() > pullRule.getRandomRareThreshold()
+                || pullRule.getRandomRareThreshold() > 100;
+
+        if (pullRule.getCardsPerPackage() <= 0
+                || pullRule.getGuaranteedCommonCards() < 0
+                || pullRule.getGuaranteedRareCards() < 0
+                || pullRule.getCycleLength() <= 0
+                || invalidCardDistribution
+                || invalidThresholds) {
+            throw new ResourceConflictException("The selected package version has an invalid pull rule.");
+        }
     }
 
     private String buildPurchaseDescription(PackageVersion packageVersion) {

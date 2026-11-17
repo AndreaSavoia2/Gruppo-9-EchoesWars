@@ -21,10 +21,10 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     Page<Card> findAll(Pageable pageable);
 
     /**
-     * Restituisce le carte attive di una rarità con tutte le relazioni necessarie alla risposta API.
+     * Returns active cards of a given rarity with every relation needed by the API response.
      *
-     * @param tierCode rarità da cui estrarre le carte
-     * @return carte disponibili per l'estrazione, ordinate in modo stabile
+     * @param tierCode rarity from which cards are drawn
+     * @return cards available for drawing, in stable order
      */
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,

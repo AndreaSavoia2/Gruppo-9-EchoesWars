@@ -12,10 +12,11 @@ public interface PackageOpeningRepository extends JpaRepository<PackageOpening, 
     boolean existsByPackagePurchaseId(Long packagePurchaseId);
 
     /**
-     * Conta le aperture completate dall'account per determinare la posizione nel ciclo di dieci.
+     * Counts completed account openings to determine the position in the cycle
+     * defined by the rule of the version being opened.
      *
-     * @param userId identificativo dell'account
-     * @return numero totale di pacchetti già aperti dall'account
+     * @param userId account identifier
+     * @return total number of packages already opened by the account
      */
     @Query("""
             select count(opening)

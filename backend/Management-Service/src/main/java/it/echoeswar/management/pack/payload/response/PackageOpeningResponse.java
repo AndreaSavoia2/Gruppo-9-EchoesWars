@@ -9,45 +9,51 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Esito di un'apertura di pacchetto con le cinque carte estratte.
+ * Result of a package opening with the drawn cards.
  */
 @Schema(
         name = "PackageOpeningResponse",
-        description = "Risultato dell'apertura di un pacchetto, incluse le carte estratte."
+        description = "Result of a package opening, including the drawn cards."
 )
 public record PackageOpeningResponse(
-        @Schema(description = "Identificativo dell'apertura appena creata.", example = "18")
+        @Schema(description = "Identifier of the newly created opening.", example = "18")
         long openingId,
 
-        @Schema(description = "Identificativo dell'acquisto aperto.", example = "42")
+        @Schema(description = "Identifier of the opened purchase.", example = "42")
         long packagePurchaseId,
 
-        @Schema(description = "Numero progressivo dell'apertura per l'account.", example = "10")
+        @Schema(description = "Sequence number of the opening for the account.", example = "10")
         long openingNumber,
 
-        @Schema(description = "Posizione dell'apertura nel ciclo da dieci.", example = "10")
-        short cyclePosition,
+        @Schema(
+                description = "Position of the opening in the cycle defined by the purchased version rule.",
+                example = "10"
+        )
+        int cyclePosition,
 
-        @Schema(description = "Indica se il quinto slot contiene una leggendaria garantita.", example = "true")
+        @Schema(
+                description = "Whether the variable slots contain end-of-cycle guaranteed legendaries.",
+                example = "true"
+        )
         boolean legendaryGuaranteed,
 
         @Schema(
-                description = "Data e ora in cui il pacchetto è stato aperto.",
+                description = "Date and time when the package was opened.",
                 example = "2026-11-17T10:15:30",
                 format = "date-time"
         )
         LocalDateTime openedAt,
 
-        @Schema(description = "Le cinque carte estratte, nell'ordine degli slot del pacchetto.")
+        @Schema(description = "Drawn cards, in the order of the slots defined by the package rule.")
         List<CardResponse> cards
 ) {
 
     /**
-     * Converte l'apertura persistita e conserva l'ordine delle cinque estrazioni, inclusi i duplicati.
+     * Maps the persisted opening and preserves the draw order, including duplicates.
      *
-     * @param packageOpening apertura appena persistita
-     * @param drawnCards carte estratte nell'ordine dei rispettivi slot
-     * @return payload da inviare al client
+     * @param packageOpening newly persisted opening
+     * @param drawnCards cards drawn in their respective slot order
+     * @return payload to send to the client
      */
     public static PackageOpeningResponse from(
             PackageOpening packageOpening,

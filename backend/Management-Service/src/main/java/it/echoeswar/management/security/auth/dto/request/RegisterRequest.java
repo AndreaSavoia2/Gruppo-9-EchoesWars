@@ -20,7 +20,7 @@ public record RegisterRequest(
         )
         @NotBlank(message = "Username must not be blank.")
         @Size(max = 20, message = "Username must not exceed 20 characters.")
-        // TODO: implementare regex per controllo nome
+        // TODO: implement a regular expression to validate the username.
         String username,
 
         @Schema(

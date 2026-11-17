@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.echoeswar.management.common.api.ResponseApi;
 import it.echoeswar.management.pack.payload.response.GamePackageResponse;
+import it.echoeswar.management.pack.payload.response.PackageLegendaryProgressResponse;
 import it.echoeswar.management.pack.payload.response.PackageOpeningResponse;
 import it.echoeswar.management.pack.payload.response.PackagePurchaseResponse;
 import it.echoeswar.management.pack.payload.response.UnopenedPackagePurchaseResponse;
@@ -146,11 +147,88 @@ public class PackController {
     }
 
     @Operation(
+            summary = "Show progress toward a guaranteed legendary",
+            description = "Returns the number of account-level package openings remaining before the selected "
+                    + "unopened purchase can receive its guaranteed legendary. The calculation uses the "
+                    + "immutable pull rule of the purchased package version."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Legendary guarantee progress retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid purchase identifier",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Bearer token is missing, invalid, expired, or revoked",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Only users can view their legendary guarantee progress",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "The requested purchase is not an unopened package owned by the authenticated user",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "The purchased package version has no valid pull rule",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            )
+    })
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/v1/private/packs/purchases/{purchaseId}/legendary-guarantee-progress")
+    public ResponseEntity<ResponseApi<PackageLegendaryProgressResponse>> getLegendaryGuaranteeProgress(
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @Parameter(
+                    in = ParameterIn.PATH,
+                    description = "Identifier of the unopened purchased package to inspect.",
+                    example = "42"
+            )
+            @PathVariable @Positive Long purchaseId
+    ) {
+        PackageLegendaryProgressResponse progress = packagePurchaseService
+                .getLegendaryGuaranteeProgress(customUserDetails.getId(), purchaseId);
+
+        return ResponseApi.buildResponse(
+                HttpStatus.OK,
+                progress,
+                "Legendary guarantee progress retrieved successfully."
+        );
+    }
+
+    @Operation(
             summary = "Open a purchased package",
-            description = "Opens one package owned by the authenticated user and adds the five drawn cards to "
-                    + "the user's collection. The first nine openings in each cycle grant three common cards, "
-                    + "one rare card, and a random slot (85% common, 13% rare, 2% legendary). The tenth opening "
-                    + "replaces that random slot with a guaranteed legendary card."
+            description = "Opens one package owned by the authenticated user and adds the drawn cards to the "
+                    + "user's collection according to the immutable pull rule of the purchased package version."
     )
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponses({
