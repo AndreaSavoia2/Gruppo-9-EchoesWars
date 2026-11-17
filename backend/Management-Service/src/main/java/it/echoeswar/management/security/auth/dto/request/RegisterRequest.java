@@ -19,7 +19,8 @@ public record RegisterRequest(
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
         @NotBlank(message = "Username must not be blank.")
-        @Size(max = 50, message = "Username must not exceed 50 characters.")
+        @Size(max = 20, message = "Username must not exceed 50 characters.")
+        // TODO: implementare regex per controllo nome
         String username,
 
         @Schema(

@@ -6,6 +6,8 @@ import it.echoeswar.management.collection.repository.UserAvatarRepository;
 import it.echoeswar.management.common.exception.ResourceConflictException;
 import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.FormatterString;
+import it.echoeswar.management.credit.entity.CreditWallet;
+import it.echoeswar.management.credit.repository.CreditWalletRepository;
 import it.echoeswar.management.security.auth.dto.request.RegisterRequest;
 import it.echoeswar.management.security.auth.dto.response.UserResponse;
 import it.echoeswar.management.security.auth.password.PasswordPolicy;
@@ -41,6 +43,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordPolicy passwordPolicy;
     private final PasswordEncoder passwordEncoder;
+    private final CreditWalletRepository creditWalletRepository;
 
     /**
      * Registers an active account with the default user role.
@@ -76,9 +79,10 @@ public class UserService {
                 .passwordChangedAt(Instant.now())
                 .role(userRole)
                 .build();
-
+        CreditWallet creditWallet = CreditWallet.builder().user(user).build();
         try {
             User savedUser = userRepository.saveAndFlush(user);
+            creditWalletRepository.saveAndFlush(creditWallet);
 
             return UserResponse.toUserResponse(savedUser);
         } catch (DataIntegrityViolationException exception) {

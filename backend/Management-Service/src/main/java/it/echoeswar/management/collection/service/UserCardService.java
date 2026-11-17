@@ -1,11 +1,12 @@
 package it.echoeswar.management.collection.service;
 
+
+import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.collection.payload.response.CollectionResponse;
 import it.echoeswar.management.collection.repository.UserCardRepository;
 import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.BuildPageableResponse;
 import it.echoeswar.management.security.userdetails.CustomUserDetails;
-import it.echoeswar.management.user.entity.User;
 import it.echoeswar.management.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -63,7 +64,7 @@ public class UserCardService {
 
         return BuildPageableResponse.buildPage(
                 userCardRepository.findAllByUserId(customUserDetails.getId(), pageable)
-                        .map(CollectionResponse::from));
+                        .map(CardResponse::from));
 
     }
 
