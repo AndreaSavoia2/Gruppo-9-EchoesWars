@@ -41,10 +41,6 @@ public class PackagePurchase {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "package_version_id", nullable = false)
     private PackageVersion packageVersion;
 

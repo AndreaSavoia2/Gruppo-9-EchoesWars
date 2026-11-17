@@ -20,6 +20,7 @@ import it.echoeswar.management.pack.payload.response.UnopenedPackagePurchaseResp
 import it.echoeswar.management.pack.repository.PackageOpeningRepository;
 import it.echoeswar.management.pack.repository.PackagePurchaseRepository;
 import it.echoeswar.management.pack.repository.PackageVersionRepository;
+import it.echoeswar.management.user.entity.User;
 import it.echoeswar.management.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,9 @@ public class PackagePurchaseService {
      */
     @Transactional
     public PackagePurchaseResponse purchasePackage(UUID userId, Long gamePackageId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
         PackageVersion packageVersion = packageVersionRepository
                 .findAvailableByGamePackageId(gamePackageId)
                 .stream()
@@ -120,7 +124,7 @@ public class PackagePurchaseService {
 
         PackagePurchase packagePurchase = packagePurchaseRepository.saveAndFlush(
                 PackagePurchase.builder()
-                        .user(wallet.getUser())
+
                         .packageVersion(packageVersion)
                         .creditTransaction(creditTransaction)
                         .pricePaidCredits(price)

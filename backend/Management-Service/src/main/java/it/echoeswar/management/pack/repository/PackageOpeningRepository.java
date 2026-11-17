@@ -20,7 +20,7 @@ public interface PackageOpeningRepository extends JpaRepository<PackageOpening, 
     @Query("""
             select count(opening)
             from PackageOpening opening
-            where opening.packagePurchase.user.id = :userId
+            where opening.packagePurchase.creditTransaction.wallet.user.id = :userId
             """)
     long countByUserId(@Param("userId") UUID userId);
 }

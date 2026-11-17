@@ -27,7 +27,7 @@ public interface PackagePurchaseRepository extends JpaRepository<PackagePurchase
     @Query("""
             select purchase
             from PackagePurchase purchase
-            where purchase.user.id = :userId
+            where purchase.creditTransaction.wallet.user.id = :userId
               and not exists (
                   select 1
                   from PackageOpening opening
@@ -49,7 +49,7 @@ public interface PackagePurchaseRepository extends JpaRepository<PackagePurchase
             select purchase
             from PackagePurchase purchase
             where purchase.id = :purchaseId
-              and purchase.user.id = :userId
+              and purchase.creditTransaction.wallet.user.id = :userId
             """)
     Optional<PackagePurchase> findByIdAndUserIdForUpdate(
             @Param("purchaseId") Long purchaseId,
