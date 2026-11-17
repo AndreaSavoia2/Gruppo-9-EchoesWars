@@ -116,6 +116,6 @@ public class BackofficeController {
     @PostMapping("v1/private/packages")
     public ResponseEntity<?> createPack(@Valid @RequestBody PackRequest request){
         PackResponse pack = backofficeService.createPack(request);
-        return ResponseApi.buildResponse(HttpStatus.CREATED, pack, "Pack created succesfully");
+        return ResponseApi.buildResponse(HttpStatus.CREATED, pack, "Pack created successfully");
     }
 }
