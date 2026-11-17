@@ -1,7 +1,9 @@
 package it.echoeswar.management.catalog.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.echoeswar.management.catalog.entity.Card;
+import it.echoeswar.management.collection.entity.UserCard;
 import it.echoeswar.management.common.utils.FormatterString;
 import lombok.Builder;
 
@@ -199,7 +201,18 @@ public record CardResponse(
                 accessMode = Schema.AccessMode.READ_ONLY,
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
-        int tierLevel
+        int tierLevel,
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        @Schema(
+                description = "Number of copies of this card owned by the authenticated user.",
+                example = "2",
+                format = "int32",
+                minimum = "1",
+                accessMode = Schema.AccessMode.READ_ONLY,
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
+        Integer quantity
 ) {
     /**
      * Builds a {@link CardResponse} from a {@link Card} entity, flattening the
@@ -231,4 +244,29 @@ public record CardResponse(
                 .tierLevel(card.getTier().getLevel())
                 .build();
     }
+
+        public static CardResponse from(UserCard userCard) {
+                Card card = userCard.getCard();
+                return CardResponse.builder()
+                        .id(userCard.getCard().getId())
+                        .code(FormatterString.capitalizeFirstLetter(card.getCode()))
+                        .nameIt(FormatterString.capitalizeFirstLetter(card.getNameIt()))
+                        .nameEn(FormatterString.capitalizeFirstLetter(card.getNameEn()))
+                        .descriptionIt(FormatterString.capitalizeFirstLetter(card.getDescriptionIt()))
+                        .descriptionEn(FormatterString.capitalizeFirstLetter(card.getDescriptionEn()))
+                        .attack(card.getAttack())
+                        .defense(card.getDefense())
+                        .cost(card.getPlayCost())
+                        .artUrl(FormatterString.capitalizeFirstLetter(card.getImageUrl()))
+                        .frameImageUrl(card.getTier().getImageUrl())
+                        .echoesId(card.getFaction().getId())
+                        .echoesNameIt(FormatterString.capitalizeFirstLetter(card.getFaction().getNameIt()))
+                        .echoesNameEn(FormatterString.capitalizeFirstLetter(card.getFaction().getNameEn()))
+                        .schoolId(card.getSchool().getId())
+                        .schoolNameIt(FormatterString.capitalizeFirstLetter(card.getSchool().getNameIt()))
+                        .schoolNameEn(FormatterString.capitalizeFirstLetter(card.getSchool().getNameEn()))
+                        .tierLevel(card.getTier().getLevel())
+                        .quantity(userCard.getQuantity())
+                        .build();
+        }
 }
