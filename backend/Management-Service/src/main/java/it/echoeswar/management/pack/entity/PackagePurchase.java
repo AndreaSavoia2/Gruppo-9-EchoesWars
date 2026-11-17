@@ -58,4 +58,6 @@ public class PackagePurchase {
     @CreationTimestamp
     @Column(name = "purchased_at", nullable = false, updatable = false)
     private LocalDateTime purchasedAt;
+
+
 }
