@@ -14,6 +14,7 @@ import it.echoeswar.management.catalog.repository.TierRepository;
 import it.echoeswar.management.common.exception.ResourceConflictException;
 import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.BuildPageableResponse;
+import it.echoeswar.management.common.utils.FormatterString;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.Map;
 
@@ -75,15 +77,15 @@ public class CardService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tier", "id", request.echoesId()));
 
         Card card = Card.builder()
-                .code(request.code())
-                .nameIt(request.nameIt())
-                .nameEn(request.nameEn())
-                .descriptionIt(request.descriptionIt())
-                .descriptionEn(request.descriptionEn())
+                .code(FormatterString.normalizeString(request.code()))
+                .nameIt(FormatterString.normalizeString(request.nameIt()))
+                .nameEn(FormatterString.normalizeString(request.nameIt()))
+                .descriptionIt(FormatterString.normalizeString(request.descriptionIt()))
+                .descriptionEn(FormatterString.normalizeString(request.descriptionEn()))
                 .attack(request.attack())
                 .defense(request.defense())
                 .playCost(request.playCost())
-                .imageUrl(request.artUrl())
+                .imageUrl(FormatterString.normalizeString(request.artUrl()))
                 .faction(faction)
                 .school(school)
                 .tier(tier)
