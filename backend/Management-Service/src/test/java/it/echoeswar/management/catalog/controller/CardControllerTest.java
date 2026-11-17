@@ -1,11 +1,11 @@
 package it.echoeswar.management.catalog.controller;
 
+import it.echoeswar.management.backoffice.BackofficeController;
+import it.echoeswar.management.backoffice.BackofficeService;
 import it.echoeswar.management.catalog.payload.request.CardRequest;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
-import it.echoeswar.management.catalog.service.CardService;
 import it.echoeswar.management.security.session.service.AuthenticationSessionService;
 import it.echoeswar.management.security.userdetails.CustomUserDetailsService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CardController.class)
+@WebMvcTest(BackofficeController.class)
 class CardControllerTest {
 
     private static final String URL = "/api/v1/cards";
@@ -35,7 +35,7 @@ class CardControllerTest {
     private JsonMapper jsonMapper;
 
     @MockitoBean
-    private CardService cardService;
+    private BackofficeService backofficeService;
 
     @MockitoBean
     private CustomUserDetailsService customUserDetailsService;
@@ -67,7 +67,7 @@ class CardControllerTest {
                 .schoolId((byte) 2)
                 .tierLevel(2)
                 .build();
-        given(cardService.createCard(any(CardRequest.class))).willReturn(response);
+        given(backofficeService.createCard(any(CardRequest.class))).willReturn(response);
 
         mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,7 +86,7 @@ class CardControllerTest {
                         .with(csrf()))
                 .andExpect(status().isBadRequest());
 
-        verifyNoInteractions(cardService);
+        verifyNoInteractions(backofficeService);
     }
 
 

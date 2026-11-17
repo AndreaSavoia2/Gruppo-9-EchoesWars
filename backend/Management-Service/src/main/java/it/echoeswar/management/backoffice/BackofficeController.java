@@ -1,16 +1,14 @@
-package it.echoeswar.management.catalog.controller;
+package it.echoeswar.management.backoffice;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.echoeswar.management.catalog.payload.request.CardRequest;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
-import it.echoeswar.management.catalog.service.CardService;
 import it.echoeswar.management.common.api.ResponseApi;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,17 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api")
 @RequiredArgsConstructor
 @Tag(
-        name = "Cards",
-        description = "Operations for managing cards in the catalogue"
+        name = "Backoffice",
+        description = "Operations for managing backoffice"
 )
-public class CardController {
+public class BackofficeController {
 
-    private final CardService cardService;
+    private final BackofficeService backofficeService;
 
     @Operation(
             summary = "Create a card",
             description = "Creats a new card. Faction, school and tier are referenced by identifier"
-                +"and must already exist. Restricted to authorized users."
+                    +"and must already exist. Restricted to authorized users."
     )
     @ApiResponses({
             @ApiResponse(
@@ -69,8 +68,7 @@ public class CardController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("v1/private/cards")
     public ResponseEntity<?> createCard(@Valid @RequestBody CardRequest request){
-        CardResponse card = cardService.createCard(request);
+        CardResponse card = backofficeService.createCard(request);
         return ResponseApi.buildResponse(HttpStatus.CREATED, card, "Card created succesfully");
     }
-
 }
