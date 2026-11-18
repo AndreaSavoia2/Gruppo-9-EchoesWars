@@ -32,4 +32,8 @@ public class FormatterString {
         }
         return str.substring(0,1).toUpperCase()+str.substring(1);
     }
+
+    public static String normalizeLowerCase(String str){
+        return str == null || str.isEmpty() ? str : str.toLowerCase().trim().toLowerCase();
+    }
 }

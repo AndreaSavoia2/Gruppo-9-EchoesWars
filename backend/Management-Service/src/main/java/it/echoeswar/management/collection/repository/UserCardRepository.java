@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface UserCardRepository extends JpaRepository<UserCard, UserCardId> {
@@ -19,6 +21,16 @@ public interface UserCardRepository extends JpaRepository<UserCard, UserCardId> 
             attributePaths = {"card","card.faction", "card.school", "card.tier"}
     )
     Page<UserCard> findAllByUserId(UUID userId, Pageable pageable);
+
+    /**
+     * Loads the collection entries needed to assemble a deck, including the card faction used
+     * by the deck-rule validation.
+     */
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = {"card", "card.faction"}
+    )
+    List<UserCard> findAllByUserIdAndCardIdIn(UUID userId, Collection<Long> cardIds);
 
     /**
      * Adds copies of a card to the collection, creating the record if the user does not yet own it.

@@ -23,6 +23,7 @@ import it.echoeswar.management.pack.repository.PackageOpeningRepository;
 import it.echoeswar.management.pack.repository.PackagePullRuleRepository;
 import it.echoeswar.management.pack.repository.PackagePurchaseRepository;
 import it.echoeswar.management.pack.repository.PackageVersionRepository;
+import it.echoeswar.management.pack.utils.ValidatePackUtils;
 import it.echoeswar.management.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ public class PackagePurchaseService {
     private final CardRepository cardRepository;
     private final UserCardService userCardService;
     private final UserRepository userRepository;
+    private final ValidatePackUtils validatePackUtils;
 
     /**
      * Purchases the most recent active version of a catalog package for a user.
@@ -87,7 +89,7 @@ public class PackagePurchaseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Available package", "id", gamePackageId));
 
         // The sale is allowed only when the version has a complete, immutable pull rule.
-        validatePullRule(findPullRuleForVersion(packageVersion));
+        validatePackUtils.validatePullRule(findPullRuleForVersion(packageVersion));
 
         CreditWallet wallet = creditWalletRepository.findByUserIdForUpdate(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Credit wallet", "user id", userId));
@@ -157,7 +159,7 @@ public class PackagePurchaseService {
 
         // Retrieve the immutable rule of the version that was actually purchased.
         PackagePullRule pullRule = findPullRuleForVersion(packagePurchase.getPackageVersion());
-        validatePullRule(pullRule);
+        validatePackUtils.validatePullRule(pullRule);
 
         // Apply the same global progression used by openPackage.
         long completedOpenings = packageOpeningRepository.countByUserId(userId);
@@ -208,7 +210,7 @@ public class PackagePurchaseService {
 
         // Only the rule of the purchased version is used, not the version currently active.
         PackagePullRule pullRule = findPullRuleForVersion(packagePurchase.getPackageVersion());
-        validatePullRule(pullRule);
+        validatePackUtils.validatePullRule(pullRule);
 
         // Only completed openings are counted; randomly drawn legendaries do not affect the counter.
         long openingNumber = packageOpeningRepository.countByUserId(userId) + 1;
@@ -341,27 +343,7 @@ public class PackagePurchaseService {
                 ));
     }
 
-    /**
-     * Additional safeguard against configurations inserted manually outside application constraints.
-     */
-    private void validatePullRule(PackagePullRule pullRule) {
-        long guaranteedCards = (long) pullRule.getGuaranteedCommonCards()
-                + pullRule.getGuaranteedRareCards();
 
-        boolean invalidCardDistribution = pullRule.getCardsPerPackage() <= guaranteedCards;
-        boolean invalidThresholds = pullRule.getRandomCommonThreshold() < 0
-                || pullRule.getRandomCommonThreshold() > pullRule.getRandomRareThreshold()
-                || pullRule.getRandomRareThreshold() > 100;
-
-        if (pullRule.getCardsPerPackage() <= 0
-                || pullRule.getGuaranteedCommonCards() < 0
-                || pullRule.getGuaranteedRareCards() < 0
-                || pullRule.getCycleLength() <= 0
-                || invalidCardDistribution
-                || invalidThresholds) {
-            throw new ResourceConflictException("The selected package version has an invalid pull rule.");
-        }
-    }
 
     private String buildPurchaseDescription(PackageVersion packageVersion) {
         return "Purchase of package "
