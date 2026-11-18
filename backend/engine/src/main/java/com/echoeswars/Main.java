@@ -4,6 +4,9 @@ import com.echoeswars.game.Game;
 import com.echoeswars.model.Card;
 import com.echoeswars.model.Player;
 import com.echoeswars.result.MatchResult;
+import com.echoeswars.model.Echo;
+import com.echoeswars.model.CardSchool;
+import com.echoeswars.model.CardEffect;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -47,6 +50,14 @@ public class Main {
                 int attack = cardNode.get("attack").asInt();
                 int defense = cardNode.get("defense").asInt();
                 int cost = cardNode.get("cost").asInt();
+                Echo echo = Echo.valueOf(
+                        cardNode.path("echo").asText());
+
+                CardSchool school = CardSchool.valueOf(
+                        cardNode.path("school").asText());
+
+                CardEffect effect = CardEffect.valueOf(
+                        cardNode.path("effect").asText("NONE"));
 
                 // Create a card definition, not a playable instance
                 Card card = new Card(
@@ -54,7 +65,10 @@ public class Main {
                         cardId,
                         attack,
                         defense,
-                        cost);
+                        cost,
+                        echo,
+                        school,
+                        effect);
 
                 cardMap.put(cardId, card);
             }
@@ -98,7 +112,10 @@ public class Main {
                                 cardDefinition.getCardId(),
                                 cardDefinition.getAttack(),
                                 cardDefinition.getDefense(),
-                                cardDefinition.getCost());
+                                cardDefinition.getCost(),
+                                cardDefinition.getEcho(),
+                                cardDefinition.getSchool(),
+                                cardDefinition.getEffect());
 
                         playerDeck.add(cardCopy);
 
