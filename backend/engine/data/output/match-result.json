@@ -1,0 +1,130 @@
+{
+  "matchId" : "match-123",
+  "status" : "COMPLETED",
+  "winnerUserId" : "player-1",
+  "totalRounds" : 2,
+  "currentLife" : {
+    "playerOne" : 10,
+    "playerTwo" : 1
+  },
+  "rulesVersionId" : "1.0",
+  "engineVersion" : "1.0.0",
+  "replay" : {
+    "players" : [ {
+      "playerId" : "player-1",
+      "initialLife" : 10
+    }, {
+      "playerId" : "player-2",
+      "initialLife" : 10
+    } ],
+    "rounds" : [ {
+      "round" : 1,
+      "events" : [ {
+        "phase" : "DRAW",
+        "type" : "CARDS_DRAWN",
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "C001",
+          "instanceId" : "p1-c11"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "C002",
+          "instanceId" : "p2-c2"
+        } ]
+      }, {
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED",
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "C001",
+          "instanceId" : "p1-c11"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "C002",
+          "instanceId" : "p2-c2"
+        } ]
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c11",
+          "cardId" : "C001",
+          "attack" : 13,
+          "defenseBefore" : 4,
+          "defenseAfter" : 1,
+          "destroyed" : false
+        }, {
+          "instanceId" : "p2-c2",
+          "cardId" : "C002",
+          "attack" : 3,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 9
+        }
+      }, {
+        "phase" : "END",
+        "type" : "ROUND_ENDED",
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 1
+        }
+      } ]
+    }, {
+      "round" : 2,
+      "events" : [ {
+        "phase" : "DRAW",
+        "type" : "CARDS_DRAWN",
+        "cards" : [ {
+          "playerId" : "player-2",
+          "cardId" : "C001",
+          "instanceId" : "p2-c1"
+        } ]
+      }, {
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED",
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "C001",
+          "instanceId" : "p1-c11"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "C001",
+          "instanceId" : "p2-c1"
+        } ]
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c11",
+          "cardId" : "C001",
+          "attack" : 13,
+          "defenseBefore" : 1,
+          "defenseAfter" : 0,
+          "destroyed" : true
+        }, {
+          "instanceId" : "p2-c1",
+          "cardId" : "C001",
+          "attack" : 13,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "phase" : "END",
+        "type" : "ROUND_ENDED",
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 1
+        }
+      } ]
+    } ]
+  }
+}

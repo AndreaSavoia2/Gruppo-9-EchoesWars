@@ -1,0 +1,8 @@
+# Maven
+target/
+
+# VS Code
+.vscode/
+
+# Log
+*.log

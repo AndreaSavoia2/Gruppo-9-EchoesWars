@@ -6,17 +6,21 @@ import it.echoeswar.management.security.session.exception.InvalidRefreshTokenExc
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.method.ParameterErrors;
+import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -27,6 +31,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -131,6 +136,51 @@ public class ExceptionManagement {
                 .message("Some fields are invalid.")
                 .errors(errors)
                 .build();
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<?> handlerMethodValidationExceptionManagement(
+            HandlerMethodValidationException ex
+    ) {
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        for (ParameterValidationResult result : ex.getParameterValidationResults()) {
+            if (result instanceof ParameterErrors parameterErrors) {
+                parameterErrors.getFieldErrors().forEach(fieldError ->
+                        errors.putIfAbsent(
+                                fieldError.getField(),
+                                fieldError.getDefaultMessage() == null
+                                        ? "invalid value"
+                                        : fieldError.getDefaultMessage()
+                        ));
+                continue;
+            }
+
+            String parameterName = result.getMethodParameter().getParameterName();
+            if (parameterName == null) {
+                parameterName = "parameter[" + result.getMethodParameter().getParameterIndex() + "]";
+            }
+
+            String message = result.getResolvableErrors().stream()
+                    .map(MessageSourceResolvable::getDefaultMessage)
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .orElse("invalid value");
+            errors.putIfAbsent(parameterName, message);
+        }
+
+        HttpStatus status = HttpStatus.valueOf(ex.getStatusCode().value());
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message(ex.isForReturnValue()
+                        ? "The response could not be validated."
+                        : "Some fields are invalid.")
+                .errors(errors)
+                .build();
+
         return new ResponseEntity<>(response, status);
     }
 
