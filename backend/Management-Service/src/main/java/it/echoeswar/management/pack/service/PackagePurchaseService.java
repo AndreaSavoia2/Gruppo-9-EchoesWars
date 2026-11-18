@@ -343,8 +343,6 @@ public class PackagePurchaseService {
                 ));
     }
 
-
-
     private String buildPurchaseDescription(PackageVersion packageVersion) {
         return "Purchase of package "
                 + packageVersion.getGamePackage().getCode()

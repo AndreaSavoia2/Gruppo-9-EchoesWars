@@ -42,18 +42,18 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Servizio applicativo responsabile della creazione di un deck completo.
+ * Application service responsible for creating a complete deck.
  *
- * <p>Il flusso segue questo ordine: blocca l'utente per gestire il limite dei deck,
- * legge la regola scelta, valida le fazioni e le carte, salva il deck e infine salva
- * le relazioni con fazioni e carte.</p>
+ * <p>The flow follows this order: it locks the user to enforce the deck limit,
+ * loads the active rule, validates factions and cards, saves the deck, and finally
+ * saves the faction and card relationships.</p>
  */
 @Service
 @RequiredArgsConstructor
 public class DeckService {
 
     private static final int MAX_ACTIVE_DECKS_PER_USER = 20;
-    // Entrambi gli stati occupano uno dei 20 slot disponibili: un draft non deve aggirare il limite.
+    // Both statuses occupy one of the 20 available slots: a draft must not bypass the limit.
     private static final List<DeckStatus> ACTIVE_DECK_STATUSES = List.of(
             DeckStatus.DRAFT,
             DeckStatus.READY
@@ -68,47 +68,47 @@ public class DeckService {
     private final UserRepository userRepository;
 
     /**
-     * Crea un deck valido per l'utente autenticato.
+     * Creates a valid deck for the authenticated user.
      *
-     * <p>La collezione dell'utente viene soltanto consultata: le copie non vengono consumate
-     * né riservate, quindi le stesse carte possono essere utilizzate anche in altri deck.</p>
+     * <p>The user's collection is only read: copies are neither consumed nor reserved, so the
+     * same cards can also be used in other decks.</p>
      *
-     * @param userDetails utente autenticato fornito dal layer web
-     * @param request regola, metadati, fazioni e carte richieste per il deck
-     * @return deck persistito con il riepilogo della sua composizione
+     * @param userDetails authenticated user provided by the web layer
+     * @param request requested deck metadata, factions, and cards
+     * @return persisted deck with a summary of its composition
      */
     @Transactional
     public DeckResponse createDeck(CustomUserDetails userDetails, CreateDeckRequest request) {
 
         UUID userId = userDetails.getId();
-        // Il lock serializza le creazioni dello stesso utente e rende affidabile il limite di 20 deck.
+        // The lock serializes creations for the same user and makes the 20-deck limit reliable.
         User user = userRepository.findByIdForUpdate(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        // Verifica lo slot prima di eseguire tutte le altre query di validazione.
+        // Check the available slot before executing all other validation queries.
         validateActiveDeckLimit(userId);
 
-        // I limiti del deck (numero carte, costo, copie e fazioni) vengono letti dalla regola persistita.
+        // Deck limits (card count, cost, copies, and factions) are read from the active persisted rule.
         DeckRule deckRule = deckRuleRepository.findDeckRuleByActiveTrue()
                 .orElseThrow(NotActiveDeckRuleFoundException::new);
 
-        // Il nome è univoco per utente, anche se il deck viene archiviato in seguito.
+        // The name is unique per user, even if the deck is later archived.
         if (deckRepository.existsByUserIdAndName(userId, request.name())) {
             throw new ResourceConflictException("A deck with this name already exists.");
         }
 
-        // Prima vengono validate le fazioni dichiarate dal client: saranno le sole ammesse nel deck.
+        // First validate the factions declared by the client: they will be the only ones allowed in the deck.
         Map<Byte, Faction> selectedFactionsById = loadSelectedFactions(
                 deckRule,
                 request.factionIds()
         );
 
-        // La mappa mantiene l'ordine ricevuto e impedisce che una stessa carta compaia due volte nel payload.
+        // The map preserves the received order and prevents the same card from appearing twice in the payload.
         Map<Long, Integer> quantitiesByCardId = normalizeRequestedCards(request.cards());
-        // Recupera in una sola query le carte possedute, senza modificare le loro quantità in collezione.
+        // Fetch owned cards with a single query, without changing their quantities in the collection.
         Map<Long, UserCard> ownedCardsById = loadOwnedCards(userId, quantitiesByCardId);
 
-        // Qui si applicano tutte le regole che dipendono dall'insieme completo delle carte.
+        // Apply all rules that depend on the complete set of cards.
         DeckComposition composition = validateComposition(
                 deckRule,
                 selectedFactionsById,
@@ -116,20 +116,20 @@ public class DeckService {
                 ownedCardsById
         );
 
-        // Il deck padre deve essere salvato prima: il suo ID serve nelle chiavi composte delle tabelle figlie.
+        // The parent deck must be saved first because its ID is required by the child-table composite keys.
         Deck deck = deckRepository.saveAndFlush(
                 Deck.builder()
                         .user(user)
                         .deckRule(deckRule)
                         .name(FormatterString.normalizeLowerCase(request.name()))
                         .description(FormatterString.normalizeLowerCase(request.description()))
-                        // La composizione ha superato tutte le regole, quindi il deck è subito utilizzabile.
+        // The composition passed all rules, so the deck can be used immediately.
                         .status(DeckStatus.READY)
                         .build()
         );
 
-        // Le entità non hanno cascade: le associazioni vengono persistite esplicitamente.
-        // Crea una riga in deck_factions per ogni fazione scelta dall'utente.
+        // The entities have no cascade, so associations are persisted explicitly.
+        // Create one deck_factions row for each faction selected by the user.
         List<DeckFaction> deckFactions = composition.selectedFactionsById().values().stream()
                 .map(faction -> DeckFaction.builder()
                         .id(new DeckFactionId(deck.getId(), faction.getId()))
@@ -139,7 +139,7 @@ public class DeckService {
                 .toList();
         deckFactionRepository.saveAll(deckFactions);
 
-        // Crea una riga in deck_cards per ogni carta distinta con la sua quantità validata.
+        // Create one deck_cards row for each distinct card with its validated quantity.
         List<DeckCard> deckCards = composition.cards().stream()
                 .map(resolvedCard -> DeckCard.builder()
                         .id(new DeckCardId(deck.getId(), resolvedCard.card().getId()))
@@ -150,7 +150,7 @@ public class DeckService {
                 .toList();
         deckCardRepository.saveAll(deckCards);
 
-        // La risposta restituisce le fazioni selezionate e le quantità effettivamente salvate.
+        // The response returns the selected factions and the quantities actually saved.
         return DeckResponse.builder()
                 .id(deck.getId())
                 .deckRuleId(deckRule.getId())
@@ -172,7 +172,7 @@ public class DeckService {
     }
 
     private void validateActiveDeckLimit(UUID userId) {
-        // I deck ARCHIVED o soft-delete non occupano uno slot; DRAFT e READY sì.
+        // ARCHIVED or soft-deleted decks do not occupy a slot; DRAFT and READY decks do.
         long activeDeckCount = deckRepository.countByUserIdAndDeletedAtIsNullAndStatusIn(
                 userId,
                 ACTIVE_DECK_STATUSES
@@ -185,10 +185,10 @@ public class DeckService {
     }
 
     private Map<Long, Integer> normalizeRequestedCards(List<DeckCardRequest> requestedCards) {
-        // LinkedHashMap conserva l'ordine del JSON, utile per una risposta e messaggi di errore prevedibili.
+        // LinkedHashMap preserves JSON order, which makes responses and error messages predictable.
         Map<Long, Integer> quantitiesByCardId = new LinkedHashMap<>();
         for (DeckCardRequest requestedCard : requestedCards) {
-            // La Bean Validation verifica id e quantità; qui resta il controllo di dominio sui duplicati.
+            // Bean Validation verifies IDs and quantities; only the domain-level duplicate check remains here.
             Integer previousQuantity = quantitiesByCardId.putIfAbsent(
                     requestedCard.cardId(),
                     requestedCard.quantity()
@@ -204,7 +204,7 @@ public class DeckService {
     }
 
     private Map<Byte, Faction> loadSelectedFactions(DeckRule deckRule, List<Byte> requestedFactionIds) {
-        // Non eliminiamo silenziosamente i duplicati: due volte la stessa fazione non valgono come due fazioni.
+        // Do not silently remove duplicates: the same faction twice does not count as two factions.
         Set<Byte> distinctFactionIds = new LinkedHashSet<>(requestedFactionIds);
         if (distinctFactionIds.size() != requestedFactionIds.size()) {
             throw new IllegalArgumentException("Deck factions must be distinct.");
@@ -217,13 +217,13 @@ public class DeckService {
             );
         }
 
-        // Carichiamo tutte le fazioni in blocco e le indicizziamo per ID per individuare quelle mancanti.
+        // Load all factions in bulk and index them by ID to identify missing ones.
         Map<Byte, Faction> availableFactionsById = new LinkedHashMap<>();
         for (Faction faction : factionRepository.findAllById(distinctFactionIds)) {
             availableFactionsById.put(faction.getId(), faction);
         }
 
-        // Ricostruiamo la mappa nell'ordine richiesto e accettiamo solo fazioni attive.
+        // Rebuild the map in the requested order and accept active factions only.
         Map<Byte, Faction> selectedFactionsById = new LinkedHashMap<>();
         for (Byte factionId : distinctFactionIds) {
             Faction faction = availableFactionsById.get(factionId);
@@ -242,7 +242,7 @@ public class DeckService {
 
     private Map<Long, UserCard> loadOwnedCards(UUID userId, Map<Long, Integer> quantitiesByCardId
     ) {
-        // Una query batch evita di eseguire una query per ogni carta richiesta.
+        // A batch query avoids executing one query for every requested card.
         Map<Long, UserCard> ownedCardsById = new LinkedHashMap<>();
         for (UserCard userCard : userCardRepository.findAllByUserIdAndCardIdIn(
                 userId,
@@ -251,7 +251,7 @@ public class DeckService {
             ownedCardsById.put(userCard.getCard().getId(), userCard);
         }
 
-        // Se una carta non è presente nella collezione, il deck non può essere creato.
+        // If a card is not in the collection, the deck cannot be created.
         for (Long cardId : quantitiesByCardId.keySet()) {
             if (!ownedCardsById.containsKey(cardId)) {
                 throw new ResourceConflictException(
@@ -269,26 +269,26 @@ public class DeckService {
             Map<Long, Integer> quantitiesByCardId,
             Map<Long, UserCard> ownedCardsById
     ) {
-        // Questi valori vengono calcolati sull'intero deck per controllare le regole aggregate.
+        // These values are calculated across the whole deck to validate aggregate rules.
         long totalCards = 0;
         long totalCost = 0;
-        // Serve a verificare che entrambe le fazioni selezionate siano davvero rappresentate da una carta.
+        // Used to verify that both selected factions are actually represented by at least one card.
         Map<Byte, Faction> factionsUsedByCards = new LinkedHashMap<>();
         List<ResolvedDeckCard> resolvedCards = new ArrayList<>();
 
-        // Analizziamo una riga del payload alla volta: ogni riga rappresenta un tipo di carta e le sue copie.
+        // Process one payload entry at a time: each entry represents one card type and its copies.
         for (Map.Entry<Long, Integer> entry : quantitiesByCardId.entrySet()) {
-            // 1. Estraiamo ID della carta e quantita richiesta nel JSON.
+            // 1. Extract the card ID and requested quantity from the JSON payload.
             long cardId = entry.getKey();
             int requestedQuantity = entry.getValue();
 
-            // 2. Recuperiamo dalla collezione dell'utente la carta e i dati del suo catalogo.
-            //    loadOwnedCards ha gia verificato che la carta sia posseduta dall'utente.
+            // 2. Retrieve the card from the user's collection and its catalog data.
+            //    loadOwnedCards has already verified that the user owns this card.
             UserCard ownedCard = ownedCardsById.get(cardId);
             Card card = ownedCard.getCard();
 
-            // 3. Verifichiamo che la carta sia attiva, che le copie richieste siano consentite
-            //    e che la sua fazione sia una di quelle scelte per questo deck.
+            // 3. Verify that the card is active, the requested copies are allowed,
+            //    and its faction is one of those selected for this deck.
             validateCardAvailability(card);
             validateCopyLimit(deckRule, card, ownedCard.getQuantity(), requestedQuantity);
             Faction selectedFaction = selectedFactionsById.get(card.getFaction().getId());
@@ -299,19 +299,19 @@ public class DeckService {
                 );
             }
 
-            // 4. Solo dopo le validazioni aggiorniamo numero totale di carte e costo complessivo.
-            //    Il costo della singola carta viene moltiplicato per il numero di copie richieste.
+            // 4. Update the total card count and total cost only after validation succeeds.
+            //    The cost of one card is multiplied by the number of requested copies.
             totalCards += requestedQuantity;
             totalCost += (long) card.getPlayCost() * requestedQuantity;
 
-            // Registriamo la fazione una sola volta: servira al controllo finale sulle fazioni rappresentate.
+            // Record the faction only once; it will be used by the final represented-faction check.
             factionsUsedByCards.putIfAbsent(card.getFaction().getId(), selectedFaction);
 
-            // Conserviamo carta e quantita risolte per creare successivamente le righe DeckCard da salvare.
+            // Keep the resolved card and quantity to create the DeckCard rows saved later.
             resolvedCards.add(new ResolvedDeckCard(card, requestedQuantity));
         }
 
-        // Regole che dipendono dal deck completo, non dalla singola riga del payload.
+        // Rules that depend on the complete deck, rather than on a single payload entry.
         if (totalCards != deckRule.getExactCardCount()) {
             throw new IllegalArgumentException(
                     "Deck must contain exactly " + deckRule.getExactCardCount() + " cards."
@@ -337,7 +337,7 @@ public class DeckService {
     }
 
     private void validateCardAvailability(Card card) {
-        // Non si possono inserire carte disattivate, né carte appartenenti a una fazione disattivata.
+        // Disabled cards, or cards belonging to disabled factions, cannot be included.
         if (!card.isActive() || !card.getFaction().isActive()) {
             throw new ResourceConflictException(
                     "Card " + card.getId() + " is not available for deck creation."
@@ -351,7 +351,7 @@ public class DeckService {
             int ownedQuantity,
             int requestedQuantity
     ) {
-        // Vale il vincolo più restrittivo tra la regola generale del deck e quello specifico della carta.
+        // The stricter limit between the general deck rule and the card-specific rule applies.
         int maxCopiesForDeck = Math.min(
                 deckRule.getMaxCopiesSameCard(),
                 card.getMaxCopyDeck()
@@ -365,7 +365,7 @@ public class DeckService {
             );
         }
         if (requestedQuantity > ownedQuantity) {
-            // Il controllo è per questo deck soltanto: le copie usate in altri deck non vengono sottratte.
+        // This check applies only to this deck: copies used in other decks are not deducted.
             throw new ResourceConflictException(
                     "The user does not own enough copies of card " + card.getId() + "."
             );
