@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.echoeswars.combat.CombatCardResult;
 import com.echoeswars.combat.CombatResult;
+import com.echoeswars.combat.EchoResolver;
 import com.echoeswars.combat.PlayerLife;
 import com.echoeswars.model.Card;
 import com.echoeswars.model.Player;
@@ -258,9 +259,17 @@ public class Game {
                     "Combat cannot start: missing active card.");
         }
 
-        // Read both attack values before applying damage
-        int firstAttack = firstCard.getAttack();
-        int secondAttack = secondCard.getAttack();
+        // Read both attack and echo values before applying damage
+        int firstEchoBonus = EchoResolver.calculateEchoBonus(
+                firstCard,
+                secondCard);
+
+        int secondEchoBonus = EchoResolver.calculateEchoBonus(
+                secondCard,
+                firstCard);
+
+        int firstAttack = firstCard.getAttack() + firstEchoBonus;
+        int secondAttack = secondCard.getAttack() + secondEchoBonus;
 
         // Capture defense values before combat
         int firstDefenseBefore = firstCard.getCurrentDefense();

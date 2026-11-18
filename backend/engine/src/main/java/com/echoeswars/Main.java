@@ -7,6 +7,8 @@ import com.echoeswars.result.MatchResult;
 import com.echoeswars.model.Echo;
 import com.echoeswars.model.CardSchool;
 import com.echoeswars.model.CardEffect;
+import com.echoeswars.combat.EchoResolver;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -28,7 +30,7 @@ public class Main {
                     ? Path.of(args[0])
                     : Path.of("backend/engine/data/input/match.json");
 
-            Path outputPath = args.length > 1
+            Path outputPath = args.length > 1 
                     ? Path.of(args[1])
                     : Path.of("backend/engine/data/output/match-result.json");
             // Load match configuration
