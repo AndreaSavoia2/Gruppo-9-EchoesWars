@@ -24,6 +24,8 @@
       "attack": 13,
       "defense": 4,
       "cost": 4,
+      "school": "GUERRIERI",
+      "echo": "DOMINIO",
       "effect": "FURIA"
     },
     {
@@ -31,6 +33,8 @@
       "attack": 3,
       "defense": 4,
       "cost": 4,
+      "school": "MAGHI",
+      "echo": "SAPIENZA",
       "effect": "RESISTENZA"
     }
   ]
