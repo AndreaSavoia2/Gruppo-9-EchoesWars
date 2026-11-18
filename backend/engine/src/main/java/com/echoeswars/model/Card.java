@@ -58,6 +58,26 @@ public class Card {
         this.analysisTargetId = null;
     }
 
+     // Legacy constructor for backward compatibility
+    public Card(
+            String instanceId,
+            String cardId,
+            int attack,
+            int defense,
+            int cost) {
+
+        this(
+                instanceId,
+                cardId,
+                attack,
+                defense,
+                cost,
+                Echo.DOMINIO,
+                CardSchool.GUERRIERI,
+                CardEffect.NONE
+        );
+    }
+
     // Card identity
 
     public String getInstanceId() {
