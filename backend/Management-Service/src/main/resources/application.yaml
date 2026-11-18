@@ -2,7 +2,7 @@ spring:
   application:
     name: Management-Service
   datasource:
-    # Le credenziali database arrivano dall'ambiente, mai dal repository.
+    # Database credentials are supplied through the environment and never committed to the repository.
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}

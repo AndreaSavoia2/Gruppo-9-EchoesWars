@@ -2,6 +2,7 @@ package it.echoeswar.management.common.exception;
 
 
 import it.echoeswar.management.common.api.ResponseApi;
+import it.echoeswar.management.deck.exception.NotActiveDeckRuleFoundException;
 import it.echoeswar.management.security.session.exception.InvalidRefreshTokenException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -71,6 +72,22 @@ public class ExceptionManagement {
                 .error(status.getReasonPhrase())
                 .message(ex.getMessage())
                 .build();
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(NotActiveDeckRuleFoundException.class)
+    public ResponseEntity<?> notActiveDeckRuleFoundExceptionManagement(
+            NotActiveDeckRuleFoundException ex
+    ) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
         return new ResponseEntity<>(response, status);
     }
 

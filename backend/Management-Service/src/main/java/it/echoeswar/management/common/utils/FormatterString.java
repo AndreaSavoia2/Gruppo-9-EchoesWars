@@ -50,4 +50,8 @@ public class FormatterString {
         }
         return str.trim().toLowerCase(Locale.ROOT);
     }
+
+    public static String normalizeLowerCase(String str){
+        return str == null || str.isEmpty() ? str : str.toLowerCase().trim().toLowerCase();
+    }
 }

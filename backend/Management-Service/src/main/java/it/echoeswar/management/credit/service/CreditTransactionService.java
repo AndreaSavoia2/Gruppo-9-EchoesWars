@@ -5,6 +5,7 @@ import it.echoeswar.management.common.utils.BuildPageableResponse;
 import it.echoeswar.management.credit.entity.CreditTransaction;
 import it.echoeswar.management.credit.entity.CreditWallet;
 import it.echoeswar.management.credit.enumerated.TransactionType;
+import it.echoeswar.management.credit.payload.response.CreditBalanceResponse;
 import it.echoeswar.management.credit.payload.response.CreditTransactionResponse;
 import it.echoeswar.management.credit.repository.CreditTransactionRepository;
 import it.echoeswar.management.credit.repository.CreditWalletRepository;
@@ -41,6 +42,25 @@ public class CreditTransactionService {
                 creditTransactionRepository.findAllByWalletUserId(user.getId(), pageable)
                         .map(CreditTransactionResponse::from));
 
+    }
+
+    /**
+     * Retrieves the current credit balance for the authenticated user.
+     *
+     * @param user authenticated user whose wallet is being read
+     * @return current wallet balance
+     * @throws ResourceNotFoundException if the user has no credit wallet
+     */
+    @Transactional(readOnly = true)
+    public CreditBalanceResponse getCurrentCreditBalance(CustomUserDetails user) {
+        CreditWallet wallet = creditWalletRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Credit wallet",
+                        "user id",
+                        user.getId()
+                ));
+
+        return CreditBalanceResponse.from(wallet);
     }
 
     @Transactional
