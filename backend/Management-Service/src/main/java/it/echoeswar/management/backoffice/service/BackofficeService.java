@@ -16,10 +16,17 @@ import it.echoeswar.management.common.exception.ResourceConflictException;
 import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.FormatterString;
 import it.echoeswar.management.pack.entity.GamePackage;
+import it.echoeswar.management.pack.entity.PackagePullRule;
+import it.echoeswar.management.pack.entity.PackageVersion;
 import it.echoeswar.management.pack.repository.GamePackageRepository;
+import it.echoeswar.management.pack.repository.PackagePullRuleRepository;
+import it.echoeswar.management.pack.repository.PackageVersionRepository;
+import it.echoeswar.management.pack.utils.ValidatePackUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 /**
  * Service containing the back-office business logic used by administrators
@@ -42,13 +49,19 @@ public class BackofficeService {
     private final TierRepository tierRepository;
     private final GamePackageRepository gamePackageRepository;
 
+    /** Method use to validate the rule of packages creates*/
+    private final ValidatePackUtils validatePackUtils;
+
+    private final PackagePullRuleRepository packagePullRuleRepository;
+    private final PackageVersionRepository packageVersionRepository;
+
     /**
      * Creates a new card in the catalog.
      *
      * <p>The method first verifies that no card with the same code exists
      * (case-insensitive), then resolves the faction, school and tier
      * referenced by the request, and finally builds and persists the card.
-     * String fields are normalized through {@link FormatterString#normalizeString(String)}
+     * String fields are normalized through {@link FormatterString#normalizeLowerCase(String)} (String)}
      * before being saved.</p>
      *
      * @param request the payload containing the card data and the identifiers
@@ -72,16 +85,16 @@ public class BackofficeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tier", "id", request.tierId()));
 
         Card card = Card.builder()
-                .code(FormatterString.normalizeString(request.code()))
-                .nameIt(FormatterString.normalizeString(request.nameIt()))
-                .nameEn(FormatterString.normalizeString(request.nameEn()))
-                .descriptionIt(FormatterString.normalizeString(request.descriptionIt()))
-                .descriptionEn(FormatterString.normalizeString(request.descriptionEn()))
+                .code(FormatterString.normalizeLowerCase(request.code()))
+                .nameIt(FormatterString.normalizeLowerCase(request.nameIt()))
+                .nameEn(FormatterString.normalizeLowerCase(request.nameEn()))
+                .descriptionIt(FormatterString.normalizeLowerCase(request.descriptionIt()))
+                .descriptionEn(FormatterString.normalizeLowerCase(request.descriptionEn()))
                 .attack(request.attack())
                 .defense(request.defense())
                 .playCost(request.playCost())
                 .maxCopyDeck(request.maxCopyDeck())
-                .imageUrl(FormatterString.normalizeString(request.artUrl()))
+                .imageUrl(FormatterString.normalizeLowerCase(request.artUrl()))
                 .faction(faction)
                 .school(school)
                 .tier(tier)
@@ -96,7 +109,7 @@ public class BackofficeService {
      * <p>The method first verifies that no pack with the same code exists
      * (case-insensitive), then builds a {@link GamePackage} from the request
      * and persists it. String fields are normalized through
-     * {@link FormatterString#normalizeString(String)} before being saved.</p>
+     * {@link FormatterString#normalizeLowerCase(String)} (String)} before being saved.</p>
      *
      * @param request the payload containing the pack code, names and
      *                optional descriptions
@@ -106,22 +119,49 @@ public class BackofficeService {
     @Transactional
     public PackResponse createPack(PackRequest request){
 
-
-
         if(gamePackageRepository.existsByCodeIgnoreCase(request.code())){
             throw new ResourceConflictException("Pack code already exists: " + request.code());
         }
 
+
+
         GamePackage gamePackage = GamePackage.builder()
-                .code(FormatterString.normalizeString(request.code()))
-                .nameIt(FormatterString.normalizeString(request.nameIt()))
-                .nameEn(FormatterString.normalizeString(request.nameEn()))
-                .descriptionIt(FormatterString.normalizeString(request.descriptionIt()))
-                .descriptionEn(FormatterString.normalizeString(request.descriptionEn()))
+                .code(FormatterString.normalizeLowerCase(request.code()))
+                .nameIt(FormatterString.normalizeLowerCase(request.nameIt()))
+                .nameEn(FormatterString.normalizeLowerCase(request.nameEn()))
+                .descriptionIt(FormatterString.normalizeLowerCase(request.descriptionIt()))
+                .descriptionEn(FormatterString.normalizeLowerCase(request.descriptionEn()))
                 .build();
+
+
+
+        PackageVersion packageVersion = PackageVersion.builder()
+                .gamePackage(gamePackage)
+                .versionNumber(1)
+                .priceCredits(request.priceCredits())
+                .publishedAt(LocalDateTime.now())
+                .build();
+
+        PackagePullRule packagePullRule = PackagePullRule.builder()
+                .packageVersion(packageVersion)
+                .cardsPerPackage(request.cardsPerPackage())
+                .guaranteedCommonCards(request.guaranteCommonCards())
+                .guaranteedRareCards(request.guaranteRareCards())
+                .cycleLength(request.cycleLength())
+                .randomCommonThreshold(request.randomCommonThreshold())
+                .randomRareThreshold(request.randomRareThreshold())
+                .build();
+
+        validatePackUtils.validatePullRule(packagePullRule);
+
+        gamePackageRepository.save(gamePackage);
+        packageVersionRepository.save(packageVersion);
+        packagePullRuleRepository.save(packagePullRule);
 
         return PackResponse.from(gamePackageRepository.save(gamePackage));
 
     }
+
+
 
 }

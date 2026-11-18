@@ -44,14 +44,7 @@ public class FormatterString {
      * @param str the string to normalize, may be {@code null}
      * @return the trimmed, lowercase string, or {@code null} if {@code str} is {@code null}
      */
-    public static String normalizeString(String str){
-        if(str == null){
-            return null;
-        }
-        return str.trim().toLowerCase(Locale.ROOT);
-    }
-
-    public static String normalizeLowerCase(String str){
+        public static String normalizeLowerCase(String str){
         return str == null || str.isEmpty() ? str : str.toLowerCase().trim().toLowerCase();
     }
 }
