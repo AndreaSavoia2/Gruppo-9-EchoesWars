@@ -1,7 +1,6 @@
 package it.echoeswar.management.backoffice.controller;
 
-import it.echoeswar.management.backoffice.BackofficeController;
-import it.echoeswar.management.backoffice.BackofficeService;
+import it.echoeswar.management.backoffice.service.BackofficeService;
 import it.echoeswar.management.backoffice.payload.request.PackRequest;
 import it.echoeswar.management.backoffice.payload.response.PackResponse;
 import it.echoeswar.management.common.exception.ResourceConflictException;

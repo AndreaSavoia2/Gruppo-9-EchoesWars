@@ -1,4 +1,4 @@
-package it.echoeswar.management.backoffice;
+package it.echoeswar.management.backoffice.service;
 
 import it.echoeswar.management.backoffice.payload.request.PackRequest;
 import it.echoeswar.management.backoffice.payload.response.PackResponse;
@@ -105,6 +105,9 @@ public class BackofficeService {
      */
     @Transactional
     public PackResponse createPack(PackRequest request){
+
+
+
         if(gamePackageRepository.existsByCodeIgnoreCase(request.code())){
             throw new ResourceConflictException("Pack code already exists: " + request.code());
         }

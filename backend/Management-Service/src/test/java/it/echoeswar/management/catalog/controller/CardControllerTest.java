@@ -1,7 +1,7 @@
 package it.echoeswar.management.catalog.controller;
 
-import it.echoeswar.management.backoffice.BackofficeController;
-import it.echoeswar.management.backoffice.BackofficeService;
+import it.echoeswar.management.backoffice.controller.BackofficeController;
+import it.echoeswar.management.backoffice.service.BackofficeService;
 import it.echoeswar.management.catalog.payload.request.CardRequest;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.security.session.service.AuthenticationSessionService;
