@@ -2,7 +2,6 @@ package it.echoeswar.management.collection.service;
 
 
 import it.echoeswar.management.catalog.payload.response.CardResponse;
-import it.echoeswar.management.collection.payload.response.CollectionResponse;
 import it.echoeswar.management.collection.repository.UserCardRepository;
 import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.BuildPageableResponse;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Application service for reading a card collection for the principal authenticated by the web layer.
@@ -34,7 +34,7 @@ public class UserCardService {
      * Retrieves one zero-based page of cards owned by the authenticated user.
      *
      * <p>The read-only transaction stays open while each {@code UserCard} is mapped to a
-     * {@link CollectionResponse}, allowing its lazily loaded card, faction, school, and tier to
+     * {@link CardResponse}, allowing its lazily loaded card, faction, school, and tier to
      * be read. The returned map contains a {@code content} list of collection responses plus
      * {@code totalPages}, {@code totalElements}, and {@code currentPage}.</p>
      *
@@ -66,6 +66,27 @@ public class UserCardService {
                 userCardRepository.findAllByUserId(customUserDetails.getId(), pageable)
                         .map(CardResponse::from));
 
+    }
+
+    /**
+     * Credits the collection with copies obtained from an opening or another reward.
+     *
+     * <p>Each quantity is applied using an atomic UPSERT: if the row exists, it is incremented;
+     * otherwise, it is created. The method participates in the caller's transaction.</p>
+     *
+     * @param userId collection owner
+     * @param cardQuantities quantities to add, grouped by card identifier
+     */
+    @Transactional
+    public void addCardsToCollection(UUID userId, Map<Long, Integer> cardQuantities) {
+        cardQuantities.forEach((cardId, quantity) -> {
+            if (quantity == null || quantity <= 0) {
+                throw new IllegalArgumentException("Card quantity must be positive.");
+            }
+
+            // The UPSERT prevents copy loss when multiple flows update the same card.
+            userCardRepository.incrementQuantity(userId, cardId, quantity);
+        });
     }
 
 }

@@ -43,7 +43,7 @@ public class DeckRule extends AuditableEntity {
 
     @Builder.Default
     @Column(name = "max_total_cost", nullable = false)
-    private int maxTotalCost = 100;
+    private int maxTotalCost = 98;
 
     @Builder.Default
     @Column(name = "max_copies_same_card", nullable = false)
