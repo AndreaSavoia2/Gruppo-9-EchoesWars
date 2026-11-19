@@ -6,18 +6,22 @@ import com.echoeswars.combat.CombatCardResult;
 import com.echoeswars.combat.CombatResult;
 import com.echoeswars.combat.EchoResolver;
 import com.echoeswars.combat.PlayerLife;
+
 import com.echoeswars.model.Card;
 import com.echoeswars.model.Player;
+
 import com.echoeswars.replay.Replay;
 import com.echoeswars.replay.ReplayEvent;
 import com.echoeswars.replay.ReplayPlayer;
 import com.echoeswars.replay.ReplayRound;
+
 import com.echoeswars.replay.events.CardsDrawnEvent;
 import com.echoeswars.replay.events.CardsPlayedEvent;
 import com.echoeswars.replay.events.CombatResolvedEvent;
 import com.echoeswars.replay.events.DrawnCard;
 import com.echoeswars.replay.events.PlayedCard;
 import com.echoeswars.replay.events.RoundEndedEvent;
+
 import com.echoeswars.result.MatchResult;
 
 public class Game {
@@ -156,6 +160,10 @@ public class Game {
             // Store the combat event in the current round
             replayRound.addEvent(combatEvent);
 
+            // Register destroyed cards before drawing replacements.
+            registerDestroyedActiveCard(player2);
+            registerDestroyedActiveCard(player1);
+
             // Replace destroyed cards and remember actual draws
             if (player1.getActiveCard() != null
                     && player1.getActiveCard().isDestroyed()) {
@@ -243,6 +251,29 @@ public class Game {
         }
     }
 
+    /**
+     * Registers a destroyed active card in its owner's discard pile.
+     *
+     * Must be called before replaceDestroyedCard().
+     */
+    private void registerDestroyedActiveCard(Player player) {
+
+        Card activeCard = player.getActiveCard();
+
+        if (activeCard == null) {
+            return;
+        }
+
+        if (!activeCard.isDestroyed()) {
+            return;
+        }
+
+        // Avoid registering the same card more than once.
+        if (!player.getDiscardPile().contains(activeCard)) {
+            player.registerDestroyedCard(activeCard);
+        }
+    }
+
     private CombatResult resolveCombat(Player firstPlayer, Player secondPlayer) {
 
         // Get the active cards
@@ -268,8 +299,8 @@ public class Game {
                 secondCard,
                 firstCard);
 
-        int firstAttack = firstCard.getAttack() + firstEchoBonus;
-        int secondAttack = secondCard.getAttack() + secondEchoBonus;
+        int firstAttack = firstCard.getBaseEffectiveAttack() + firstEchoBonus;
+        int secondAttack = secondCard.getBaseEffectiveAttack() + secondEchoBonus;
 
         // Capture defense values before combat
         int firstDefenseBefore = firstCard.getCurrentDefense();
