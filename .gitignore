@@ -1,8 +1,38 @@
-# Maven
-target/
+# Maven build output
+**/target/
 
-# VS Code
+# Compiled Java files
+*.class
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+
+# IDE - VS Code
 .vscode/
 
-# Log
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary files
 *.log
+*.tmp
+*.bak
+
+# Generated match results
+**/data/output/*
+!**/data/output/.gitkeep
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example

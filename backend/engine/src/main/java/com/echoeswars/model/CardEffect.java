@@ -1,0 +1,25 @@
+package com.echoeswars.model;
+
+public enum CardEffect {
+    NONE,
+    ASSALTO,
+    FURIA,
+    PERFORANTE,
+    BERSERKER,
+    RESISTENZA,
+    RIFLESSO,
+    SACRIFICIO,
+    GUARDIANO,
+    GUARIGIONE,
+    DRENAGGIO,
+    SABOTAGGIO,
+    MALEDIZIONE,
+    MEMORIA,
+    CONDANNA,
+    DISCIPLINA,
+    DUELLANTE,
+    PREPARAZIONE_ARCANA,
+    ANALISI,
+    IMBOSCATA,
+    OPPORTUNISTA
+}

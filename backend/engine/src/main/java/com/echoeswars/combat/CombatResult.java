@@ -1,3 +1,4 @@
+
 package com.echoeswars.combat;
 
 import java.util.ArrayList;
@@ -7,23 +8,44 @@ public class CombatResult {
     private final ArrayList<CombatCardResult> cards;
     private final PlayerLife playerDamage;
 
+    private final boolean firstAttackDestroyedOpponent;
+    private final boolean secondAttackDestroyedOpponent;
+
     public CombatResult(
             CombatCardResult firstCardResult,
             CombatCardResult secondCardResult,
             int firstPlayerDamage,
-            int secondPlayerDamage
-    ) {
-        // Store the combat results of both cards
+            int secondPlayerDamage) {
+
+        this(
+                firstCardResult,
+                secondCardResult,
+                firstPlayerDamage,
+                secondPlayerDamage,
+                false,
+                false);
+    }
+
+    public CombatResult(
+            CombatCardResult firstCardResult,
+            CombatCardResult secondCardResult,
+            int firstPlayerDamage,
+            int secondPlayerDamage,
+            boolean firstAttackDestroyedOpponent,
+            boolean secondAttackDestroyedOpponent) {
+
         this.cards = new ArrayList<>();
 
         this.cards.add(firstCardResult);
         this.cards.add(secondCardResult);
 
-        // Store the damage received by both players
         this.playerDamage = new PlayerLife(
                 firstPlayerDamage,
-                secondPlayerDamage
-        );
+                secondPlayerDamage);
+
+        this.firstAttackDestroyedOpponent = firstAttackDestroyedOpponent;
+
+        this.secondAttackDestroyedOpponent = secondAttackDestroyedOpponent;
     }
 
     public ArrayList<CombatCardResult> getCards() {
@@ -33,4 +55,25 @@ public class CombatResult {
     public PlayerLife getPlayerDamage() {
         return playerDamage;
     }
+
+    public boolean isFirstAttackDestroyedOpponent() {
+        return firstAttackDestroyedOpponent;
+    }
+
+    public boolean isSecondAttackDestroyedOpponent() {
+        return secondAttackDestroyedOpponent;
+    }
+
+    public int getDamageToFirstCardDefense() {
+        return cards.get(1)
+                .getDamageBreakdown()
+                .get("defenseDamage");
+    }
+
+    public int getDamageToSecondCardDefense() {
+        return cards.get(0)
+                .getDamageBreakdown()
+                .get("defenseDamage");
+    }
+
 }
