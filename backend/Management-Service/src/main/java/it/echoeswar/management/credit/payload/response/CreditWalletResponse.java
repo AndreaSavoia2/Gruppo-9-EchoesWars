@@ -6,6 +6,8 @@ import it.echoeswar.management.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 
+// TODO: manca la documentazione
+
 @Builder
 public record CreditWalletResponse(
         Long id,

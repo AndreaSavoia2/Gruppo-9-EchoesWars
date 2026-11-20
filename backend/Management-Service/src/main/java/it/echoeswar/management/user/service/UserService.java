@@ -11,8 +11,11 @@ import it.echoeswar.management.credit.repository.CreditWalletRepository;
 import it.echoeswar.management.security.auth.dto.request.RegisterRequest;
 import it.echoeswar.management.security.auth.dto.response.UserResponse;
 import it.echoeswar.management.security.auth.password.PasswordPolicy;
+import it.echoeswar.management.security.userdetails.CustomUserDetails;
 import it.echoeswar.management.user.entity.Role;
 import it.echoeswar.management.user.entity.User;
+import it.echoeswar.management.user.exception.AccountConflictException;
+import it.echoeswar.management.user.payload.response.UserSearchResponse;
 import it.echoeswar.management.user.enumerated.AccountStatus;
 import it.echoeswar.management.user.enumerated.RoleName;
 import it.echoeswar.management.user.repository.RoleRepository;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,9 +38,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
-    private static final String ACCOUNT_CONFLICT_MESSAGE =
-            "An account with the provided username or email already exists.";
 
     private final UserRepository userRepository;
     private final UserAvatarRepository userAvatarRepository;
@@ -55,16 +56,15 @@ public class UserService {
      */
     @Transactional
     public UserResponse register(RegisterRequest request) {
-        Objects.requireNonNull(request, "request must not be null");
 
         String normalizedEmail = FormatterString.normalizeEmail(request.email());
 
         passwordPolicy.validateForRegistration(request.password());
 
-        if (userRepository.existsByUsername(request.username())
-                || userRepository.existsByEmailIgnoreCase(normalizedEmail)) {
-            throw new ResourceConflictException(ACCOUNT_CONFLICT_MESSAGE);
-        }
+        if (userRepository.existsByUsername(request.username()) ||
+                userRepository.existsByEmailIgnoreCase(normalizedEmail))
+            throw new AccountConflictException();
+
 
         Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new IllegalStateException(
@@ -82,32 +82,41 @@ public class UserService {
         CreditWallet creditWallet = CreditWallet.builder().user(user).build();
         try {
             User savedUser = userRepository.saveAndFlush(user);
+            // TODO: gestire il credit wallet in un suo try/catch in modo che non generi ambiguità in casi di errore
             creditWalletRepository.saveAndFlush(creditWallet);
 
             return UserResponse.toUserResponse(savedUser);
         } catch (DataIntegrityViolationException exception) {
-            throw new ResourceConflictException(ACCOUNT_CONFLICT_MESSAGE);
+            throw new AccountConflictException();
         }
     }
 
     /**
      * Retrieves an account only for that account's owner or an administrator.
      */
-    @PreAuthorize(
-            "hasRole('ADMIN') or "
-                    + "(hasRole('USER') and #p0 == authentication.principal.id)"
-    )
     @Transactional(readOnly = true)
-    public UserResponse getUserById(UUID userId) {
-        Objects.requireNonNull(userId, "userId must not be null");
-
-        return userRepository.findByIdWithRole(userId)
+    public UserResponse getUserById(CustomUserDetails user) {
+        return userRepository.findByIdWithRole(user.getId())
                 .map(UserResponse::toUserResponse)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "User",
                         "id",
-                        userId
+                        user.getId()
                 ));
+    }
+
+    /**
+     * Finds visible active accounts whose username contains the supplied fragment.
+     */
+    @Transactional(readOnly = true)
+    public List<UserSearchResponse> searchUsersByUsername(String username) {
+        return userRepository.findAllVisibleByUsernameLike(
+                        username,
+                        AccountStatus.ACTIVE
+                )
+                .stream()
+                .map(UserSearchResponse::from)
+                .toList();
     }
 
     /**
@@ -117,6 +126,7 @@ public class UserService {
      * caller a useful validation error, while the composite foreign key on {@code users} is the
      * final integrity guarantee at database level.</p>
      */
+    // TODO: da rivedere metodo per lezione dell'avatar
     @PreAuthorize("#p0 == authentication.principal.id")
     @Transactional
     public UserResponse selectAvatar(UUID userId, Long avatarId) {

@@ -83,15 +83,9 @@ public class PackController {
     public ResponseEntity<?> getAvailablePackages() {
         List<GamePackageResponse> packages = gamePackageService.getAllAvailablePackages();
 
-        if (packages.isEmpty()) {
-            return ResponseApi.buildResponse(
-                    HttpStatus.OK,
-                    packages,
-                    "No available packages found."
-            );
-        }
-
-        return ResponseApi.buildResponse(HttpStatus.OK, packages);
+        return packages.isEmpty() ?
+                ResponseApi.buildResponse(HttpStatus.OK, packages, "No available packages found.") :
+                ResponseApi.buildResponse(HttpStatus.OK, packages);
     }
 
     @Operation(
@@ -135,15 +129,9 @@ public class PackController {
         List<UnopenedPackagePurchaseResponse> purchases = packagePurchaseService
                 .getUnopenedPurchases(customUserDetails.getId());
 
-        if (purchases.isEmpty()) {
-            return ResponseApi.buildResponse(
-                    HttpStatus.OK,
-                    purchases,
-                    "No unopened package purchases found."
-            );
-        }
-
-        return ResponseApi.buildResponse(HttpStatus.OK, purchases);
+        return purchases.isEmpty() ?
+                ResponseApi.buildResponse(HttpStatus.OK, purchases, "No unopened package purchases found."):
+                ResponseApi.buildResponse(HttpStatus.OK, purchases);
     }
 
     @Operation(

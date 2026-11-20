@@ -120,11 +120,9 @@ public class CreditController {
                 sortBy,
                 direction);
         List<?> content = (List<?>) result.get("content");
-        if (content.isEmpty()) {
-            return ResponseApi.buildResponse(HttpStatus.OK, result, "No transaction found for the requested page.");
-        }
-
-        return ResponseApi.buildResponse(HttpStatus.OK, result);
+        return content.isEmpty() ?
+                ResponseApi.buildResponse(HttpStatus.OK, result, "No transaction found for the requested page.") :
+                ResponseApi.buildResponse(HttpStatus.OK, result);
     }
 
     @Operation(

@@ -228,6 +228,16 @@ public record CardResponse(
     }
 
     /**
+     * Builds a card response for a card in an authenticated user's collection.
+     *
+     * @param userCard collection entry containing the card and its owned quantity
+     * @return flattened card response with the owned quantity
+     */
+    public static CardResponse from(UserCard userCard) {
+        return from(userCard.getCard(), userCard.getQuantity());
+    }
+
+    /**
      * Builds a {@link CardResponse} from a card and an optional contextual quantity.
      *
      * <p>The quantity may represent owned copies in a collection or copies assigned to a deck,
@@ -259,15 +269,5 @@ public record CardResponse(
                 .tierLevel(card.getTier().getLevel())
                 .quantity(quantity)
                 .build();
-    }
-
-    /**
-     * Builds a card response for a card in an authenticated user's collection.
-     *
-     * @param userCard collection entry containing the card and its owned quantity
-     * @return flattened card response with the owned quantity
-     */
-    public static CardResponse from(UserCard userCard) {
-        return from(userCard.getCard(), userCard.getQuantity());
     }
 }
