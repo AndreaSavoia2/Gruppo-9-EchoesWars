@@ -21,6 +21,7 @@ public class Card {
     private int maxDefense;
     private int protection;
     private int attackBonus;
+    private int temporaryAttackBonus;
 
     // Effect state
     private int roundsInPlay;
@@ -52,13 +53,14 @@ public class Card {
         this.maxDefense = defense;
         this.protection = 0;
         this.attackBonus = 0;
+        this.temporaryAttackBonus = 0;
 
         this.roundsInPlay = 0;
         this.healingDone = 0;
         this.analysisTargetId = null;
     }
 
-     // Legacy constructor for backward compatibility
+    // Legacy constructor for backward compatibility
     public Card(
             String instanceId,
             String cardId,
@@ -74,8 +76,7 @@ public class Card {
                 cost,
                 Echo.DOMINIO,
                 CardSchool.GUERRIERI,
-                CardEffect.NONE
-        );
+                CardEffect.NONE);
     }
 
     // Card identity
@@ -135,7 +136,7 @@ public class Card {
     }
 
     public int getBaseEffectiveAttack() {
-        return attack + attackBonus;
+        return attack + attackBonus + temporaryAttackBonus;
     }
 
     // Effect state
@@ -167,6 +168,24 @@ public class Card {
         }
 
         attackBonus += bonus;
+    }
+
+    public int getTemporaryAttackBonus() {
+        return temporaryAttackBonus;
+    }
+
+    public void addTemporaryAttackBonus(int bonus) {
+
+        if (bonus < 0) {
+            throw new IllegalArgumentException(
+                    "Temporary attack bonus cannot be negative.");
+        }
+
+        temporaryAttackBonus += bonus;
+    }
+
+    public void clearTemporaryAttackBonus() {
+        temporaryAttackBonus = 0;
     }
 
     // Defense modifiers
