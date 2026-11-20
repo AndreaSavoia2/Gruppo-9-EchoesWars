@@ -6,11 +6,11 @@ import lombok.Builder;
 
 import java.util.List;
 
-/** Confirmation returned after a deck has been created successfully. */
+/** Confirmation response returned after a deck is created or updated. */
 @Builder
 @Schema(
         name = "DeckResponse",
-        description = "A newly created deck together with the rule-derived composition summary."
+        description = "A deck together with the rule-derived composition summary."
 )
 public record DeckResponse(
 
@@ -26,9 +26,6 @@ public record DeckResponse(
         @Schema(description = "Deck name.", example = "Fiamme e Ombre")
         String name,
 
-        @Schema(description = "Optional deck description.", nullable = true)
-        String description,
-
         @Schema(description = "Deck lifecycle state.", example = "READY")
         DeckStatus status,
 
@@ -38,8 +35,10 @@ public record DeckResponse(
         @Schema(description = "Total play cost of all cards in the deck.", example = "86", format = "int32")
         int totalCost,
 
-        @Schema(description = "The factions explicitly assigned to the deck.", example = "[1, 2]")
-        List<Byte> factionIds,
+        @Schema(
+                description = "The factions explicitly associated with the deck, including their Italian and English names."
+        )
+        List<DeckFactionResponse> factions,
 
         @Schema(description = "Distinct catalog cards and their quantities in the deck.")
         List<DeckCardResponse> cards

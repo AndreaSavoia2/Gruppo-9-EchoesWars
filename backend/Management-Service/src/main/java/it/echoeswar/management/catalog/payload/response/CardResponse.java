@@ -205,7 +205,8 @@ public record CardResponse(
 
         @JsonInclude(JsonInclude.Include.NON_NULL)
         @Schema(
-                description = "Number of copies of this card owned by the authenticated user.",
+                description = "Number of copies of this card in the context represented by the response, "
+                        + "such as a user's collection or a deck.",
                 example = "2",
                 format = "int32",
                 minimum = "1",
@@ -223,6 +224,20 @@ public record CardResponse(
      * @return a new {@code CardResponse} populated from the given entity
      */
     public static CardResponse from(Card card) {
+        return from(card, null);
+    }
+
+    /**
+     * Builds a {@link CardResponse} from a card and an optional contextual quantity.
+     *
+     * <p>The quantity may represent owned copies in a collection or copies assigned to a deck,
+     * depending on the endpoint that creates the response.</p>
+     *
+     * @param card catalog card to convert; its faction, school and tier must not be {@code null}
+     * @param quantity number of copies represented by the response, or {@code null} when not applicable
+     * @return a flattened response populated from the given card
+     */
+    public static CardResponse from(Card card, Integer quantity) {
         return CardResponse.builder()
                 .id(card.getId())
                 .code(FormatterString.capitalizeFirstLetter(card.getCode()))
@@ -242,31 +257,17 @@ public record CardResponse(
                 .schoolNameIt(FormatterString.capitalizeFirstLetter(card.getSchool().getNameIt()))
                 .schoolNameEn(FormatterString.capitalizeFirstLetter(card.getSchool().getNameEn()))
                 .tierLevel(card.getTier().getLevel())
+                .quantity(quantity)
                 .build();
     }
 
-        public static CardResponse from(UserCard userCard) {
-                Card card = userCard.getCard();
-                return CardResponse.builder()
-                        .id(userCard.getCard().getId())
-                        .code(FormatterString.capitalizeFirstLetter(card.getCode()))
-                        .nameIt(FormatterString.capitalizeFirstLetter(card.getNameIt()))
-                        .nameEn(FormatterString.capitalizeFirstLetter(card.getNameEn()))
-                        .descriptionIt(FormatterString.capitalizeFirstLetter(card.getDescriptionIt()))
-                        .descriptionEn(FormatterString.capitalizeFirstLetter(card.getDescriptionEn()))
-                        .attack(card.getAttack())
-                        .defense(card.getDefense())
-                        .cost(card.getPlayCost())
-                        .artUrl(FormatterString.capitalizeFirstLetter(card.getImageUrl()))
-                        .frameImageUrl(card.getTier().getImageUrl())
-                        .echoesId(card.getFaction().getId())
-                        .echoesNameIt(FormatterString.capitalizeFirstLetter(card.getFaction().getNameIt()))
-                        .echoesNameEn(FormatterString.capitalizeFirstLetter(card.getFaction().getNameEn()))
-                        .schoolId(card.getSchool().getId())
-                        .schoolNameIt(FormatterString.capitalizeFirstLetter(card.getSchool().getNameIt()))
-                        .schoolNameEn(FormatterString.capitalizeFirstLetter(card.getSchool().getNameEn()))
-                        .tierLevel(card.getTier().getLevel())
-                        .quantity(userCard.getQuantity())
-                        .build();
-        }
+    /**
+     * Builds a card response for a card in an authenticated user's collection.
+     *
+     * @param userCard collection entry containing the card and its owned quantity
+     * @return flattened card response with the owned quantity
+     */
+    public static CardResponse from(UserCard userCard) {
+        return from(userCard.getCard(), userCard.getQuantity());
+    }
 }

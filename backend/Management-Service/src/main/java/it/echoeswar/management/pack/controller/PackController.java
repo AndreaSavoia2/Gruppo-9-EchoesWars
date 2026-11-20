@@ -80,7 +80,7 @@ public class PackController {
     })
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/v1/private/packs")
-    public ResponseEntity<ResponseApi<List<GamePackageResponse>>> getAvailablePackages() {
+    public ResponseEntity<?> getAvailablePackages() {
         List<GamePackageResponse> packages = gamePackageService.getAllAvailablePackages();
 
         if (packages.isEmpty()) {
@@ -205,7 +205,7 @@ public class PackController {
     })
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/v1/private/packs/purchases/{purchaseId}/legendary-guarantee-progress")
-    public ResponseEntity<ResponseApi<PackageLegendaryProgressResponse>> getLegendaryGuaranteeProgress(
+    public ResponseEntity<?> getLegendaryGuaranteeProgress(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(
@@ -364,7 +364,7 @@ public class PackController {
     })
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/v1/private/packs/{packageId}/purchases")
-    public ResponseEntity<ResponseApi<PackagePurchaseResponse>> purchasePackage(
+    public ResponseEntity<?> purchasePackage(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(

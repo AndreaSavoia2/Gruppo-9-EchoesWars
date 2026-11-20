@@ -2,6 +2,7 @@ package it.echoeswar.management.deck.service;
 
 import it.echoeswar.management.catalog.entity.Card;
 import it.echoeswar.management.catalog.entity.Faction;
+import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.catalog.repository.FactionRepository;
 import it.echoeswar.management.collection.entity.UserCard;
 import it.echoeswar.management.collection.repository.UserCardRepository;
@@ -16,12 +17,17 @@ import it.echoeswar.management.deck.entity.DeckFaction;
 import it.echoeswar.management.deck.entity.DeckFactionId;
 import it.echoeswar.management.deck.entity.DeckRule;
 import it.echoeswar.management.deck.enumerated.DeckStatus;
+import it.echoeswar.management.deck.enumerated.DeckStatusFilter;
 import it.echoeswar.management.deck.model.DeckComposition;
 import it.echoeswar.management.deck.model.ResolvedDeckCard;
 import it.echoeswar.management.deck.payload.request.CreateDeckRequest;
 import it.echoeswar.management.deck.payload.request.DeckCardRequest;
+import it.echoeswar.management.deck.payload.request.UpdateDeckRequest;
 import it.echoeswar.management.deck.payload.response.DeckCardResponse;
+import it.echoeswar.management.deck.payload.response.DeckDetailResponse;
+import it.echoeswar.management.deck.payload.response.DeckFactionResponse;
 import it.echoeswar.management.deck.payload.response.DeckResponse;
+import it.echoeswar.management.deck.payload.response.DeckSummaryResponse;
 import it.echoeswar.management.deck.repository.DeckCardRepository;
 import it.echoeswar.management.deck.repository.DeckFactionRepository;
 import it.echoeswar.management.deck.repository.DeckRepository;
@@ -33,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -42,7 +49,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Application service responsible for creating a complete deck.
+ * Application service responsible for reading, creating, updating, and deleting user decks.
  *
  * <p>The flow follows this order: it locks the user to enforce the deck limit,
  * loads the active rule, validates factions and cards, saves the deck, and finally
@@ -53,10 +60,10 @@ import java.util.UUID;
 public class DeckService {
 
     private static final int MAX_ACTIVE_DECKS_PER_USER = 20;
-    // Both statuses occupy one of the 20 available slots: a draft must not bypass the limit.
+    // READY and ARCHIVED decks occupy one of the 20 available slots; DISABLED decks do not.
     private static final List<DeckStatus> ACTIVE_DECK_STATUSES = List.of(
-            DeckStatus.DRAFT,
-            DeckStatus.READY
+            DeckStatus.READY,
+            DeckStatus.ARCHIVED
     );
 
     private final DeckRepository deckRepository;
@@ -66,6 +73,100 @@ public class DeckService {
     private final UserCardRepository userCardRepository;
     private final FactionRepository factionRepository;
     private final UserRepository userRepository;
+
+    /**
+     * Lists non-deleted decks owned by the authenticated user.
+     *
+     * <p>The response contains only deck summary data; associated cards are not loaded or returned.</p>
+     *
+     * @param userDetails authenticated user whose decks are requested
+     * @param statusFilter visible statuses to include
+     * @return decks matching the selected filter, ordered from newest to oldest
+     */
+    @Transactional(readOnly = true)
+    public List<DeckSummaryResponse> getUserDecks(
+            CustomUserDetails userDetails,
+            DeckStatusFilter statusFilter
+    ) {
+        List<Deck> decks = deckRepository.findAllByUserIdAndDeletedAtIsNullAndStatusInOrderByCreatedAtDesc(
+                userDetails.getId(),
+                statusFilter.getIncludedStatuses()
+        );
+        if (decks.isEmpty())
+            return List.of();
+
+        // Load the factions for all decks in a single query and group them by their corresponding deck.
+        Map<Long, List<DeckFactionResponse>> factionsByDeckId = new LinkedHashMap<>();
+        List<Long> deckIds = decks.stream().map(Deck::getId).toList();
+        for (DeckFaction deckFaction : deckFactionRepository.findAllByDeckIdInWithFactionDetails(deckIds)) {
+            factionsByDeckId
+                    .computeIfAbsent(deckFaction.getId().getDeckId(), ignored -> new ArrayList<>())
+                    .add(DeckFactionResponse.from(deckFaction.getFaction()));
+        }
+
+        return decks.stream()
+                .map(deck -> DeckSummaryResponse.from(
+                        deck,
+                        factionsByDeckId.getOrDefault(deck.getId(), List.of())
+                ))
+                .toList();
+    }
+
+    /**
+     * Returns the full detail of a visible deck owned by the authenticated user.
+     *
+     * <p>The ownership and status checks are part of the deck lookup so that another user's,
+     * disabled, or deleted deck is indistinguishable from a missing deck. Each {@link DeckCard}
+     * has the composite key {@code (deck_id, card_id)}, therefore the response contains exactly
+     * one {@link CardResponse} per catalog card and keeps its copies in {@code quantity}.</p>
+     *
+     * @param userDetails authenticated user requesting the deck
+     * @param deckId identifier of the requested deck
+     * @return complete deck information and its distinct cards
+     */
+    @Transactional(readOnly = true)
+    public DeckDetailResponse getUserDeckDetail(
+            CustomUserDetails userDetails,
+            long deckId
+    ) {
+        Deck deck = deckRepository.findByIdAndUserIdAndDeletedAtIsNullAndStatusIn(
+                        deckId,
+                        userDetails.getId(),
+                        ACTIVE_DECK_STATUSES
+                )
+                .orElseThrow(() -> new ResourceNotFoundException("Deck", "id", deckId));
+
+        // One deck_cards row represents one card type; quantity contains its copies in this deck.
+        List<DeckCard> deckCards = deckCardRepository.findAllByDeckIdWithCardDetails(deck.getId());
+        List<CardResponse> cards = deckCards.stream()
+                .map(deckCard -> CardResponse.from(deckCard.getCard(), deckCard.getQuantity()))
+                .toList();
+
+        int totalCards = deckCards.stream()
+                .mapToInt(DeckCard::getQuantity)
+                .sum();
+        int totalCost = Math.toIntExact(deckCards.stream()
+                .mapToLong(deckCard -> (long) deckCard.getCard().getPlayCost() * deckCard.getQuantity())
+                .sum());
+
+        // Read factions from the deck_factions association rather than inferring them from the cards in the deck.
+        List<DeckFactionResponse> factions = deckFactionRepository.findAllByDeckIdOrderByFactionId(deck.getId())
+                .stream()
+                .map(deckFaction -> DeckFactionResponse.from(deckFaction.getFaction()))
+                .toList();
+
+        return DeckDetailResponse.builder()
+                .id(deck.getId())
+                .deckRuleId(deck.getDeckRule().getId())
+                .deckRuleCode(deck.getDeckRule().getCode())
+                .name(FormatterString.capitalizeFirstLetter(deck.getName()))
+                .status(deck.getStatus())
+                .totalCards(totalCards)
+                .totalCost(totalCost)
+                .factions(factions)
+                .cards(cards)
+                .build();
+    }
 
     /**
      * Creates a valid deck for the authenticated user.
@@ -92,8 +193,9 @@ public class DeckService {
         DeckRule deckRule = deckRuleRepository.findDeckRuleByActiveTrue()
                 .orElseThrow(NotActiveDeckRuleFoundException::new);
 
-        // The name is unique per user, even if the deck is later archived.
-        if (deckRepository.existsByUserIdAndName(userId, request.name())) {
+        // A name is unique only among a user's non-deleted decks; archived decks retain their names.
+        String normalizedName = FormatterString.normalizeLowerCase(request.name());
+        if (deckRepository.existsByUserIdAndNameAndDeletedAtIsNull(userId, normalizedName)) {
             throw new ResourceConflictException("A deck with this name already exists.");
         }
 
@@ -121,8 +223,7 @@ public class DeckService {
                 Deck.builder()
                         .user(user)
                         .deckRule(deckRule)
-                        .name(FormatterString.normalizeLowerCase(request.name()))
-                        .description(FormatterString.normalizeLowerCase(request.description()))
+                        .name(normalizedName)
         // The composition passed all rules, so the deck can be used immediately.
                         .status(DeckStatus.READY)
                         .build()
@@ -140,6 +241,104 @@ public class DeckService {
         deckFactionRepository.saveAll(deckFactions);
 
         // Create one deck_cards row for each distinct card with its validated quantity.
+        saveDeckCards(deck, composition);
+
+        // The response returns the selected factions and the quantities actually saved.
+        return buildDeckResponse(deck, deckRule, composition);
+    }
+
+    /**
+     * Updates the name and completely replaces the cards of a deck owned by the authenticated user.
+     *
+     * <p>The factions and deck rule remain unchanged: received cards are revalidated against the same
+     * rule and the factions selected when the deck was created.</p>
+     *
+     * @param userDetails authenticated user who owns the deck
+     * @param deckId identifier of the deck to update
+     * @param request replacement name and complete composition
+     * @return updated deck with a summary of the saved composition
+     */
+    @Transactional
+    public DeckResponse updateDeck(
+            CustomUserDetails userDetails,
+            long deckId,
+            UpdateDeckRequest request
+    ) {
+        UUID userId = userDetails.getId();
+
+        // The lookup includes owner and status: another user's, deleted, or disabled deck cannot be updated.
+        Deck deck = deckRepository.findByIdAndUserIdAndDeletedAtIsNullAndStatusIn(
+                        deckId,
+                        userId,
+                        ACTIVE_DECK_STATUSES
+                )
+                .orElseThrow(() -> new ResourceNotFoundException("Deck", "id", deckId));
+
+        // Normalize the name before checking it, excluding the current deck from the uniqueness constraint.
+        String normalizedName = FormatterString.normalizeLowerCase(request.name());
+        if (deckRepository.existsByUserIdAndNameAndIdNotAndDeletedAtIsNull(userId, normalizedName, deckId)) {
+            throw new ResourceConflictException("A deck with this name already exists.");
+        }
+
+        // Factions cannot be changed: reload them from the deck and validate them as during creation.
+        DeckRule deckRule = deck.getDeckRule();
+        List<Byte> existingFactionIds = deckFactionRepository.findAllByDeckIdOrderByFactionId(deckId)
+                .stream()
+                .map(deckFaction -> deckFaction.getId().getFactionId())
+                .toList();
+        Map<Byte, Faction> selectedFactionsById = loadSelectedFactions(
+                deckRule,
+                existingFactionIds
+        );
+
+        // Before changing the database, validate the complete replacement list of cards and owned quantities.
+        Map<Long, Integer> quantitiesByCardId = normalizeRequestedCards(request.cards());
+        Map<Long, UserCard> ownedCardsById = loadOwnedCards(userId, quantitiesByCardId);
+        DeckComposition composition = validateComposition(
+                deckRule,
+                selectedFactionsById,
+                quantitiesByCardId,
+                ownedCardsById
+        );
+
+        // The entity is managed by the transaction: JPA persists the new name at commit.
+        deck.setName(normalizedName);
+
+        // Remove existing rows only after all validations succeed, then save the replacement composition.
+        // The entire operation is transactional: if saving fails, the deck remains unchanged.
+        deckCardRepository.deleteAllByDeckId(deckId);
+        saveDeckCards(deck, composition);
+
+        return buildDeckResponse(deck, deckRule, composition);
+    }
+
+    /**
+     * Soft-deletes a visible deck owned by the authenticated user.
+     *
+     * <p>The deck composition is retained for history, but the deck no longer occupies an active slot
+     * and cannot be listed, viewed, or updated.</p>
+     *
+     * @param userDetails authenticated user who owns the deck
+     * @param deckId identifier of the deck to delete
+     */
+    @Transactional
+    public void deleteDeck(CustomUserDetails userDetails, long deckId) {
+        Deck deck = deckRepository.findByIdAndUserIdAndDeletedAtIsNullAndStatusIn(
+                        deckId,
+                        userDetails.getId(),
+                        ACTIVE_DECK_STATUSES
+                )
+                .orElseThrow(() -> new ResourceNotFoundException("Deck", "id", deckId));
+
+        // Dirty checking persists both deletion markers when the transaction commits.
+        deck.setStatus(DeckStatus.DISABLED);
+        deck.setDeletedAt(LocalDateTime.now());
+    }
+
+    /**
+     * Creates the association rows between the deck and the cards in the already validated composition.
+     */
+    private void saveDeckCards(Deck deck, DeckComposition composition) {
         List<DeckCard> deckCards = composition.cards().stream()
                 .map(resolvedCard -> DeckCard.builder()
                         .id(new DeckCardId(deck.getId(), resolvedCard.card().getId()))
@@ -149,18 +348,29 @@ public class DeckService {
                         .build())
                 .toList();
         deckCardRepository.saveAll(deckCards);
+    }
 
-        // The response returns the selected factions and the quantities actually saved.
+    /**
+     * Builds a consistent response after both deck creation and update.
+     */
+    private DeckResponse buildDeckResponse(
+            Deck deck,
+            DeckRule deckRule,
+            DeckComposition composition
+    ) {
+        List<DeckFactionResponse> factions = composition.selectedFactionsById().values().stream()
+                .map(DeckFactionResponse::from)
+                .toList();
+
         return DeckResponse.builder()
                 .id(deck.getId())
                 .deckRuleId(deckRule.getId())
                 .deckRuleCode(deckRule.getCode())
                 .name(FormatterString.capitalizeFirstLetter(deck.getName()))
-                .description(FormatterString.capitalizeFirstLetter(deck.getDescription()))
                 .status(deck.getStatus())
                 .totalCards(composition.totalCards())
                 .totalCost(composition.totalCost())
-                .factionIds(List.copyOf(composition.selectedFactionsById().keySet()))
+                .factions(factions)
                 .cards(composition.cards().stream()
                         .map(resolvedCard -> new DeckCardResponse(
                                 resolvedCard.card().getId(),
@@ -172,7 +382,7 @@ public class DeckService {
     }
 
     private void validateActiveDeckLimit(UUID userId) {
-        // ARCHIVED or soft-deleted decks do not occupy a slot; DRAFT and READY decks do.
+        // READY and ARCHIVED decks occupy a slot; DISABLED and soft-deleted decks do not.
         long activeDeckCount = deckRepository.countByUserIdAndDeletedAtIsNullAndStatusIn(
                 userId,
                 ACTIVE_DECK_STATUSES
