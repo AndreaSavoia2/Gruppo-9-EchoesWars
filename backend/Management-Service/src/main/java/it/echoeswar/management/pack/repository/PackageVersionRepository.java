@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PackageVersionRepository extends JpaRepository<PackageVersion, Long> {
 
@@ -28,6 +29,15 @@ public interface PackageVersionRepository extends JpaRepository<PackageVersion, 
             order by packageVersion.versionNumber desc
             """)
     List<PackageVersion> findAvailableByGamePackageId(
+            @Param("gamePackageId") Long gamePackageId
+    );
+
+    /*query join per recuperare la versione associata al pacchetto tramite pacchettoId*/
+    @Query("""
+            select v from PackageVersion v join GamePackage p on v.gamePackage.id = p.id where p.id = :gamePackageId order by v.versionNumber desc limit 1
+                                   
+            """)
+    Optional<PackageVersion> findVersionByPackageId(
             @Param("gamePackageId") Long gamePackageId
     );
 }

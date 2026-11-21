@@ -1,6 +1,7 @@
 package it.echoeswar.management.backoffice.service;
 
 import it.echoeswar.management.backoffice.payload.request.PackRequest;
+import it.echoeswar.management.backoffice.payload.request.PackUpdateVersionRequest;
 import it.echoeswar.management.backoffice.payload.response.PackResponse;
 import it.echoeswar.management.catalog.entity.Card;
 import it.echoeswar.management.catalog.entity.Faction;
@@ -61,7 +62,7 @@ public class BackofficeService {
      * <p>The method first verifies that no card with the same code exists
      * (case-insensitive), then resolves the faction, school and tier
      * referenced by the request, and finally builds and persists the card.
-     * String fields are normalized through {@link FormatterString#normalizeLowerCase(String)} (String)}
+     * String fields are normalized through {@link FormatterString#normalizeLowerCase(String)} (String)
      * before being saved.</p>
      *
      * @param request the payload containing the card data and the identifiers
@@ -109,7 +110,7 @@ public class BackofficeService {
      * <p>The method first verifies that no pack with the same code exists
      * (case-insensitive), then builds a {@link GamePackage} from the request
      * and persists it. String fields are normalized through
-     * {@link FormatterString#normalizeLowerCase(String)} (String)} before being saved.</p>
+     * {@link FormatterString#normalizeLowerCase(String)} (String) before being saved.</p>
      *
      * @param request the payload containing the pack code, names and
      *                optional descriptions
@@ -160,6 +161,39 @@ public class BackofficeService {
 
         return PackResponse.from(gamePackageRepository.save(gamePackage));
 
+    }
+
+    //Modificare il pacchetto con delle nuove regole
+    @Transactional
+    public String updatePullRulePack(PackUpdateVersionRequest request){
+
+        PackageVersion packageVersion = packageVersionRepository.findVersionByPackageId(request.packageId())
+                .orElseThrow(()-> new ResourceNotFoundException("packageId", "id", request.packageId()));
+
+        PackageVersion newPackageVersion = PackageVersion.builder()
+                .gamePackage(packageVersion.getGamePackage())
+                .versionNumber(packageVersion.getVersionNumber()+1)
+                .priceCredits(request.priceCredits())
+                .publishedAt(LocalDateTime.now())
+                .build();
+
+        newPackageVersion = packageVersionRepository.save(newPackageVersion);   // <-- AGGIUNGI QUESTA RIGA
+
+
+        PackagePullRule newPackagePullRule = PackagePullRule.builder()
+                .packageVersion(newPackageVersion)
+                .cardsPerPackage(request.cardsPerPackage())
+                .guaranteedCommonCards(request.guaranteCommonCards())
+                .guaranteedRareCards(request.guaranteRareCards())
+                .cycleLength(request.cycleLength())
+                .randomCommonThreshold(request.randomCommonThreshold())
+                .randomRareThreshold(request.randomRareThreshold())
+                .build();
+
+        validatePackUtils.validatePullRule(newPackagePullRule);
+        packagePullRuleRepository.save(newPackagePullRule);
+
+        return "complete";
     }
 
 

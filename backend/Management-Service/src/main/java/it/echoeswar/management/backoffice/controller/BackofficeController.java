@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.echoeswar.management.backoffice.payload.request.PackUpdateVersionRequest;
 import it.echoeswar.management.backoffice.service.BackofficeService;
 import it.echoeswar.management.backoffice.payload.request.PackRequest;
 import it.echoeswar.management.backoffice.payload.response.PackResponse;
@@ -18,10 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api")
@@ -118,6 +116,48 @@ public class BackofficeController {
     public ResponseEntity<?> createPack(@Valid @RequestBody PackRequest request){
         PackResponse pack = backofficeService.createPack(request);
         return ResponseApi.buildResponse(HttpStatus.CREATED, pack, "Pack created successfully");
+    }
+
+    @Operation(
+            summary = "Update the pull rules of a pack",
+            description = "Creates a new version of an existing pack with updated pull rules and price. "
+                    + "The pack is identified by its id. The new pull rule is validated before being saved. "
+                    + "Restricted to authorized users."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pack pull rule updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request payload or invalid pull rule configuration",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(responseCode = "401", description = "Authentication required", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Not authorized to update packs", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pack not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            )
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("v1/private/packages/pull-rules")
+    public ResponseEntity<?> updatePullRulePack(@Valid @RequestBody PackUpdateVersionRequest request){
+        String result = backofficeService.updatePullRulePack(request);
+        return ResponseApi.buildResponse(HttpStatus.OK, result, "Pack pull rule updated successfully");
     }
 
 
