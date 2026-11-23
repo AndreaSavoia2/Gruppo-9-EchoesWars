@@ -80,18 +80,12 @@ public class PackController {
     })
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/v1/private/packs")
-    public ResponseEntity<ResponseApi<List<GamePackageResponse>>> getAvailablePackages() {
+    public ResponseEntity<?> getAvailablePackages() {
         List<GamePackageResponse> packages = gamePackageService.getAllAvailablePackages();
 
-        if (packages.isEmpty()) {
-            return ResponseApi.buildResponse(
-                    HttpStatus.OK,
-                    packages,
-                    "No available packages found."
-            );
-        }
-
-        return ResponseApi.buildResponse(HttpStatus.OK, packages);
+        return packages.isEmpty() ?
+                ResponseApi.buildResponse(HttpStatus.OK, packages, "No available packages found.") :
+                ResponseApi.buildResponse(HttpStatus.OK, packages);
     }
 
     @Operation(
@@ -135,15 +129,9 @@ public class PackController {
         List<UnopenedPackagePurchaseResponse> purchases = packagePurchaseService
                 .getUnopenedPurchases(customUserDetails.getId());
 
-        if (purchases.isEmpty()) {
-            return ResponseApi.buildResponse(
-                    HttpStatus.OK,
-                    purchases,
-                    "No unopened package purchases found."
-            );
-        }
-
-        return ResponseApi.buildResponse(HttpStatus.OK, purchases);
+        return purchases.isEmpty() ?
+                ResponseApi.buildResponse(HttpStatus.OK, purchases, "No unopened package purchases found."):
+                ResponseApi.buildResponse(HttpStatus.OK, purchases);
     }
 
     @Operation(
@@ -205,7 +193,7 @@ public class PackController {
     })
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/v1/private/packs/purchases/{purchaseId}/legendary-guarantee-progress")
-    public ResponseEntity<ResponseApi<PackageLegendaryProgressResponse>> getLegendaryGuaranteeProgress(
+    public ResponseEntity<?> getLegendaryGuaranteeProgress(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(
@@ -364,7 +352,7 @@ public class PackController {
     })
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/v1/private/packs/{packageId}/purchases")
-    public ResponseEntity<ResponseApi<PackagePurchaseResponse>> purchasePackage(
+    public ResponseEntity<?> purchasePackage(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+// TODO: manca la documentazione
+
 @Builder
 public record CreditTransactionResponse(
         Long id,

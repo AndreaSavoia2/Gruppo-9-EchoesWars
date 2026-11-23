@@ -43,11 +43,11 @@ public class Friendship {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_a_id", nullable = false)
-    private User userA;
+    private User firstUser;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_b_id", nullable = false)
-    private User userB;
+    private User secondUser;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "requested_by_user_id", nullable = false)

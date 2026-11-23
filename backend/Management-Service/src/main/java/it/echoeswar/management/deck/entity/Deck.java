@@ -28,13 +28,7 @@ import java.time.LocalDateTime;
  * A user-owned deck built under a specific {@link DeckRule}.
  */
 @Entity
-@Table(
-        name = "decks",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uq_decks_user_name",
-                columnNames = {"user_id", "name"}
-        )
-)
+@Table(name = "decks")
 @Getter
 @Setter
 @Builder
@@ -58,13 +52,10 @@ public class Deck extends AuditableEntity {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private DeckStatus status = DeckStatus.DRAFT;
+    private DeckStatus status = DeckStatus.READY;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
