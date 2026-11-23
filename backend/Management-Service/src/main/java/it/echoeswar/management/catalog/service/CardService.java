@@ -59,4 +59,6 @@ public class CardService {
         return BuildPageableResponse.buildPage(
                 cardRepository.findAll(pageable).map(CardResponse::from));
     }
+
+
 }

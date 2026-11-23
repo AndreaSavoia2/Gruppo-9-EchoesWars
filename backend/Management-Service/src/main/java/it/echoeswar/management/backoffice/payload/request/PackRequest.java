@@ -26,11 +26,14 @@ import lombok.Builder;
         description = "Payload for creating a pack"
 )
 public record PackRequest(
+        // TODO rimuovere e gestitre lato server scegliendo un formato uniforme
         @Schema(description = "Unique pack code", example = "#1234_001",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank
         @Size(max = 100)
         String code,
+
+        // TODO: controllare e adattare limiti alle entity
 
         @Schema(description = "Pack name in Italian", example = "Pacchetto settimanale",
                 requiredMode = Schema.RequiredMode.REQUIRED)

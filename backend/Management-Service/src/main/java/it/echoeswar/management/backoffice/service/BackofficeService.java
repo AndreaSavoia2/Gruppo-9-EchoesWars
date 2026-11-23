@@ -196,6 +196,12 @@ public class BackofficeService {
         return "complete";
     }
 
+    // TODO: lista degli echi del database
 
+    // TODO: lista degli tiar del datgabase
+
+    // TODO: lista delle scuole del database
+
+    // todo: acessibili sol oda utente autenticato con ruolo admin restuire response , restisci id, codice, nome inglese .
 
 }

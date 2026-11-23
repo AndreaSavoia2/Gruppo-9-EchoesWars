@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
 
+//TODO spostare in payload request di back office
+
 /**
  * Request payload used to create a new card.
  *
@@ -30,11 +32,15 @@ import org.hibernate.validator.constraints.URL;
         description = "Payload for creating a card, referencing faction, school and tier by identifier"
 )
 public record CardRequest(
+
+        // TODO rimuovere e gestitre lato server scegliendo un formato uniforme
         @Schema(description = "Unique catalog code of the card", example = "DOMINION_001",
         requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank
         @Size(max = 100)
         String code,
+
+        // TODO: unifrmare limite della response con limite dell'entity
 
         @Schema(description = "Card name in Italian", example = "Guardiano",
         requiredMode = Schema.RequiredMode.REQUIRED)
@@ -87,7 +93,7 @@ public record CardRequest(
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull
         @Min(0)
-        @Max(127)
+        @Max(3)
         Byte maxCopyDeck,
 
         @Schema(description = "URL of the card artwork, when available",
