@@ -13,16 +13,20 @@ import it.echoeswar.management.common.api.ResponseApi;
 import it.echoeswar.management.security.userdetails.CustomUserDetails;
 import it.echoeswar.management.social.payload.response.FriendshipRequestResponse;
 import it.echoeswar.management.social.service.FriendshipService;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -88,17 +92,17 @@ public class FriendshipController {
             )
     })
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("/v1/private/friendships/requests/{recipientUserId}")
+    @PostMapping("/v1/private/friendships/requests/{recipientUsername}")
     public ResponseEntity<?> sendFriendRequest(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(
                     in = ParameterIn.PATH,
-                    description = "Identificativo dell'utente che riceverà la richiesta.",
-                    example = "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                    description = "Identificativo uername dell'utente che riceverà la richiesta.",
+                    example = "Username",
                     required = true
             )
-            @PathVariable UUID recipientUserId
+            @PathVariable @NotNull @NotBlank String recipientUsername
     ) {
         /*
          * customUserDetails contiene il principal creato da Spring Security dal
@@ -106,7 +110,7 @@ public class FriendshipController {
          */
         FriendshipRequestResponse friendshipRequest = friendshipService.sendFriendRequest(
                 customUserDetails,
-                recipientUserId
+                recipientUsername
         );
 
         return ResponseApi.buildResponse(
@@ -114,5 +118,55 @@ public class FriendshipController {
                 friendshipRequest,
                 "Friendship request sent successfully."
         );
+    }
+
+    @Operation(
+            summary = "Elenca le richieste di amicizia ricevute",
+            description = "Restituisce le richieste di amicizia ancora pendenti inviate all'utente autenticato, "
+                    + "ordinate dalla più recente."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Richieste di amicizia ricevute correttamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Token Bearer mancante, non valido, scaduto o revocato",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Solo gli utenti possono visualizzare le proprie richieste di amicizia",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseApi.class)
+                    )
+            )
+    })
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/v1/private/friendships/requests/received")
+    public ResponseEntity<?> getReceivedFriendshipRequests(
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        List<FriendshipRequestResponse> friendshipRequests = friendshipService
+                .getReceivedFriendshipRequests(customUserDetails);
+
+        return friendshipRequests.isEmpty()
+                ? ResponseApi.buildResponse(
+                        HttpStatus.OK,
+                        friendshipRequests,
+                        "No received friendship requests found."
+                )
+                : ResponseApi.buildResponse(HttpStatus.OK, friendshipRequests);
     }
 }

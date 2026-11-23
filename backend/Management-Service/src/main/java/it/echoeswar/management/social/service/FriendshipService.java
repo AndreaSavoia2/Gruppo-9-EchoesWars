@@ -15,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -34,15 +35,18 @@ public class FriendshipService {
      * dal {@link CustomUserDetails} associato al token già autenticato.</p>
      *
      * @param customUserDetails dati dell'utente autenticato che invia la richiesta
-     * @param recipientUserId identificativo dell'utente destinatario
+     * @param recipientUsername identificativo username dell'utente destinatario
      * @return i dati della richiesta appena salvata
      */
     @Transactional
     public FriendshipRequestResponse sendFriendRequest(
             CustomUserDetails customUserDetails,
-            UUID recipientUserId
+            String recipientUsername
     ) {
         UUID requesterUserId = customUserDetails.getId();
+
+        UUID recipientUserId = userRepository.findByUsernameAndAccountStatus(recipientUsername, AccountStatus.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", recipientUsername)).getId();
 
         // Una relazione di amicizia deve coinvolgere due utenti distinti.
         if (requesterUserId.equals(recipientUserId)) {
@@ -56,20 +60,28 @@ public class FriendshipService {
          * della rappresentazione UUID canonica coincide con l'ordinamento byte-wise
          * di PostgreSQL; UUID.compareTo(), invece, confronta long con segno.
          */
-        boolean requesterIsUserA = requesterUserId.toString()
+        boolean requesterIsCanonicalFirstUser = requesterUserId.toString()
                 .compareTo(recipientUserId.toString()) < 0;
-        UUID userAId = requesterIsUserA ? requesterUserId : recipientUserId;
-        UUID userBId = requesterIsUserA ? recipientUserId : requesterUserId;
+        UUID canonicalFirstUserId = requesterIsCanonicalFirstUser
+                ? requesterUserId
+                : recipientUserId;
+        UUID canonicalSecondUserId = requesterIsCanonicalFirstUser
+                ? recipientUserId
+                : requesterUserId;
 
         /*
          * I lock vengono acquisiti sempre nello stesso ordine canonico. In questo
          * modo due richieste simultanee tra la stessa coppia non possono creare
          * duplicati invertendo l'ordine degli utenti.
          */
-        User userA = findUserForUpdate(userAId);
-        User userB = findUserForUpdate(userBId);
-        User requester = requesterIsUserA ? userA : userB;
-        User recipient = requesterIsUserA ? userB : userA;
+        User canonicalFirstUser = findUserForUpdate(canonicalFirstUserId);
+        User canonicalSecondUser = findUserForUpdate(canonicalSecondUserId);
+        User requester = requesterIsCanonicalFirstUser
+                ? canonicalFirstUser
+                : canonicalSecondUser;
+        User recipient = requesterIsCanonicalFirstUser
+                ? canonicalSecondUser
+                : canonicalFirstUser;
 
         // Un destinatario non più attivo o eliminato non può ricevere richieste.
         if (recipient.getAccountStatus() != AccountStatus.ACTIVE
@@ -78,14 +90,17 @@ public class FriendshipService {
         }
 
         // La coppia ordinata permette di intercettare anche una richiesta inversa già esistente.
-        if (friendshipRepository.existsByUserA_IdAndUserB_Id(userAId, userBId)) {
+        if (friendshipRepository.existsByFirstUser_IdAndSecondUser_Id(
+                canonicalFirstUserId,
+                canonicalSecondUserId
+        )) {
             throw new ResourceConflictException("A friendship relationship already exists between these users.");
         }
 
         Friendship friendship = Friendship.builder()
-                .userA(userA)
-                .userB(userB)
-                // Il mittente resta corretto anche quando, nell'ordine canonico, è userB.
+                .firstUser(canonicalFirstUser)
+                .secondUser(canonicalSecondUser)
+                // Il mittente resta corretto anche quando è il secondo utente nell'ordine canonico.
                 .requestedByUser(requester)
                 // La richiesta viene soltanto creata: l'accettazione sarà un flusso separato.
                 .status(FriendshipStatus.PENDING)
@@ -102,7 +117,9 @@ public class FriendshipService {
             return new FriendshipRequestResponse(
                     savedFriendship.getId(),
                     requesterUserId,
+                    requester.getUsername(),
                     recipientUserId,
+                    recipient.getUsername(),
                     savedFriendship.getStatus(),
                     savedFriendship.getRequestedAt()
             );
@@ -110,6 +127,41 @@ public class FriendshipService {
             // Traduce il vincolo di unicità in una risposta HTTP 409 coerente con l'API.
             throw new ResourceConflictException("A friendship relationship already exists between these users.");
         }
+    }
+
+    /**
+     * Restituisce le richieste pendenti inviate all'utente autenticato, dalla più recente.
+     */
+    @Transactional(readOnly = true)
+    public List<FriendshipRequestResponse> getReceivedFriendshipRequests(
+            CustomUserDetails customUserDetails
+    ) {
+        UUID recipientUserId = customUserDetails.getId();
+
+        List<Friendship> friendshipRequests = friendshipRepository.findReceivedRequestsByRecipientUserIdAndStatus(
+                        recipientUserId,
+                        FriendshipStatus.PENDING
+                );
+
+        if (friendshipRequests.isEmpty()) {
+            return List.of();
+        }
+
+        User recipient = userRepository.findById(recipientUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", recipientUserId));
+
+        return friendshipRequests
+                .stream()
+                .map(friendship -> new FriendshipRequestResponse(
+                        friendship.getId(),
+                        friendship.getRequestedByUser().getId(),
+                        friendship.getRequestedByUser().getUsername(),
+                        recipientUserId,
+                        recipient.getUsername(),
+                        friendship.getStatus(),
+                        friendship.getRequestedAt()
+                ))
+                .toList();
     }
 
     /**

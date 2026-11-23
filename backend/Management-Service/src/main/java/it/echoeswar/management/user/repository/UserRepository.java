@@ -46,9 +46,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             ORDER BY LOWER(u.username), u.id
             """)
     List<User> findAllVisibleByUsernameLike(
-            @Param("username") String username,
-            @Param("accountStatus") AccountStatus accountStatus
-    );
+                    @Param("username") String username,
+                    @Param("accountStatus") AccountStatus accountStatus
+            );
+
+    Optional<User> findByUsernameAndAccountStatus(String username, AccountStatus accountStatus);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""

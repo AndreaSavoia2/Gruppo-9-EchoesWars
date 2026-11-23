@@ -266,6 +266,7 @@ public class PackagePurchaseService {
         int variableSlots = pullRule.getCardsPerPackage()
                 - pullRule.getGuaranteedCommonCards()
                 - pullRule.getGuaranteedRareCards();
+        // todo: errore brutto tuttel e carte estratte casualmente diventano leggendarie se ne ho più di una
         for (int index = 0; index < variableSlots; index++) {
             TierCode tierCode = legendaryGuaranteed
                     ? TierCode.LEGENDARY
@@ -322,11 +323,11 @@ public class PackagePurchaseService {
      * Applies the cumulative thresholds stored in the rule: common, rare, or legendary.
      */
     private TierCode resolveRandomSlotTier(PackagePullRule pullRule, Random random) {
-        int roll = random.nextInt(100);
-        if (roll < pullRule.getRandomCommonThreshold()) {
+        int roll = random.nextInt(100);  //50
+        if (roll < pullRule.getRandomCommonThreshold()) { // 10
             return TierCode.COMMON;
         }
-        if (roll < pullRule.getRandomRareThreshold()) {
+        if (roll < pullRule.getRandomRareThreshold()) { // 20
             return TierCode.RARE;
         }
         return TierCode.LEGENDARY;
