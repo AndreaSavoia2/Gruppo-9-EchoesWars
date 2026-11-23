@@ -1,5 +1,8 @@
 package com.echoeswars.replay.events;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.echoeswars.combat.PlayerLife;
 import com.echoeswars.replay.ReplayEvent;
 
@@ -7,7 +10,8 @@ public class RoundEndedEvent extends ReplayEvent {
 
     private final PlayerLife playersLife;
 
-    public RoundEndedEvent(PlayerLife playersLife) {
+    @JsonCreator
+    public RoundEndedEvent(@JsonProperty("playersLife") PlayerLife playersLife) {
 
         // Initialize the common event information
         super("END", "ROUND_ENDED");
