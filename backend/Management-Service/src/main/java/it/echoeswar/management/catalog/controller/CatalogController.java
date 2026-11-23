@@ -86,9 +86,8 @@ public class CatalogController {
     ) {
         Map<String, Object> result = cardService.getAllCards(pageNumber, pageSize, sortBy, direction);
         List<?> content = (List<?>) result.get("content");
-        if (content.isEmpty())
-            return ResponseApi.buildResponse(HttpStatus.OK, result, "No cards found for the requested page.");
-        else
-            return ResponseApi.buildResponse(HttpStatus.OK, result);
+        return content.isEmpty() ?
+                ResponseApi.buildResponse(HttpStatus.OK, result, "No cards found for the requested page.") :
+                ResponseApi.buildResponse(HttpStatus.OK, result);
     }
 }

@@ -15,6 +15,7 @@ import it.echoeswar.management.pack.entity.PackageOpening;
 import it.echoeswar.management.pack.entity.PackagePullRule;
 import it.echoeswar.management.pack.entity.PackagePurchase;
 import it.echoeswar.management.pack.entity.PackageVersion;
+import it.echoeswar.management.pack.exception.InsufficientCreditsException;
 import it.echoeswar.management.pack.payload.response.PackageOpeningResponse;
 import it.echoeswar.management.pack.payload.response.PackageLegendaryProgressResponse;
 import it.echoeswar.management.pack.payload.response.PackagePurchaseResponse;
@@ -50,8 +51,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PackagePurchaseService {
 
-    private static final String INSUFFICIENT_CREDITS_MESSAGE =
-            "Insufficient credits to purchase this package.";
     private static final SecureRandom SEED_GENERATOR = new SecureRandom();
 
     private final PackageVersionRepository packageVersionRepository;
@@ -98,7 +97,7 @@ public class PackagePurchaseService {
         if (price <= 0)
             throw new ResourceConflictException("The selected package is not available for purchase.");
         if (wallet.getBalance() < price)
-            throw new ResourceConflictException(INSUFFICIENT_CREDITS_MESSAGE);
+            throw new InsufficientCreditsException();
 
         wallet.setBalance(wallet.getBalance() - price);
 
@@ -267,6 +266,7 @@ public class PackagePurchaseService {
         int variableSlots = pullRule.getCardsPerPackage()
                 - pullRule.getGuaranteedCommonCards()
                 - pullRule.getGuaranteedRareCards();
+        // todo: errore brutto tuttel e carte estratte casualmente diventano leggendarie se ne ho più di una
         for (int index = 0; index < variableSlots; index++) {
             TierCode tierCode = legendaryGuaranteed
                     ? TierCode.LEGENDARY
@@ -323,11 +323,11 @@ public class PackagePurchaseService {
      * Applies the cumulative thresholds stored in the rule: common, rare, or legendary.
      */
     private TierCode resolveRandomSlotTier(PackagePullRule pullRule, Random random) {
-        int roll = random.nextInt(100);
-        if (roll < pullRule.getRandomCommonThreshold()) {
+        int roll = random.nextInt(100);  //50
+        if (roll < pullRule.getRandomCommonThreshold()) { // 10
             return TierCode.COMMON;
         }
-        if (roll < pullRule.getRandomRareThreshold()) {
+        if (roll < pullRule.getRandomRareThreshold()) { // 20
             return TierCode.RARE;
         }
         return TierCode.LEGENDARY;

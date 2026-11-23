@@ -1,11 +1,17 @@
 package com.echoeswars.replay;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ReplayPlayer {
 
     private final String playerId;
     private final int initialLife;
 
-    public ReplayPlayer(String playerId, int initialLife) {
+    @JsonCreator
+    public ReplayPlayer(
+            @JsonProperty("playerId") String playerId,
+            @JsonProperty("initialLife") int initialLife) {
 
         // Store the player's initial match information
         this.playerId = playerId;

@@ -24,14 +24,6 @@ public record CreateDeckRequest(
         String name,
 
         @Schema(
-                description = "Optional free-text deck description.",
-                example = "Mazzo aggressivo a due fazioni.",
-                nullable = true
-        )
-        @NotBlank
-        String description,
-
-        @Schema(
                 description = "The distinct factions assigned to the deck. Their number is defined by the selected deck rule; every selected card must belong to one of them.",
                 example = "[1, 2]",
                 requiredMode = Schema.RequiredMode.REQUIRED

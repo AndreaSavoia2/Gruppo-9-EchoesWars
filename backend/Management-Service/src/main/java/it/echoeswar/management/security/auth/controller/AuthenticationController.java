@@ -26,11 +26,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import it.echoeswar.management.security.jwt.authentication.JwtSessionAuthenticationToken;
 import it.echoeswar.management.security.userdetails.CustomUserDetails;
@@ -132,8 +134,8 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/register")
-    public ResponseEntity<ResponseApi<UserResponse>> register(
-            @Valid @RequestBody RegisterRequest request
+    public ResponseEntity<?> register(
+            @Valid @NotNull @RequestBody RegisterRequest request
     ) {
         UserResponse userResponse = userService.register(request);
 
@@ -466,12 +468,13 @@ public class AuthenticationController {
                     )
             )
     })
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @GetMapping("/me")
     public ResponseEntity<ResponseApi<UserResponse>> getMe(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails user
     ) {
-        UserResponse userResponse = userService.getUserById(user.getId());
+        UserResponse userResponse = userService.getUserById(user);
 
         return ResponseApi.buildResponse(
                 HttpStatus.OK,

@@ -1,5 +1,8 @@
 package com.echoeswars.replay.events;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 
 import com.echoeswars.replay.ReplayEvent;
@@ -8,7 +11,8 @@ public class CardsDrawnEvent extends ReplayEvent {
 
     private final ArrayList<DrawnCard> cards;
 
-    public CardsDrawnEvent(ArrayList<DrawnCard> cards) {
+    @JsonCreator
+    public CardsDrawnEvent(@JsonProperty("cards") ArrayList<DrawnCard> cards) {
 
         // Initialize the common event information
         super("DRAW", "CARDS_DRAWN");

@@ -3,7 +3,9 @@ package it.echoeswar.management.common.exception;
 
 import it.echoeswar.management.common.api.ResponseApi;
 import it.echoeswar.management.deck.exception.NotActiveDeckRuleFoundException;
+import it.echoeswar.management.pack.exception.InsufficientCreditsException;
 import it.echoeswar.management.security.session.exception.InvalidRefreshTokenException;
+import it.echoeswar.management.user.exception.AccountConflictException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +82,38 @@ public class ExceptionManagement {
             NotActiveDeckRuleFoundException ex
     ) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(AccountConflictException.class)
+    public ResponseEntity<?> accountConflictExceptionManagement(
+            AccountConflictException ex
+    ) {
+        HttpStatus status = HttpStatus.CONFLICT;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(InsufficientCreditsException.class)
+    public ResponseEntity<?> insufficientCreditsException(
+            InsufficientCreditsException ex
+    ) {
+        HttpStatus status = HttpStatus.CONFLICT;
 
         ResponseApi<?> response = ResponseApi.builder()
                 .timestamp(LocalDateTime.now())

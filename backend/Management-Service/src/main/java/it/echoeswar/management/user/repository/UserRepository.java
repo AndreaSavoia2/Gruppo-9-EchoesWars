@@ -10,6 +10,7 @@ import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.Lock;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +36,21 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             where u.id = :id
             """)
     Optional<User> findByIdWithRole(@Param("id") UUID id);
+
+    @Query("""
+            SELECT u
+            FROM User u
+            WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))
+              AND u.accountStatus = :accountStatus
+              AND u.deletedAt IS NULL
+            ORDER BY LOWER(u.username), u.id
+            """)
+    List<User> findAllVisibleByUsernameLike(
+                    @Param("username") String username,
+                    @Param("accountStatus") AccountStatus accountStatus
+            );
+
+    Optional<User> findByUsernameAndAccountStatus(String username, AccountStatus accountStatus);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""

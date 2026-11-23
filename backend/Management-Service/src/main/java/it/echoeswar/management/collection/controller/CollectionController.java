@@ -89,7 +89,7 @@ public class CollectionController {
     })
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/v1/private/collections")
-    public ResponseEntity<ResponseApi<Map<String, Object>>> getUserCollection(
+    public ResponseEntity<?> getUserCollection(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Parameter(
@@ -124,10 +124,9 @@ public class CollectionController {
                 sortBy,
                 direction);
         List<?> content = (List<?>) result.get("content");
-        if (content.isEmpty())
-            return ResponseApi.buildResponse(HttpStatus.OK, result, "No cards found for the requested page.");
-        else
-            return ResponseApi.buildResponse(HttpStatus.OK, result);
+        return content.isEmpty() ?
+                ResponseApi.buildResponse(HttpStatus.OK, result, "No cards found for the requested page.") :
+                ResponseApi.buildResponse(HttpStatus.OK, result);
     }
 
 }
