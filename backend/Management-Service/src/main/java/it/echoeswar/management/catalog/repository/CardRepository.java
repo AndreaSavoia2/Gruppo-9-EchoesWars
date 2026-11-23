@@ -20,6 +20,8 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     )
     Page<Card> findAll(Pageable pageable);
 
+    boolean existsByCodeIgnoreCase(String code);
+
     /**
      * Returns active cards of a given rarity with every relation needed by the API response.
      *
