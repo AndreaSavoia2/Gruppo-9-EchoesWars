@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # PostgreSQL 18 stores data below a major-version-specific directory.
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  jwt-key-init:
+    image: eclipse-temurin:25-jdk
+    environment:
+      JWT_KEY_STORE_PASSWORD: ${JWT_KEY_STORE_PASSWORD}
+      JWT_KEY_ALIAS: ${JWT_KEY_ALIAS}
+    volumes:
+      - jwt-keystore:/opt/echoeswar/keys
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -eu
+        if [ ! -f /opt/echoeswar/keys/jwt-signing.p12 ]; then
+          keytool -genkeypair \
+            -alias "$${JWT_KEY_ALIAS}" \
+            -keyalg RSA \
+            -keysize 3072 \
+            -sigalg SHA256withRSA \
+            -storetype PKCS12 \
+            -keystore /opt/echoeswar/keys/jwt-signing.p12 \
+            -storepass "$${JWT_KEY_STORE_PASSWORD}" \
+            -keypass "$${JWT_KEY_STORE_PASSWORD}" \
+            -dname "CN=EchoesWar JWT Signing, OU=Development, O=EchoesWar, L=Local, ST=Local, C=IT" \
+            -validity 365
+          chmod 600 /opt/echoeswar/keys/jwt-signing.p12
+          echo 'JWT keystore created.'
+        else
+          echo 'JWT keystore already exists; leaving it unchanged.'
+        fi
+
+  management-service:
+    build:
+      context: ./Management-Service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      jwt-key-init:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_ISSUER: ${JWT_ISSUER}
+      JWT_AUDIENCE: ${JWT_AUDIENCE}
+      JWT_KEY_STORE_LOCATION: file:/opt/echoeswar/keys/jwt-signing.p12
+      JWT_KEY_STORE_PASSWORD: ${JWT_KEY_STORE_PASSWORD}
+      JWT_KEY_ALIAS: ${JWT_KEY_ALIAS}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+      REFRESH_TOKEN_COOKIE_SECURE: ${REFRESH_TOKEN_COOKIE_SECURE:-false}
+      REFRESH_TOKEN_COOKIE_SAME_SITE: ${REFRESH_TOKEN_COOKIE_SAME_SITE:-Lax}
+    ports:
+      - "${MANAGEMENT_SERVICE_PORT:-8080}:8080"
+    volumes:
+      - jwt-keystore:/opt/echoeswar/keys:ro
+
+volumes:
+  postgres-data:
+  jwt-keystore:
