@@ -1,0 +1,4470 @@
+{
+  "matchId" : "real-decks-001",
+  "status" : "COMPLETED",
+  "winnerUserId" : "player-2",
+  "totalRounds" : 33,
+  "currentLife" : {
+    "playerOne" : 7,
+    "playerTwo" : 14
+  },
+  "rulesVersionId" : "1.0",
+  "engineVersion" : "1.0.0",
+  "replay" : {
+    "players" : [ {
+      "playerId" : "player-1",
+      "initialLife" : 10
+    }, {
+      "playerId" : "player-2",
+      "initialLife" : 10
+    } ],
+    "rounds" : [ {
+      "round" : 1,
+      "events" : [ {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM05",
+          "instanceId" : "p1-c12"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP09",
+          "instanceId" : "p2-c10"
+        } ],
+        "phase" : "DRAW",
+        "type" : "CARDS_DRAWN"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c12",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c10",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM05",
+          "instanceId" : "p1-c12"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP09",
+          "instanceId" : "p2-c10"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c12",
+          "cardId" : "DOM05",
+          "attack" : 7,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 6,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 7,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 7,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c10",
+          "cardId" : "SAP09",
+          "attack" : 4,
+          "defenseBefore" : 3,
+          "defenseAfter" : -4,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c12",
+        "cardId" : "DOM05",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c10",
+        "cardId" : "SAP09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c12",
+        "newInstanceId" : "p1-c11",
+        "newCardId" : "DOM04",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c10",
+        "newInstanceId" : "p2-c24",
+        "newCardId" : "OBL05",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 10
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 2,
+      "events" : [ {
+        "phase" : "ENTRY",
+        "effect" : "GUARDIANO",
+        "sourceInstanceId" : "p1-c11",
+        "sourceCardId" : "DOM04",
+        "changes" : {
+          "sourceProtectionBefore" : 0,
+          "sourceProtectionAfter" : 2
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c11",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c24",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM04",
+          "instanceId" : "p1-c11"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL05",
+          "instanceId" : "p2-c24"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c11",
+          "cardId" : "DOM04",
+          "attack" : 5,
+          "defenseBefore" : 6,
+          "defenseAfter" : 4,
+          "destroyed" : false,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 1
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 2,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c24",
+          "cardId" : "OBL05",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 2,
+            "defenseDamage" : 2,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 1
+        }
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c24",
+        "cardId" : "OBL05",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c24",
+        "newInstanceId" : "p2-c15",
+        "newCardId" : "SAP11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 3,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c11",
+        "roundsInPlay" : 2,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c15",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM04",
+          "instanceId" : "p1-c11"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP11",
+          "instanceId" : "p2-c15"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c11",
+          "cardId" : "DOM04",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 2,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c15",
+          "cardId" : "SAP11",
+          "attack" : 6,
+          "defenseBefore" : 2,
+          "defenseAfter" : -3,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 1
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c11",
+        "cardId" : "DOM04",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c15",
+        "cardId" : "SAP11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c11",
+        "newInstanceId" : "p1-c23",
+        "newCardId" : "ING03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c15",
+        "newInstanceId" : "p2-c14",
+        "newCardId" : "SAP11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 4,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c23",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c14",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING03",
+          "instanceId" : "p1-c23"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP11",
+          "instanceId" : "p2-c14"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c23",
+          "cardId" : "ING03",
+          "attack" : 4,
+          "defenseBefore" : 5,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 2,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c14",
+          "cardId" : "SAP11",
+          "attack" : 6,
+          "defenseBefore" : 2,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 5,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c23",
+        "cardId" : "ING03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c14",
+        "cardId" : "SAP11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c23",
+        "newInstanceId" : "p1-c14",
+        "newCardId" : "DOM09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c14",
+        "newInstanceId" : "p2-c21",
+        "newCardId" : "OBL03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 5,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c14",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c21",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM09",
+          "instanceId" : "p1-c14"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL03",
+          "instanceId" : "p2-c21"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c14",
+          "cardId" : "DOM09",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 5,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c21",
+          "cardId" : "OBL03",
+          "attack" : 4,
+          "defenseBefore" : 5,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c14",
+        "cardId" : "DOM09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c21",
+        "cardId" : "OBL03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c14",
+        "newInstanceId" : "p1-c5",
+        "newCardId" : "DOM02",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c21",
+        "newInstanceId" : "p2-c26",
+        "newCardId" : "OBL09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 6,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c5",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c26",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM02",
+          "instanceId" : "p1-c5"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL09",
+          "instanceId" : "p2-c26"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c5",
+          "cardId" : "DOM02",
+          "attack" : 4,
+          "defenseBefore" : 3,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 3,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c26",
+          "cardId" : "OBL09",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 1,
+          "destroyed" : false,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 3,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c5",
+        "cardId" : "DOM02",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c5",
+        "newInstanceId" : "p1-c15",
+        "newCardId" : "DOM09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 7,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c15",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c26",
+        "roundsInPlay" : 2,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM09",
+          "instanceId" : "p1-c15"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL09",
+          "instanceId" : "p2-c26"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c15",
+          "cardId" : "DOM09",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 1,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c26",
+          "cardId" : "OBL09",
+          "attack" : 4,
+          "defenseBefore" : 1,
+          "defenseAfter" : -3,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c15",
+        "cardId" : "DOM09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c26",
+        "cardId" : "OBL09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c15",
+        "newInstanceId" : "p1-c30",
+        "newCardId" : "ING11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c26",
+        "newInstanceId" : "p2-c23",
+        "newCardId" : "OBL05",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 8,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c30",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c23",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING11",
+          "instanceId" : "p1-c30"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL05",
+          "instanceId" : "p2-c23"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c30",
+          "cardId" : "ING11",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 1,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c23",
+          "cardId" : "OBL05",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c30",
+        "cardId" : "ING11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c23",
+        "cardId" : "OBL05",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c30",
+        "newInstanceId" : "p1-c16",
+        "newCardId" : "DOM11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c23",
+        "newInstanceId" : "p2-c27",
+        "newCardId" : "OBL09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 9,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c16",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c27",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM11",
+          "instanceId" : "p1-c16"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL09",
+          "instanceId" : "p2-c27"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c16",
+          "cardId" : "DOM11",
+          "attack" : 6,
+          "defenseBefore" : 3,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c27",
+          "cardId" : "OBL09",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c16",
+        "cardId" : "DOM11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c27",
+        "cardId" : "OBL09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c16",
+        "newInstanceId" : "p1-c1",
+        "newCardId" : "DOM01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c27",
+        "newInstanceId" : "p2-c20",
+        "newCardId" : "OBL03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 10,
+      "events" : [ {
+        "phase" : "ENTRY",
+        "effect" : "MEMORIA",
+        "sourceInstanceId" : "p2-c20",
+        "sourceCardId" : "OBL03",
+        "changes" : {
+          "sourceAttackBonusBefore" : 0,
+          "sourceAttackBonusAfter" : 1
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c1",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c20",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM01",
+          "instanceId" : "p1-c1"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL03",
+          "instanceId" : "p2-c20"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c1",
+          "cardId" : "DOM01",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 5,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c20",
+          "cardId" : "OBL03",
+          "attack" : 5,
+          "defenseBefore" : 5,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 1,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c1",
+        "cardId" : "DOM01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c20",
+        "cardId" : "OBL03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c1",
+        "newInstanceId" : "p1-c22",
+        "newCardId" : "ING03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c20",
+        "newInstanceId" : "p2-c8",
+        "newCardId" : "SAP06",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 11,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c22",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c8",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING03",
+          "instanceId" : "p1-c22"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP06",
+          "instanceId" : "p2-c8"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c22",
+          "cardId" : "ING03",
+          "attack" : 4,
+          "defenseBefore" : 5,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c8",
+          "cardId" : "SAP06",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 5,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 1,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c22",
+        "cardId" : "ING03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c8",
+        "cardId" : "SAP06",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c22",
+        "newInstanceId" : "p1-c6",
+        "newCardId" : "DOM02",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c8",
+        "newInstanceId" : "p2-c1",
+        "newCardId" : "SAP01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 12,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c6",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c1",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM02",
+          "instanceId" : "p1-c6"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP01",
+          "instanceId" : "p2-c1"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c6",
+          "cardId" : "DOM02",
+          "attack" : 4,
+          "defenseBefore" : 3,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c1",
+          "cardId" : "SAP01",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 3,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c6",
+        "cardId" : "DOM02",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c1",
+        "cardId" : "SAP01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c6",
+        "newInstanceId" : "p1-c2",
+        "newCardId" : "DOM01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c1",
+        "newInstanceId" : "p2-c16",
+        "newCardId" : "OBL01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 9
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 13,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c2",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c16",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM01",
+          "instanceId" : "p1-c2"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL01",
+          "instanceId" : "p2-c16"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c2",
+          "cardId" : "DOM01",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c16",
+          "cardId" : "OBL01",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "phase" : "DESTRUCTION",
+        "effect" : "SACRIFICIO",
+        "sourceInstanceId" : "p2-c16",
+        "sourceCardId" : "OBL01",
+        "changes" : {
+          "ownerHealthBefore" : 9,
+          "ownerHealthAfter" : 11
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c2",
+        "cardId" : "DOM01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c16",
+        "cardId" : "OBL01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c2",
+        "newInstanceId" : "p1-c28",
+        "newCardId" : "ING11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c16",
+        "newInstanceId" : "p2-c6",
+        "newCardId" : "SAP04",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 11
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 14,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c28",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c6",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING11",
+          "instanceId" : "p1-c28"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP04",
+          "instanceId" : "p2-c6"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c28",
+          "cardId" : "ING11",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 1,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c6",
+          "cardId" : "SAP04",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c28",
+        "cardId" : "ING11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c6",
+        "cardId" : "SAP04",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c28",
+        "newInstanceId" : "p1-c3",
+        "newCardId" : "DOM01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c6",
+        "newInstanceId" : "p2-c7",
+        "newCardId" : "SAP04",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 11
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 15,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c3",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c7",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM01",
+          "instanceId" : "p1-c3"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP04",
+          "instanceId" : "p2-c7"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c3",
+          "cardId" : "DOM01",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c7",
+          "cardId" : "SAP04",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c3",
+        "cardId" : "DOM01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c7",
+        "cardId" : "SAP04",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c3",
+        "newInstanceId" : "p1-c18",
+        "newCardId" : "DOM11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c7",
+        "newInstanceId" : "p2-c17",
+        "newCardId" : "OBL01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 11
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 16,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c18",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c17",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM11",
+          "instanceId" : "p1-c18"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL01",
+          "instanceId" : "p2-c17"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c18",
+          "cardId" : "DOM11",
+          "attack" : 6,
+          "defenseBefore" : 3,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c17",
+          "cardId" : "OBL01",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "phase" : "DESTRUCTION",
+        "effect" : "SACRIFICIO",
+        "sourceInstanceId" : "p2-c17",
+        "sourceCardId" : "OBL01",
+        "changes" : {
+          "ownerHealthBefore" : 11,
+          "ownerHealthAfter" : 13
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c18",
+        "cardId" : "DOM11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c17",
+        "cardId" : "OBL01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c18",
+        "newInstanceId" : "p1-c29",
+        "newCardId" : "ING11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c17",
+        "newInstanceId" : "p2-c28",
+        "newCardId" : "OBL09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 17,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c29",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c28",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING11",
+          "instanceId" : "p1-c29"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL09",
+          "instanceId" : "p2-c28"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c29",
+          "cardId" : "ING11",
+          "attack" : 3,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 3,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 2,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 2,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c28",
+          "cardId" : "OBL09",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 2,
+          "destroyed" : false,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c29",
+        "cardId" : "ING11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c29",
+        "newInstanceId" : "p1-c25",
+        "newCardId" : "ING09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 18,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c25",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c28",
+        "roundsInPlay" : 2,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "phase" : "ROUND_START",
+        "effect" : "ANALISI",
+        "sourceInstanceId" : "p1-c25",
+        "sourceCardId" : "ING09",
+        "changes" : { },
+        "analysisTargetIdAfter" : "p2-c28",
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING09",
+          "instanceId" : "p1-c25"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL09",
+          "instanceId" : "p2-c28"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c25",
+          "cardId" : "ING09",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 3,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 2,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c28",
+          "cardId" : "OBL09",
+          "attack" : 4,
+          "defenseBefore" : 2,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c25",
+        "cardId" : "ING09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c28",
+        "cardId" : "OBL09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c25",
+        "newInstanceId" : "p1-c26",
+        "newCardId" : "ING09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c28",
+        "newInstanceId" : "p2-c22",
+        "newCardId" : "OBL05",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 19,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c26",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c22",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "phase" : "ROUND_START",
+        "effect" : "ANALISI",
+        "sourceInstanceId" : "p1-c26",
+        "sourceCardId" : "ING09",
+        "changes" : { },
+        "analysisTargetIdAfter" : "p2-c22",
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING09",
+          "instanceId" : "p1-c26"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL05",
+          "instanceId" : "p2-c22"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c26",
+          "cardId" : "ING09",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c22",
+          "cardId" : "OBL05",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c26",
+        "cardId" : "ING09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c22",
+        "cardId" : "OBL05",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c26",
+        "newInstanceId" : "p1-c24",
+        "newCardId" : "ING03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c22",
+        "newInstanceId" : "p2-c12",
+        "newCardId" : "SAP09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 20,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c24",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c12",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING03",
+          "instanceId" : "p1-c24"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP09",
+          "instanceId" : "p2-c12"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c24",
+          "cardId" : "ING03",
+          "attack" : 4,
+          "defenseBefore" : 5,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c12",
+          "cardId" : "SAP09",
+          "attack" : 5,
+          "defenseBefore" : 3,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 5,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c24",
+        "cardId" : "ING03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c12",
+        "cardId" : "SAP09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c24",
+        "newInstanceId" : "p1-c8",
+        "newCardId" : "DOM03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c12",
+        "newInstanceId" : "p2-c13",
+        "newCardId" : "SAP11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 21,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c8",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c13",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM03",
+          "instanceId" : "p1-c8"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP11",
+          "instanceId" : "p2-c13"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c8",
+          "cardId" : "DOM03",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 2,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c13",
+          "cardId" : "SAP11",
+          "attack" : 5,
+          "defenseBefore" : 2,
+          "defenseAfter" : -4,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c8",
+        "cardId" : "DOM03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c13",
+        "cardId" : "SAP11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c8",
+        "newInstanceId" : "p1-c27",
+        "newCardId" : "ING09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c13",
+        "newInstanceId" : "p2-c2",
+        "newCardId" : "SAP01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 22,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c27",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c2",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "phase" : "ROUND_START",
+        "effect" : "ANALISI",
+        "sourceInstanceId" : "p1-c27",
+        "sourceCardId" : "ING09",
+        "changes" : { },
+        "analysisTargetIdAfter" : "p2-c2",
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING09",
+          "instanceId" : "p1-c27"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP01",
+          "instanceId" : "p2-c2"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c27",
+          "cardId" : "ING09",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c2",
+          "cardId" : "SAP01",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c27",
+        "cardId" : "ING09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c2",
+        "cardId" : "SAP01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c27",
+        "newInstanceId" : "p1-c13",
+        "newCardId" : "DOM09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c2",
+        "newInstanceId" : "p2-c25",
+        "newCardId" : "OBL07",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 23,
+      "events" : [ {
+        "phase" : "ENTRY",
+        "effect" : "PREPARAZIONE_ARCANA",
+        "sourceInstanceId" : "p1-c13",
+        "sourceCardId" : "DOM09",
+        "changes" : {
+          "sourceAttackBonusBefore" : 0,
+          "sourceAttackBonusAfter" : 1
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c13",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c25",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM09",
+          "instanceId" : "p1-c13"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL07",
+          "instanceId" : "p2-c25"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c13",
+          "cardId" : "DOM09",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 1,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c25",
+          "cardId" : "OBL07",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c13",
+        "cardId" : "DOM09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c25",
+        "cardId" : "OBL07",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c13",
+        "newInstanceId" : "p1-c7",
+        "newCardId" : "DOM03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c25",
+        "newInstanceId" : "p2-c18",
+        "newCardId" : "OBL01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 13
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 24,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c7",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c18",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM03",
+          "instanceId" : "p1-c7"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL01",
+          "instanceId" : "p2-c18"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c7",
+          "cardId" : "DOM03",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c18",
+          "cardId" : "OBL01",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "phase" : "DESTRUCTION",
+        "effect" : "SACRIFICIO",
+        "sourceInstanceId" : "p2-c18",
+        "sourceCardId" : "OBL01",
+        "changes" : {
+          "ownerHealthBefore" : 13,
+          "ownerHealthAfter" : 15
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c7",
+        "cardId" : "DOM03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c18",
+        "cardId" : "OBL01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c7",
+        "newInstanceId" : "p1-c10",
+        "newCardId" : "DOM04",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c18",
+        "newInstanceId" : "p2-c4",
+        "newCardId" : "SAP02",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 15
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 25,
+      "events" : [ {
+        "phase" : "ENTRY",
+        "effect" : "GUARDIANO",
+        "sourceInstanceId" : "p1-c10",
+        "sourceCardId" : "DOM04",
+        "changes" : {
+          "sourceProtectionBefore" : 0,
+          "sourceProtectionAfter" : 2
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c10",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c4",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "phase" : "ROUND_START",
+        "effect" : "ANALISI",
+        "sourceInstanceId" : "p2-c4",
+        "sourceCardId" : "SAP02",
+        "changes" : {
+          "sourceProtectionBefore" : 0,
+          "sourceProtectionAfter" : 1
+        },
+        "analysisTargetIdAfter" : "p1-c10",
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM04",
+          "instanceId" : "p1-c10"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP02",
+          "instanceId" : "p2-c4"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c10",
+          "cardId" : "DOM04",
+          "attack" : 5,
+          "defenseBefore" : 6,
+          "defenseAfter" : 5,
+          "destroyed" : false,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 1,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 2,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c4",
+          "cardId" : "SAP02",
+          "attack" : 3,
+          "defenseBefore" : 8,
+          "defenseAfter" : 4,
+          "destroyed" : false,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 3,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 3,
+            "protectionAbsorbed" : 2,
+            "defenseDamage" : 1,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 1,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 15
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 26,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c10",
+        "roundsInPlay" : 2,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c4",
+        "roundsInPlay" : 2,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM04",
+          "instanceId" : "p1-c10"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP02",
+          "instanceId" : "p2-c4"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c10",
+          "cardId" : "DOM04",
+          "attack" : 5,
+          "defenseBefore" : 5,
+          "defenseAfter" : 2,
+          "destroyed" : false,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 1
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c4",
+          "cardId" : "SAP02",
+          "attack" : 3,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 3,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 3,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 1
+        }
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c4",
+        "cardId" : "SAP02",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c4",
+        "newInstanceId" : "p2-c5",
+        "newCardId" : "SAP04",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 27,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c10",
+        "roundsInPlay" : 3,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c5",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM04",
+          "instanceId" : "p1-c10"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP04",
+          "instanceId" : "p2-c5"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c10",
+          "cardId" : "DOM04",
+          "attack" : 5,
+          "defenseBefore" : 2,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c5",
+          "cardId" : "SAP04",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 2,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c10",
+        "cardId" : "DOM04",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c5",
+        "cardId" : "SAP04",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c10",
+        "newInstanceId" : "p1-c9",
+        "newCardId" : "DOM03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c5",
+        "newInstanceId" : "p2-c30",
+        "newCardId" : "OBL11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 28,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c9",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c30",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM03",
+          "instanceId" : "p1-c9"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL11",
+          "instanceId" : "p2-c30"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c9",
+          "cardId" : "DOM03",
+          "attack" : 6,
+          "defenseBefore" : 4,
+          "defenseAfter" : -3,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c30",
+          "cardId" : "OBL11",
+          "attack" : 7,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 6,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 7,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 7,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c9",
+        "cardId" : "DOM03",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c30",
+        "cardId" : "OBL11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c9",
+        "newInstanceId" : "p1-c19",
+        "newCardId" : "ING01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c30",
+        "newInstanceId" : "p2-c11",
+        "newCardId" : "SAP09",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 29,
+      "events" : [ {
+        "phase" : "ENTRY",
+        "effect" : "DISCIPLINA",
+        "sourceInstanceId" : "p2-c11",
+        "sourceCardId" : "SAP09",
+        "changes" : {
+          "sourceDefenseBefore" : 3,
+          "sourceDefenseAfter" : 4,
+          "sourceMaxDefenseBefore" : 3,
+          "sourceMaxDefenseAfter" : 4
+        },
+        "type" : "EFFECT_TRIGGERED"
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c19",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c11",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING01",
+          "instanceId" : "p1-c19"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP09",
+          "instanceId" : "p2-c11"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c19",
+          "cardId" : "ING01",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c11",
+          "cardId" : "SAP09",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c19",
+        "cardId" : "ING01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c11",
+        "cardId" : "SAP09",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c19",
+        "newInstanceId" : "p1-c17",
+        "newCardId" : "DOM11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c11",
+        "newInstanceId" : "p2-c9",
+        "newCardId" : "SAP06",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 30,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c17",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c9",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM11",
+          "instanceId" : "p1-c17"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP06",
+          "instanceId" : "p2-c9"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c17",
+          "cardId" : "DOM11",
+          "attack" : 6,
+          "defenseBefore" : 3,
+          "defenseAfter" : -3,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 6,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c9",
+          "cardId" : "SAP06",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : -2,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 5,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 1,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c17",
+        "cardId" : "DOM11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c9",
+        "cardId" : "SAP06",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c17",
+        "newInstanceId" : "p1-c20",
+        "newCardId" : "ING01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c9",
+        "newInstanceId" : "p2-c3",
+        "newCardId" : "SAP01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 31,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c20",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c3",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING01",
+          "instanceId" : "p1-c20"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "SAP01",
+          "instanceId" : "p2-c3"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c20",
+          "cardId" : "ING01",
+          "attack" : 4,
+          "defenseBefore" : 4,
+          "defenseAfter" : -1,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c3",
+          "cardId" : "SAP01",
+          "attack" : 5,
+          "defenseBefore" : 4,
+          "defenseAfter" : 0,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 4,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 5,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 5,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c20",
+        "cardId" : "ING01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c3",
+        "cardId" : "SAP01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c20",
+        "newInstanceId" : "p1-c21",
+        "newCardId" : "ING01",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c3",
+        "newInstanceId" : "p2-c29",
+        "newCardId" : "OBL11",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 10,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 32,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c21",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c29",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "ING01",
+          "instanceId" : "p1-c21"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL11",
+          "instanceId" : "p2-c29"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c21",
+          "cardId" : "ING01",
+          "attack" : 3,
+          "defenseBefore" : 4,
+          "defenseAfter" : -3,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 0,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 3,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 3,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c29",
+          "cardId" : "OBL11",
+          "attack" : 7,
+          "defenseBefore" : 4,
+          "defenseAfter" : 1,
+          "destroyed" : false,
+          "attackBreakdown" : {
+            "base" : 6,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 7,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 7,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 4,
+            "overflowDamage" : 3
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 3,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c21",
+        "cardId" : "ING01",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c21",
+        "newInstanceId" : "p1-c4",
+        "newCardId" : "DOM02",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 7,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    }, {
+      "round" : 33,
+      "events" : [ {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c4",
+        "roundsInPlay" : 1,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c29",
+        "roundsInPlay" : 2,
+        "phase" : "ROUND_START",
+        "type" : "CARD_ROUND_ADVANCED"
+      }, {
+        "cards" : [ {
+          "playerId" : "player-1",
+          "cardId" : "DOM02",
+          "instanceId" : "p1-c4"
+        }, {
+          "playerId" : "player-2",
+          "cardId" : "OBL11",
+          "instanceId" : "p2-c29"
+        } ],
+        "phase" : "PLAY",
+        "type" : "CARDS_PLAYED"
+      }, {
+        "phase" : "COMBAT",
+        "type" : "COMBAT_RESOLVED",
+        "cards" : [ {
+          "instanceId" : "p1-c4",
+          "cardId" : "DOM02",
+          "attack" : 4,
+          "defenseBefore" : 3,
+          "defenseAfter" : -3,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 3,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 4,
+            "resistanceReduction" : 0,
+            "effectiveDamage" : 4,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 1,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        }, {
+          "instanceId" : "p2-c29",
+          "cardId" : "OBL11",
+          "attack" : 7,
+          "defenseBefore" : 1,
+          "defenseAfter" : -3,
+          "destroyed" : true,
+          "attackBreakdown" : {
+            "base" : 6,
+            "permanentBonus" : 0,
+            "temporaryBonus" : 0,
+            "echoBonus" : 1,
+            "duelistBonus" : 0,
+            "opportunistBonus" : 0
+          },
+          "damageBreakdown" : {
+            "rawDamage" : 7,
+            "resistanceReduction" : 1,
+            "effectiveDamage" : 6,
+            "protectionAbsorbed" : 0,
+            "defenseDamage" : 3,
+            "overflowDamage" : 0
+          },
+          "reflectionDamage" : 0,
+          "piercingBypassedResistance" : false,
+          "protectionBefore" : 0,
+          "protectionAfter" : 0
+        } ],
+        "playerDamage" : {
+          "playerOne" : 0,
+          "playerTwo" : 0
+        }
+      }, {
+        "playerId" : "player-1",
+        "instanceId" : "p1-c4",
+        "cardId" : "DOM02",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-2",
+        "instanceId" : "p2-c29",
+        "cardId" : "OBL11",
+        "phase" : "DESTRUCTION",
+        "type" : "CARD_DESTROYED"
+      }, {
+        "playerId" : "player-1",
+        "destroyedInstanceId" : "p1-c4",
+        "newInstanceId" : null,
+        "newCardId" : null,
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playerId" : "player-2",
+        "destroyedInstanceId" : "p2-c29",
+        "newInstanceId" : "p2-c19",
+        "newCardId" : "OBL03",
+        "phase" : "REPLACEMENT",
+        "type" : "CARD_REPLACED"
+      }, {
+        "playersLife" : {
+          "playerOne" : 7,
+          "playerTwo" : 14
+        },
+        "phase" : "END",
+        "type" : "ROUND_ENDED"
+      } ]
+    } ],
+    "initialState" : {
+      "players" : [ {
+        "playerId" : "player-1",
+        "health" : 10,
+        "activeCard" : {
+          "instanceId" : "p1-c12",
+          "cardId" : "DOM05"
+        },
+        "deck" : [ {
+          "instanceId" : "p1-c11",
+          "cardId" : "DOM04"
+        }, {
+          "instanceId" : "p1-c23",
+          "cardId" : "ING03"
+        }, {
+          "instanceId" : "p1-c14",
+          "cardId" : "DOM09"
+        }, {
+          "instanceId" : "p1-c5",
+          "cardId" : "DOM02"
+        }, {
+          "instanceId" : "p1-c15",
+          "cardId" : "DOM09"
+        }, {
+          "instanceId" : "p1-c30",
+          "cardId" : "ING11"
+        }, {
+          "instanceId" : "p1-c16",
+          "cardId" : "DOM11"
+        }, {
+          "instanceId" : "p1-c1",
+          "cardId" : "DOM01"
+        }, {
+          "instanceId" : "p1-c22",
+          "cardId" : "ING03"
+        }, {
+          "instanceId" : "p1-c6",
+          "cardId" : "DOM02"
+        }, {
+          "instanceId" : "p1-c2",
+          "cardId" : "DOM01"
+        }, {
+          "instanceId" : "p1-c28",
+          "cardId" : "ING11"
+        }, {
+          "instanceId" : "p1-c3",
+          "cardId" : "DOM01"
+        }, {
+          "instanceId" : "p1-c18",
+          "cardId" : "DOM11"
+        }, {
+          "instanceId" : "p1-c29",
+          "cardId" : "ING11"
+        }, {
+          "instanceId" : "p1-c25",
+          "cardId" : "ING09"
+        }, {
+          "instanceId" : "p1-c26",
+          "cardId" : "ING09"
+        }, {
+          "instanceId" : "p1-c24",
+          "cardId" : "ING03"
+        }, {
+          "instanceId" : "p1-c8",
+          "cardId" : "DOM03"
+        }, {
+          "instanceId" : "p1-c27",
+          "cardId" : "ING09"
+        }, {
+          "instanceId" : "p1-c13",
+          "cardId" : "DOM09"
+        }, {
+          "instanceId" : "p1-c7",
+          "cardId" : "DOM03"
+        }, {
+          "instanceId" : "p1-c10",
+          "cardId" : "DOM04"
+        }, {
+          "instanceId" : "p1-c9",
+          "cardId" : "DOM03"
+        }, {
+          "instanceId" : "p1-c19",
+          "cardId" : "ING01"
+        }, {
+          "instanceId" : "p1-c17",
+          "cardId" : "DOM11"
+        }, {
+          "instanceId" : "p1-c20",
+          "cardId" : "ING01"
+        }, {
+          "instanceId" : "p1-c21",
+          "cardId" : "ING01"
+        }, {
+          "instanceId" : "p1-c4",
+          "cardId" : "DOM02"
+        } ],
+        "discardPile" : [ ],
+        "lastDestroyedSchool" : null
+      }, {
+        "playerId" : "player-2",
+        "health" : 10,
+        "activeCard" : {
+          "instanceId" : "p2-c10",
+          "cardId" : "SAP09"
+        },
+        "deck" : [ {
+          "instanceId" : "p2-c24",
+          "cardId" : "OBL05"
+        }, {
+          "instanceId" : "p2-c15",
+          "cardId" : "SAP11"
+        }, {
+          "instanceId" : "p2-c14",
+          "cardId" : "SAP11"
+        }, {
+          "instanceId" : "p2-c21",
+          "cardId" : "OBL03"
+        }, {
+          "instanceId" : "p2-c26",
+          "cardId" : "OBL09"
+        }, {
+          "instanceId" : "p2-c23",
+          "cardId" : "OBL05"
+        }, {
+          "instanceId" : "p2-c27",
+          "cardId" : "OBL09"
+        }, {
+          "instanceId" : "p2-c20",
+          "cardId" : "OBL03"
+        }, {
+          "instanceId" : "p2-c8",
+          "cardId" : "SAP06"
+        }, {
+          "instanceId" : "p2-c1",
+          "cardId" : "SAP01"
+        }, {
+          "instanceId" : "p2-c16",
+          "cardId" : "OBL01"
+        }, {
+          "instanceId" : "p2-c6",
+          "cardId" : "SAP04"
+        }, {
+          "instanceId" : "p2-c7",
+          "cardId" : "SAP04"
+        }, {
+          "instanceId" : "p2-c17",
+          "cardId" : "OBL01"
+        }, {
+          "instanceId" : "p2-c28",
+          "cardId" : "OBL09"
+        }, {
+          "instanceId" : "p2-c22",
+          "cardId" : "OBL05"
+        }, {
+          "instanceId" : "p2-c12",
+          "cardId" : "SAP09"
+        }, {
+          "instanceId" : "p2-c13",
+          "cardId" : "SAP11"
+        }, {
+          "instanceId" : "p2-c2",
+          "cardId" : "SAP01"
+        }, {
+          "instanceId" : "p2-c25",
+          "cardId" : "OBL07"
+        }, {
+          "instanceId" : "p2-c18",
+          "cardId" : "OBL01"
+        }, {
+          "instanceId" : "p2-c4",
+          "cardId" : "SAP02"
+        }, {
+          "instanceId" : "p2-c5",
+          "cardId" : "SAP04"
+        }, {
+          "instanceId" : "p2-c30",
+          "cardId" : "OBL11"
+        }, {
+          "instanceId" : "p2-c11",
+          "cardId" : "SAP09"
+        }, {
+          "instanceId" : "p2-c9",
+          "cardId" : "SAP06"
+        }, {
+          "instanceId" : "p2-c3",
+          "cardId" : "SAP01"
+        }, {
+          "instanceId" : "p2-c29",
+          "cardId" : "OBL11"
+        }, {
+          "instanceId" : "p2-c19",
+          "cardId" : "OBL03"
+        } ],
+        "discardPile" : [ ],
+        "lastDestroyedSchool" : null
+      } ]
+    },
+    "cardDefinitions" : {
+      "DOM05" : {
+        "attack" : 6,
+        "defense" : 4,
+        "cost" : 4,
+        "echo" : "DOMINIO",
+        "school" : "GUERRIERI",
+        "effect" : "FURIA"
+      },
+      "DOM04" : {
+        "attack" : 4,
+        "defense" : 6,
+        "cost" : 4,
+        "echo" : "DOMINIO",
+        "school" : "GUERRIERI",
+        "effect" : "GUARDIANO"
+      },
+      "ING03" : {
+        "attack" : 3,
+        "defense" : 5,
+        "cost" : 3,
+        "echo" : "INGANNO",
+        "school" : "FURFANTI",
+        "effect" : "OPPORTUNISTA"
+      },
+      "DOM09" : {
+        "attack" : 4,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "DOMINIO",
+        "school" : "MAGHI",
+        "effect" : "PREPARAZIONE_ARCANA"
+      },
+      "DOM02" : {
+        "attack" : 3,
+        "defense" : 3,
+        "cost" : 3,
+        "echo" : "DOMINIO",
+        "school" : "GUERRIERI",
+        "effect" : "RESISTENZA"
+      },
+      "ING11" : {
+        "attack" : 3,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "INGANNO",
+        "school" : "GUERRIERI",
+        "effect" : "DUELLANTE"
+      },
+      "DOM11" : {
+        "attack" : 5,
+        "defense" : 3,
+        "cost" : 3,
+        "echo" : "DOMINIO",
+        "school" : "FURFANTI",
+        "effect" : "ASSALTO"
+      },
+      "DOM01" : {
+        "attack" : 5,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "DOMINIO",
+        "school" : "GUERRIERI",
+        "effect" : "NONE"
+      },
+      "ING09" : {
+        "attack" : 4,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "INGANNO",
+        "school" : "MAGHI",
+        "effect" : "ANALISI"
+      },
+      "DOM03" : {
+        "attack" : 5,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "DOMINIO",
+        "school" : "GUERRIERI",
+        "effect" : "DUELLANTE"
+      },
+      "ING01" : {
+        "attack" : 3,
+        "defense" : 4,
+        "cost" : 2,
+        "echo" : "INGANNO",
+        "school" : "FURFANTI",
+        "effect" : "NONE"
+      },
+      "SAP09" : {
+        "attack" : 4,
+        "defense" : 3,
+        "cost" : 3,
+        "echo" : "SAPIENZA",
+        "school" : "GUERRIERI",
+        "effect" : "DISCIPLINA"
+      },
+      "OBL05" : {
+        "attack" : 3,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "OBLIO",
+        "school" : "MAGHI",
+        "effect" : "MALEDIZIONE"
+      },
+      "SAP11" : {
+        "attack" : 5,
+        "defense" : 2,
+        "cost" : 3,
+        "echo" : "SAPIENZA",
+        "school" : "FURFANTI",
+        "effect" : "OPPORTUNISTA"
+      },
+      "OBL03" : {
+        "attack" : 3,
+        "defense" : 5,
+        "cost" : 3,
+        "echo" : "OBLIO",
+        "school" : "FURFANTI",
+        "effect" : "MEMORIA"
+      },
+      "OBL09" : {
+        "attack" : 3,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "OBLIO",
+        "school" : "GUERRIERI",
+        "effect" : "RESISTENZA"
+      },
+      "SAP06" : {
+        "attack" : 5,
+        "defense" : 4,
+        "cost" : 4,
+        "echo" : "SAPIENZA",
+        "school" : "MAGHI",
+        "effect" : "RIFLESSO"
+      },
+      "SAP01" : {
+        "attack" : 4,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "SAPIENZA",
+        "school" : "MAGHI",
+        "effect" : "NONE"
+      },
+      "OBL01" : {
+        "attack" : 3,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "OBLIO",
+        "school" : "FURFANTI",
+        "effect" : "SACRIFICIO"
+      },
+      "SAP04" : {
+        "attack" : 4,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "SAPIENZA",
+        "school" : "MAGHI",
+        "effect" : "NONE"
+      },
+      "OBL07" : {
+        "attack" : 5,
+        "defense" : 4,
+        "cost" : 3,
+        "echo" : "OBLIO",
+        "school" : "MAGHI",
+        "effect" : "DRENAGGIO"
+      },
+      "SAP02" : {
+        "attack" : 3,
+        "defense" : 8,
+        "cost" : 4,
+        "echo" : "SAPIENZA",
+        "school" : "MAGHI",
+        "effect" : "ANALISI"
+      },
+      "OBL11" : {
+        "attack" : 6,
+        "defense" : 4,
+        "cost" : 4,
+        "echo" : "OBLIO",
+        "school" : "GUERRIERI",
+        "effect" : "BERSERKER"
+      }
+    },
+    "formatVersion" : 2
+  }
+}

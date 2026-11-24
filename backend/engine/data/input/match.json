@@ -1,0 +1,318 @@
+{
+  "matchId": "real-decks-001",
+  "rulesVersion": "1.0",
+  "seed": 123456,
+  "players": [
+    {
+      "playerId": "player-1",
+      "deck": [
+        {
+          "cardId": "DOM01",
+          "quantity": 3
+        },
+        {
+          "cardId": "DOM02",
+          "quantity": 3
+        },
+        {
+          "cardId": "DOM03",
+          "quantity": 3
+        },
+        {
+          "cardId": "DOM04",
+          "quantity": 2
+        },
+        {
+          "cardId": "DOM05",
+          "quantity": 1
+        },
+        {
+          "cardId": "DOM09",
+          "quantity": 3
+        },
+        {
+          "cardId": "DOM11",
+          "quantity": 3
+        },
+        {
+          "cardId": "ING01",
+          "quantity": 3
+        },
+        {
+          "cardId": "ING03",
+          "quantity": 3
+        },
+        {
+          "cardId": "ING09",
+          "quantity": 3
+        },
+        {
+          "cardId": "ING11",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "playerId": "player-2",
+      "deck": [
+        {
+          "cardId": "SAP01",
+          "quantity": 3
+        },
+        {
+          "cardId": "SAP02",
+          "quantity": 1
+        },
+        {
+          "cardId": "SAP04",
+          "quantity": 3
+        },
+        {
+          "cardId": "SAP06",
+          "quantity": 2
+        },
+        {
+          "cardId": "SAP09",
+          "quantity": 3
+        },
+        {
+          "cardId": "SAP11",
+          "quantity": 3
+        },
+        {
+          "cardId": "OBL01",
+          "quantity": 3
+        },
+        {
+          "cardId": "OBL03",
+          "quantity": 3
+        },
+        {
+          "cardId": "OBL05",
+          "quantity": 3
+        },
+        {
+          "cardId": "OBL07",
+          "quantity": 1
+        },
+        {
+          "cardId": "OBL09",
+          "quantity": 3
+        },
+        {
+          "cardId": "OBL11",
+          "quantity": 2
+        }
+      ]
+    }
+  ],
+  "cardDefinitions": [
+    {
+      "cardId": "DOM01",
+      "attack": 5,
+      "defense": 4,
+      "cost": 3,
+      "school": "GUERRIERI",
+      "echo": "DOMINIO",
+      "effect": "NONE"
+    },
+    {
+      "cardId": "DOM02",
+      "attack": 3,
+      "defense": 3,
+      "cost": 3,
+      "school": "GUERRIERI",
+      "echo": "DOMINIO",
+      "effect": "RESISTENZA"
+    },
+    {
+      "cardId": "DOM03",
+      "attack": 5,
+      "defense": 4,
+      "cost": 3,
+      "school": "GUERRIERI",
+      "echo": "DOMINIO",
+      "effect": "DUELLANTE"
+    },
+    {
+      "cardId": "DOM04",
+      "attack": 4,
+      "defense": 6,
+      "cost": 4,
+      "school": "GUERRIERI",
+      "echo": "DOMINIO",
+      "effect": "GUARDIANO"
+    },
+    {
+      "cardId": "DOM05",
+      "attack": 6,
+      "defense": 4,
+      "cost": 4,
+      "school": "GUERRIERI",
+      "echo": "DOMINIO",
+      "effect": "FURIA"
+    },
+    {
+      "cardId": "DOM09",
+      "attack": 4,
+      "defense": 4,
+      "cost": 3,
+      "school": "MAGHI",
+      "echo": "DOMINIO",
+      "effect": "PREPARAZIONE_ARCANA"
+    },
+    {
+      "cardId": "DOM11",
+      "attack": 5,
+      "defense": 3,
+      "cost": 3,
+      "school": "FURFANTI",
+      "echo": "DOMINIO",
+      "effect": "ASSALTO"
+    },
+    {
+      "cardId": "ING01",
+      "attack": 3,
+      "defense": 4,
+      "cost": 2,
+      "school": "FURFANTI",
+      "echo": "INGANNO",
+      "effect": "NONE"
+    },
+    {
+      "cardId": "ING03",
+      "attack": 3,
+      "defense": 5,
+      "cost": 3,
+      "school": "FURFANTI",
+      "echo": "INGANNO",
+      "effect": "OPPORTUNISTA"
+    },
+    {
+      "cardId": "ING09",
+      "attack": 4,
+      "defense": 4,
+      "cost": 3,
+      "school": "MAGHI",
+      "echo": "INGANNO",
+      "effect": "ANALISI"
+    },
+    {
+      "cardId": "ING11",
+      "attack": 3,
+      "defense": 4,
+      "cost": 3,
+      "school": "GUERRIERI",
+      "echo": "INGANNO",
+      "effect": "DUELLANTE"
+    },
+    {
+      "cardId": "SAP01",
+      "attack": 4,
+      "defense": 4,
+      "cost": 3,
+      "school": "MAGHI",
+      "echo": "SAPIENZA",
+      "effect": "NONE"
+    },
+    {
+      "cardId": "SAP02",
+      "attack": 3,
+      "defense": 8,
+      "cost": 4,
+      "school": "MAGHI",
+      "echo": "SAPIENZA",
+      "effect": "ANALISI"
+    },
+    {
+      "cardId": "SAP04",
+      "attack": 4,
+      "defense": 4,
+      "cost": 3,
+      "school": "MAGHI",
+      "echo": "SAPIENZA",
+      "effect": "NONE"
+    },
+    {
+      "cardId": "SAP06",
+      "attack": 5,
+      "defense": 4,
+      "cost": 4,
+      "school": "MAGHI",
+      "echo": "SAPIENZA",
+      "effect": "RIFLESSO"
+    },
+    {
+      "cardId": "SAP09",
+      "attack": 4,
+      "defense": 3,
+      "cost": 3,
+      "school": "GUERRIERI",
+      "echo": "SAPIENZA",
+      "effect": "DISCIPLINA"
+    },
+    {
+      "cardId": "SAP11",
+      "attack": 5,
+      "defense": 2,
+      "cost": 3,
+      "school": "FURFANTI",
+      "echo": "SAPIENZA",
+      "effect": "OPPORTUNISTA"
+    },
+    {
+      "cardId": "OBL01",
+      "attack": 3,
+      "defense": 4,
+      "cost": 3,
+      "school": "FURFANTI",
+      "echo": "OBLIO",
+      "effect": "SACRIFICIO"
+    },
+    {
+      "cardId": "OBL03",
+      "attack": 3,
+      "defense": 5,
+      "cost": 3,
+      "school": "FURFANTI",
+      "echo": "OBLIO",
+      "effect": "MEMORIA"
+    },
+    {
+      "cardId": "OBL05",
+      "attack": 3,
+      "defense": 4,
+      "cost": 3,
+      "school": "MAGHI",
+      "echo": "OBLIO",
+      "effect": "MALEDIZIONE"
+    },
+    {
+      "cardId": "OBL07",
+      "attack": 5,
+      "defense": 4,
+      "cost": 3,
+      "school": "MAGHI",
+      "echo": "OBLIO",
+      "effect": "DRENAGGIO"
+    },
+    {
+      "cardId": "OBL09",
+      "attack": 3,
+      "defense": 4,
+      "cost": 3,
+      "school": "GUERRIERI",
+      "echo": "OBLIO",
+      "effect": "RESISTENZA"
+    },
+    {
+      "cardId": "OBL11",
+      "attack": 6,
+      "defense": 4,
+      "cost": 4,
+      "school": "GUERRIERI",
+      "echo": "OBLIO",
+      "effect": "BERSERKER"
+    }
+  ]
+}

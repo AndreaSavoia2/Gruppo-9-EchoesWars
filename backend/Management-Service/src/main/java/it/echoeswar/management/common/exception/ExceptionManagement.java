@@ -8,10 +8,13 @@ import it.echoeswar.management.security.session.exception.InvalidRefreshTokenExc
 import it.echoeswar.management.user.exception.AccountConflictException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.method.ParameterErrors;
 import org.springframework.validation.method.ParameterValidationResult;
@@ -35,6 +38,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class ExceptionManagement {
 
@@ -314,6 +318,46 @@ public class ExceptionManagement {
                 .httpStatus(status)
                 .error(status.getReasonPhrase())
                 .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> httpMessageNotReadableExceptionManagement(HttpMessageNotReadableException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message("Malformed request body.")
+                .build();
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> accessDeniedExceptionManagement(AccessDeniedException ex) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message("Access denied.")
+                .build();
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> genericExceptionManagement(Exception ex) {
+        log.error("Unhandled error", ex);
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        ResponseApi<?> response = ResponseApi.builder()
+                .timestamp(LocalDateTime.now())
+                .httpStatus(status)
+                .error(status.getReasonPhrase())
+                .message("Internal server error.")
                 .build();
         return new ResponseEntity<>(response, status);
     }

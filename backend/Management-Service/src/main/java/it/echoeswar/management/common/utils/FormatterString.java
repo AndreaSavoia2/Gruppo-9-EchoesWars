@@ -33,7 +33,18 @@ public class FormatterString {
         return str.substring(0,1).toUpperCase()+str.substring(1);
     }
 
-    public static String normalizeLowerCase(String str){
+    /**
+     * Normalizes a string before it is stored in the database.
+     * <p>
+     * The value is trimmed (leading and trailing whitespace removed) and converted
+     * to lowercase using {@link Locale#ROOT}, so the result does not depend on the
+     * default locale of the machine running the application.
+     * </p>
+     *
+     * @param str the string to normalize, may be {@code null}
+     * @return the trimmed, lowercase string, or {@code null} if {@code str} is {@code null}
+     */
+        public static String normalizeLowerCase(String str){
         return str == null || str.isEmpty() ? str : str.toLowerCase().trim().toLowerCase();
     }
 }
