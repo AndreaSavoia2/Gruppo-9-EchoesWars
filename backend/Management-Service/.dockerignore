@@ -1,0 +1,9 @@
+target/
+.git/
+.idea/
+.agents/
+*.p12
+*.jks
+.env
+.env.*
+!.env.example
