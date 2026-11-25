@@ -2,20 +2,9 @@ package it.echoeswar.management.catalog.service;
 
 
 import it.echoeswar.management.catalog.entity.Card;
-import it.echoeswar.management.catalog.entity.Faction;
-import it.echoeswar.management.catalog.entity.School;
-import it.echoeswar.management.catalog.entity.Tier;
-import it.echoeswar.management.catalog.payload.request.CardRequest;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.catalog.repository.CardRepository;
-import it.echoeswar.management.catalog.repository.FactionRepository;
-import it.echoeswar.management.catalog.repository.SchoolRepository;
-import it.echoeswar.management.catalog.repository.TierRepository;
-import it.echoeswar.management.common.exception.ResourceConflictException;
-import it.echoeswar.management.common.exception.ResourceNotFoundException;
 import it.echoeswar.management.common.utils.BuildPageableResponse;
-import it.echoeswar.management.common.utils.FormatterString;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

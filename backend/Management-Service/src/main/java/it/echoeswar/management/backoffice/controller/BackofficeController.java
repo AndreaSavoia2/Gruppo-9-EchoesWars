@@ -14,7 +14,7 @@ import it.echoeswar.management.backoffice.payload.response.TierResponse;
 import it.echoeswar.management.backoffice.service.BackofficeService;
 import it.echoeswar.management.backoffice.payload.request.PackRequest;
 import it.echoeswar.management.backoffice.payload.response.PackResponse;
-import it.echoeswar.management.catalog.payload.request.CardRequest;
+import it.echoeswar.management.backoffice.payload.request.CardRequest;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.common.api.ResponseApi;
 import jakarta.validation.Valid;

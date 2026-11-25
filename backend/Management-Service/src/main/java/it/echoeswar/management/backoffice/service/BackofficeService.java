@@ -10,7 +10,7 @@ import it.echoeswar.management.catalog.entity.Card;
 import it.echoeswar.management.catalog.entity.Faction;
 import it.echoeswar.management.catalog.entity.School;
 import it.echoeswar.management.catalog.entity.Tier;
-import it.echoeswar.management.catalog.payload.request.CardRequest;
+import it.echoeswar.management.backoffice.payload.request.CardRequest;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.catalog.repository.CardRepository;
 import it.echoeswar.management.catalog.repository.FactionRepository;
@@ -32,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Service containing the back-office business logic used by administrators

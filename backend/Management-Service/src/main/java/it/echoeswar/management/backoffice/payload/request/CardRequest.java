@@ -1,11 +1,9 @@
-package it.echoeswar.management.catalog.payload.request;
+package it.echoeswar.management.backoffice.payload.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
-
-//TODO spostare in payload request di back office
 
 /**
  * Request payload used to create a new card.
@@ -33,35 +31,32 @@ import org.hibernate.validator.constraints.URL;
 )
 public record CardRequest(
 
-        // TODO rimuovere e gestitre lato server scegliendo un formato uniforme
         @Schema(description = "Unique catalog code of the card", example = "DOMINION_001",
         requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank
         @Size(max = 100)
         String code,
 
-        // TODO: unifrmare limite della response con limite dell'entity
-
         @Schema(description = "Card name in Italian", example = "Guardiano",
         requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank
-        @Size(max = 100)
+        @Size(max = 150)
         String nameIt,
 
         @Schema(description = "Card name in English", example = "Guardian",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank
-        @Size(max = 100)
+        @Size(max = 150)
         String nameEn,
 
         @Schema(description = "Card description in Italian, when available",
                 example = "Protegge gli alleati", nullable = true)
-        @Size(max = 250)
+        @Size(max = 5000)
         String descriptionIt,
 
         @Schema(description = "Card description in English, when available",
                 example = "Protects allies", nullable = true)
-        @Size(max = 250)
+        @Size(max = 5000)
         String descriptionEn,
 
         @Schema(description = "Attack value of the card", example = "8",
