@@ -2,7 +2,10 @@ package it.echoeswar.management.backoffice.service;
 
 import it.echoeswar.management.backoffice.payload.request.PackRequest;
 import it.echoeswar.management.backoffice.payload.request.PackUpdateVersionRequest;
+import it.echoeswar.management.backoffice.payload.response.FactionResponse;
 import it.echoeswar.management.backoffice.payload.response.PackResponse;
+import it.echoeswar.management.backoffice.payload.response.SchoolResponse;
+import it.echoeswar.management.backoffice.payload.response.TierResponse;
 import it.echoeswar.management.catalog.entity.Card;
 import it.echoeswar.management.catalog.entity.Faction;
 import it.echoeswar.management.catalog.entity.School;
@@ -28,6 +31,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Service containing the back-office business logic used by administrators
@@ -196,11 +201,41 @@ public class BackofficeService {
         return "complete";
     }
 
-    // TODO: lista degli echi del database
+    /**
+     * Retrieves all tiers.
+     *
+     * @return the list of all tiers as {@link TierResponse} objects, or an empty list if none exist
+     */
+    @Transactional(readOnly = true)
+    public List<TierResponse> getAllTiers() {
+        return tierRepository.findAll().stream()
+                .map(TierResponse::from)
+                .toList();
+    }
 
-    // TODO: lista degli tiar del datgabase
+    /**
+     * Retrieves all factions.
+     *
+     * @return the list of all factions as {@link FactionResponse} objects, or an empty list if none exist
+     */
+    @Transactional(readOnly = true)
+    public List<FactionResponse> getAllFactions() {
+        return factionRepository.findAll().stream()
+                .map(FactionResponse::from)
+                .toList();
+    }
 
-    // TODO: lista delle scuole del database
+    /**
+     * Retrieves all schools.
+     *
+     * @return the list of all schools as {@link SchoolResponse} objects, or an empty list if none exist
+     */
+    @Transactional(readOnly = true)
+    public List<SchoolResponse> getAllSchools() {
+        return schoolRepository.findAll().stream()
+                .map(SchoolResponse::from)
+                .toList();
+    }
 
     // todo: acessibili sol oda utente autenticato con ruolo admin restuire response , restisci id, codice, nome inglese .
 
