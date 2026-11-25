@@ -254,6 +254,4 @@ public class BackofficeService {
         return String.format("%s_%02d", CODE_PREFIX, next);   // PACK_01, ..., PACK_99, PACK_100
     }
 
-    // todo: acessibili sol oda utente autenticato con ruolo admin restuire response , restisci id, codice, nome inglese .
-
 }
