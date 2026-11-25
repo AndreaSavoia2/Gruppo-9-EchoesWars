@@ -3,7 +3,7 @@
 Il login è nelle **pagine statiche**. L'app di gioco è in **React**.
 Questo documento è l'accordo tra le due parti su come passare il **token JWT**.
 
-> Il token **non lo crea nessuna pagina**: lo crea il **backend Spring** in `POST /api/login`.
+> Il token **non lo crea nessuna pagina**: lo crea il **backend Spring** in `POST /api/v1/auth/login`.
 > Le pagine lo ricevono e lo passano all'app React.
 
 ---
@@ -13,7 +13,8 @@ Questo documento è l'accordo tra le due parti su come passare il **token JWT**.
 ```
 PAGINA STATICA (accesso.html)                 BACKEND SPRING              APP REACT
 1. l'utente scrive email e password
-2. POST /api/login { email, password }  ──►  controlla e crea il token
+2. POST /api/v1/auth/login               ──►  controlla e crea il token
+   { email, password }                         (+ cookie di rinnovo, 7 giorni)
 3. riceve { "token": "eyJ..." }          ◄──
 4. porta l'utente all'app con il token:
    http://localhost:5173/#token=eyJ...   ─────────────────────────────►  5. salva il token,
@@ -39,7 +40,7 @@ La parte dopo `#` **non viene mai mandata a nessun server** e l'app React la can
 
 <script>
   // ⚙️ Da cambiare quando il sito va online
-  const BACKEND = 'http://localhost:8080/api'   // indirizzo del backend Spring
+  const BACKEND = 'http://localhost:8080/api/v1/auth'   // indirizzo del login nel backend Spring
   const APP = 'http://localhost:5173/'          // indirizzo dell'app React
 
   // Messaggio se l'app ci ha rimandato qui (?motivo=scaduto o ?motivo=uscito)
@@ -56,6 +57,9 @@ La parte dopo `#` **non viene mai mandata a nessun server** e l'app React la can
 
     try {
       const risposta = await fetch(`${BACKEND}/login`, {
+        // ⭐ IMPORTANTE: senza questa riga il browser non salva il cookie di rinnovo
+        // e dopo 15 minuti l'utente dovrebbe rifare il login
+        credentials: 'include',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: dati.get('email'), password: dati.get('password') }),
@@ -66,7 +70,9 @@ La parte dopo `#` **non viene mai mandata a nessun server** e l'app React la can
         return
       }
 
-      const { token } = await risposta.json()
+      // Il backend risponde { timestamp, httpStatus, message, data: { accessToken, tokenType, expiresAt } }
+      const { data } = await risposta.json()
+      const token = data.accessToken
       // ⭐ Il passaggio importante: vai all'app con il token dopo il #
       window.location.href = `${APP}#token=${encodeURIComponent(token)}`
     } catch {
@@ -85,7 +91,9 @@ La parte dopo `#` **non viene mai mandata a nessun server** e l'app React la can
 ### Registrazione
 Dopo `POST /api/registrazione` andata a buon fine (risposta `201`), le strade sono due:
 - **più semplice**: porta l'utente alla pagina di login (`accesso.html`), così accede con i dati appena creati;
-- **più comoda**: fai subito anche `POST /api/login` e poi vai all'app con `#token=...`, come sopra.
+- **più comoda**: fai subito anche `POST /api/v1/auth/login` e poi vai all'app con `#token=...`, come sopra.
+
+La registrazione è `POST /api/v1/auth/register` con `{ "username": "...", "email": "...", "password": "..." }`.
 
 ---
 
@@ -107,9 +115,10 @@ VITE_LOGIN_URL=http://localhost:5500/accesso.html
 ---
 
 ## Cosa serve dal backend Spring
-- `POST /api/login` → risposta `{ "token": "eyJ..." }`, oppure `401` se i dati sono sbagliati
+- ✅ già fatto: `POST /api/v1/auth/login` → `{ "data": { "accessToken": "eyJ...", ... } }` + cookie di rinnovo
+- ✅ già fatto: il token dura 15 minuti, l'app React lo rinnova da sola (`/api/v1/auth/csrf` + `/api/v1/auth/refresh`)
 - `POST /api/registrazione` → risposta `201`
-- CORS: permettere **sia** l'indirizzo della pagina statica (es. `http://localhost:5500`) **sia** quello dell'app React (`http://localhost:5173`)
+- CORS: nel `.env` del backend `CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5500` (app React + pagina statica)
 - Tutti gli altri endpoint: rispondere `401` se manca il token o non è valido
 
 ## ⚠️ Regole di sicurezza
