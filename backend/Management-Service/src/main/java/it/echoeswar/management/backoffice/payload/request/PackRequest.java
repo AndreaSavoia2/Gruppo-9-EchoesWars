@@ -11,8 +11,6 @@ import lombok.Builder;
  * <p>Code and names are mandatory, while descriptions are optional.
  * All fields are validated against the maximum lengths allowed by the
  * database schema.</p>
- *
- * @param code          unique pack code (required, max 100 characters)
  * @param nameIt        pack name in Italian (required, max 100 characters)
  * @param nameEn        pack name in English (required, max 100 characters)
  * @param descriptionIt pack description in Italian, may be {@code null}
@@ -26,35 +24,27 @@ import lombok.Builder;
         description = "Payload for creating a pack"
 )
 public record PackRequest(
-        // TODO rimuovere e gestitre lato server scegliendo un formato uniforme
-        @Schema(description = "Unique pack code", example = "#1234_001",
-                requiredMode = Schema.RequiredMode.REQUIRED)
-        @NotBlank
-        @Size(max = 100)
-        String code,
-
-        // TODO: controllare e adattare limiti alle entity
 
         @Schema(description = "Pack name in Italian", example = "Pacchetto settimanale",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank
-        @Size(max = 100)
+        @Size(max = 150)
         String nameIt,
 
         @Schema(description = "Pack name in English", example = "Weekly pack",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank
-        @Size(max = 100)
+        @Size(max = 150)
         String nameEn,
 
         @Schema(description = "Pack description in Italian, when available",
                 example = "Pacchetto disponibile ogni settimana", nullable = true)
-        @Size(max = 250)
+        @Size(max = 5000) //limite massimo ragionevole per evitare payload enormi
         String descriptionIt,
 
         @Schema(description = "Pack description in English, when available",
                 example = "Available pack every week", nullable = true)
-        @Size(max = 250)
+        @Size(max = 5000)
         String descriptionEn,
 
         @Schema(description = "number pf cards for package",

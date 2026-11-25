@@ -125,14 +125,14 @@ public class BackofficeService {
     @Transactional
     public PackResponse createPack(PackRequest request){
 
-        if(gamePackageRepository.existsByCodeIgnoreCase(request.code())){
-            throw new ResourceConflictException("Pack code already exists: " + request.code());
-        }
+//        if(gamePackageRepository.existsByCodeIgnoreCase(request.code())){
+//            throw new ResourceConflictException("Pack code already exists: " + request.code());
+//        }
 
 
 
         GamePackage gamePackage = GamePackage.builder()
-                .code(FormatterString.normalizeLowerCase(request.code()))
+                .code(FormatterString.normalizeLowerCase(generateCode()))
                 .nameIt(FormatterString.normalizeLowerCase(request.nameIt()))
                 .nameEn(FormatterString.normalizeLowerCase(request.nameEn()))
                 .descriptionIt(FormatterString.normalizeLowerCase(request.descriptionIt()))
@@ -235,6 +235,24 @@ public class BackofficeService {
         return schoolRepository.findAll().stream()
                 .map(SchoolResponse::from)
                 .toList();
+    }
+
+    /**
+     * Prefix used to build game package codes (e.g. {@code PACK_01}).
+     */
+    private static final String CODE_PREFIX = "PACK";
+
+    /**
+     * Generates the next sequential game package code.
+     * <p>
+     * The code is built from {@link #CODE_PREFIX} and the highest existing number plus one,
+     * zero-padded to at least two digits (e.g. {@code PACK_01}, ..., {@code PACK_99}, {@code PACK_100}).
+     *
+     * @return the next available game package code
+     */
+    private String generateCode() {
+        int next = gamePackageRepository.findMaxNumber() + 1;
+        return String.format("%s_%02d", CODE_PREFIX, next);   // PACK_01, ..., PACK_99, PACK_100
     }
 
     // todo: acessibili sol oda utente autenticato con ruolo admin restuire response , restisci id, codice, nome inglese .
