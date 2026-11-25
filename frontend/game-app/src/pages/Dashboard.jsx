@@ -68,10 +68,13 @@ function ColonnaDati({ dati }) {
 
   return (
     <>
-      <ProgressoLeggendaria buste={leggendaria.buste} totale={leggendaria.totale} />
+      {leggendaria && <ProgressoLeggendaria buste={leggendaria.buste} totale={leggendaria.totale} />}
 
       <Riquadro titolo="Ultime partite">
-        {ultimePartite.length === 0 ? (
+        {/* null = il backend non ha ancora le partite */}
+        {!ultimePartite ? (
+          <p className="text-testo-secondario">Presto disponibile.</p>
+        ) : ultimePartite.length === 0 ? (
           <p>Non hai ancora giocato partite.</p>
         ) : (
           ultimePartite.map((partita) => (
@@ -88,8 +91,10 @@ function ColonnaDati({ dati }) {
         </Link>
       </Riquadro>
 
-      <Riquadro titolo={`Prove degli Echi · ${prove.completate}/${prove.totali}`}>
-        {prove.inEvidenza.map((prova) => (
+      <Riquadro titolo={prove ? `Prove degli Echi · ${prove.completate}/${prove.totali}` : 'Prove degli Echi'}>
+        {/* null = il backend non ha ancora le Prove degli Echi */}
+        {!prove && <p className="text-testo-secondario">Presto disponibile.</p>}
+        {prove?.inEvidenza.map((prova) => (
           <RigaMissione
             key={prova.id}
             titolo={prova.titolo}
