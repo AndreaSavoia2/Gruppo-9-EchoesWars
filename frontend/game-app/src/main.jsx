@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { prendiTokenDallIndirizzo, serveLogin, vaiAlLogin } from './api/token'
+import { applicaLingua } from './utils/lingua'
+
+// 🌍 La lingua scelta dall'utente va nell'attributo lang della pagina
+applicaLingua()
 
 // 🔑 Prima di tutto: se arriviamo dal login statico, salva il token (#token=...)
 prendiTokenDallIndirizzo()

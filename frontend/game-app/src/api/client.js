@@ -99,7 +99,8 @@ function scartaIncarto(json) {
 }
 
 // Le richieste del login stesso: se rispondono 401 NON si prova a rinnovare il token
-const PERCORSI_LOGIN = ['/auth/login', '/auth/register', '/auth/refresh', '/auth/csrf', '/auth/logout']
+// (anche il cambio password: lì 401 vuol dire "password attuale sbagliata", non "token scaduto")
+const PERCORSI_LOGIN = ['/auth/login', '/auth/register', '/auth/refresh', '/auth/csrf', '/auth/logout', '/auth/change-password']
 
 // ---------- Rinnovo del token ----------
 // Il backend, al login, salva un "refresh token" in un cookie nascosto (valido 7 giorni).

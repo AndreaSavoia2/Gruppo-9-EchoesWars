@@ -1,4 +1,5 @@
 import { cancellaToken } from './token'
+import { linguaScelta } from '../utils/lingua'
 import { apiGet, apiPost, apiPut } from './client'
 
 /**
@@ -16,7 +17,7 @@ export async function getProfilo(signal) {
     partite: '–',
     vittorie: '–',
     carte: '–',
-    lingua: 'Italiano',
+    lingua: linguaScelta().nome, // ⚠️ salvata solo nel browser: il backend non ha ancora la lingua
     accessi: null,
   }
 }
@@ -55,4 +56,18 @@ export async function esci() {
   } finally {
     cancellaToken()
   }
+}
+
+/**
+ * Cambia la password.
+ * ✅ COLLEGATO: POST /auth/change-password { currentPassword, newPassword }
+ * Dopo il cambio il backend chiude TUTTE le sessioni: bisogna rifare l'accesso.
+ * Errori: 401 = password attuale sbagliata · 400 = nuova password non valida
+ *         (meno di 12 caratteri, oppure uguale a quella attuale)
+ * @param {string} attuale - la password di adesso
+ * @param {string} nuova - la nuova password (almeno 12 caratteri)
+ * @returns {Promise<null>}
+ */
+export function cambiaPassword(attuale, nuova) {
+  return apiPost('/auth/change-password', { currentPassword: attuale, newPassword: nuova })
 }

@@ -25,6 +25,8 @@ import AccettaSfida from "./pages/AccettaSfida";
 import Negozio from "./pages/Negozio";
 import Profilo from "./pages/Profilo";
 import ModificaAvatar from "./pages/ModificaAvatar";
+import CambiaPassword from "./pages/CambiaPassword";
+import Lingua from "./pages/Lingua";
 import ProveEchi from "./pages/ProveEchi";
 import Cronologia from "./pages/Cronologia";
 import Accessi from "./pages/Accessi";
@@ -79,6 +81,8 @@ export default function App() {
             <Route path="/negozio" element={<Negozio />} />
             <Route path="/profilo" element={<Profilo />} />
             <Route path="/profilo/avatar" element={<ModificaAvatar />} />
+            <Route path="/profilo/password" element={<CambiaPassword />} />
+            <Route path="/profilo/lingua" element={<Lingua />} />
             <Route path="/missioni" element={<ProveEchi />} />
             <Route path="/cronologia" element={<Cronologia />} />
             <Route path="/accessi" element={<Accessi />} />
