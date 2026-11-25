@@ -9,7 +9,12 @@ export const FASCE_COSTO = [
 
 export const NESSUN_FILTRO = { scuola: [], rarita: [], costo: [], abilita: [] }
 
-// Tiene solo le carte che rispettano TUTTI i filtri scelti
+/**
+ * Tiene solo le carte che rispettano TUTTI i filtri scelti
+ *
+ * @param {*} carte
+ * @param {*} filtri
+ */
 export function filtraCarte(carte, filtri) {
   return carte.filter((carta) => {
     if (filtri.scuola.length && !filtri.scuola.includes(carta.scuola)) return false
@@ -25,6 +30,11 @@ export function filtraCarte(carte, filtri) {
   })
 }
 
+/**
+ * Conta quanti filtri sono attivi (il numero sul bottone "Filtri").
+ *
+ * @param {*} filtri
+ */
 export function quantiFiltri(filtri) {
   return Object.values(filtri).reduce((somma, valori) => somma + valori.length, 0)
 }

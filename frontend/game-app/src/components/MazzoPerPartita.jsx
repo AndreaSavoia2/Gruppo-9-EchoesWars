@@ -1,9 +1,18 @@
 import { Link } from 'react-router'
 
-// Un mazzo (dal Figma "App/Mazzo per partita").
-// 3 stati: Valido · Selezionato (bordo spesso + "✓ Scelto") · Non valido (sbiadito + 🔒)
-// - con onScegli → è un bottone (schermata "Scegli il mazzo")
-// - con percorso → è un link (lista mazzi: si apre per modificarlo, anche se non valido)
+/**
+ * Un mazzo (dal Figma "App/Mazzo per partita").
+ * 3 stati: Valido · Selezionato (bordo spesso + "✓ Scelto") · Non valido (sbiadito + 🔒)
+ * - con onScegli → è un bottone (schermata "Scegli il mazzo")
+ * - con percorso → è un link (lista mazzi: si apre per modificarlo, anche se non valido)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.mazzo
+ * @param {boolean} [props.selezionato=false]
+ * @param {Function} props.onScegli
+ * @param {string} props.percorso
+ * @returns {JSX.Element}
+ */
 export default function MazzoPerPartita({ mazzo, selezionato = false, onScegli, percorso }) {
   const { nome, valido, motivo, punti, puntiMax } = mazzo
   // Sotto il nome: i punti se è valido, altrimenti il motivo

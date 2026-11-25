@@ -4,7 +4,16 @@ import { FASCE_COSTO, NESSUN_FILTRO, filtraCarte } from './filtriCarte'
 const ORDINE_RARITA = ['Comune', 'Rara', 'Leggendaria']
 const ABILITA_VISIBILI = 6
 
-// 5t · "Filtra la collezione": pannello che sale dal basso (mobile) o finestra al centro (desktop)
+/**
+ * 5t · "Filtra la collezione": pannello che sale dal basso (mobile) o finestra al centro (desktop)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carte
+ * @param {*} props.filtri
+ * @param {Function} props.onApplica
+ * @param {Function} props.onChiudi
+ * @returns {JSX.Element}
+ */
 export default function FiltriCarteModale({ carte, filtri, onApplica, onChiudi }) {
   const [bozza, setBozza] = useState(filtri)
   const [tutteAbilita, setTutteAbilita] = useState(false)

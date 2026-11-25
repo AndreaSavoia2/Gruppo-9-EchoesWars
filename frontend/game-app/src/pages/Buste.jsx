@@ -11,7 +11,11 @@ import AperturaBusta from '../components/buste/AperturaBusta'
 import { useFetch } from '../hooks/useFetch'
 import { apriBuste, getBuste } from '../api/buste'
 
-// 8 · /collezione/buste — le buste da aprire
+/**
+ * 8 · /collezione/buste — le buste da aprire
+ *
+ * @returns {JSX.Element}
+ */
 export default function Buste() {
   const navigate = useNavigate()
   const { dati, caricamento, errore, ricarica } = useFetch(getBuste)

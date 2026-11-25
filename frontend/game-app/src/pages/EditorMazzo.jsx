@@ -13,9 +13,13 @@ import { trovaEco } from '../data/echi'
 import { REGOLE_MAZZO } from '../data/regole'
 import ImmagineCarta from '../components/carta/ImmagineCarta'
 
-// 5d · 5e · 5n · 5s · 5t / D5
-//   /collezione/mazzi/nuovo/carte?eco=Sapienza&eco=Oblio → nuovo mazzo (passo 2)
-//   /collezione/mazzi/:id                                 → modifica un mazzo che esiste
+/**
+ * 5d · 5e · 5n · 5s · 5t / D5
+ *   /collezione/mazzi/nuovo/carte?eco=Sapienza&eco=Oblio → nuovo mazzo (passo 2)
+ *   /collezione/mazzi/:id                                 → modifica un mazzo che esiste
+ *
+ * @returns {JSX.Element}
+ */
 export default function EditorMazzo() {
   const { id } = useParams()
   const [parametri] = useSearchParams()
@@ -41,6 +45,16 @@ export default function EditorMazzo() {
   )
 }
 
+/**
+ * L'editor del mazzo: carte disponibili, carte nel mazzo, contatori e salvataggio.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string|number} props.id
+ * @param {*} props.echi
+ * @param {string} [props.nomeIniziale='']
+ * @param {Array} [props.carteIniziali=[]]
+ * @returns {JSX.Element}
+ */
 function Editor({ id, echi, nomeIniziale = '', carteIniziali = [] }) {
   const navigate = useNavigate()
   // echi.join() = "Sapienza,Oblio": così la richiesta riparte solo se cambiano davvero le Eco
@@ -277,7 +291,16 @@ function Editor({ id, echi, nomeIniziale = '', carteIniziali = [] }) {
   )
 }
 
-// Pillole in alto: carte, punti e le 2 Eco
+/**
+ * Pillole in alto: carte, punti e le 2 Eco
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.echi
+ * @param {*} props.totaleCarte
+ * @param {*} props.totalePunti
+ * @param {*} props.puntiOltre
+ * @returns {JSX.Element}
+ */
 function Contatori({ echi, totaleCarte, totalePunti, puntiOltre }) {
   const pillola = 'rounded-full border-[1.2px] px-2.5 py-1 text-didascalia leading-[1.4] font-medium'
   return (
@@ -300,7 +323,14 @@ function Contatori({ echi, totaleCarte, totalePunti, puntiOltre }) {
   )
 }
 
-// Il "vassoio": 30 caselle su 2 righe. Tocca una carta per toglierla.
+/**
+ * Il "vassoio": 30 caselle su 2 righe. Tocca una carta per toglierla.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carte
+ * @param {Function} props.onTogli
+ * @returns {JSX.Element}
+ */
 function Vassoio({ carte, onTogli }) {
   const caselle = Array.from({ length: REGOLE_MAZZO.carte }, (_, i) => carte[i])
   return (
@@ -322,7 +352,17 @@ function Vassoio({ carte, onTogli }) {
   )
 }
 
-// Una carta della collezione: toccala per aggiungerla al mazzo
+/**
+ * Una carta della collezione: toccala per aggiungerla al mazzo
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carta
+ * @param {*} props.copie
+ * @param {*} props.limite
+ * @param {*} props.mazzoPieno
+ * @param {Function} props.onAggiungi
+ * @returns {JSX.Element}
+ */
 function CartaPerMazzo({ carta, copie, limite, mazzoPieno, onAggiungi }) {
   const esaurita = copie >= limite
   const eco = trovaEco(carta.eco)
@@ -357,7 +397,17 @@ function CartaPerMazzo({ carta, copie, limite, mazzoPieno, onAggiungi }) {
   )
 }
 
-// Barra di avanzamento (desktop): Carte e Costo totale
+/**
+ * Barra di avanzamento (desktop): Carte e Costo totale
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.etichetta
+ * @param {*} props.valore
+ * @param {*} props.massimo
+ * @param {string} props.testo
+ * @param {boolean} [props.oltre=false]
+ * @returns {JSX.Element}
+ */
 function Barra({ etichetta, valore, massimo, testo, oltre = false }) {
   return (
     <div className="flex flex-col gap-1.5 leading-[1.4]">
@@ -372,6 +422,11 @@ function Barra({ etichetta, valore, massimo, testo, oltre = false }) {
   )
 }
 
+/**
+ * Avviso quando il mazzo supera i punti massimi.
+ *
+ * @returns {JSX.Element}
+ */
 function AvvisoPunti() {
   return (
     <p role="alert" className="flex gap-2.5 rounded-xl border border-errore bg-errore-sfondo px-3.5 py-3 text-didascalia leading-[1.4] font-medium">
@@ -381,7 +436,14 @@ function AvvisoPunti() {
   )
 }
 
-// Messaggio sotto la lista (desktop)
+/**
+ * Messaggio sotto la lista (desktop)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.mancano
+ * @param {*} props.puntiOltre
+ * @returns {JSX.Element}
+ */
 function StatoMazzo({ mancano, puntiOltre }) {
   if (puntiOltre > 0) return <AvvisoPunti />
   if (mancano > 0) {

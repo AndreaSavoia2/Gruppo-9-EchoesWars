@@ -41,6 +41,11 @@ const modalita = [
   },
 ]
 
+/**
+ * Pagina "Come vuoi giocare?": partita casuale oppure sfida a un amico.
+ *
+ * @returns {JSX.Element}
+ */
 export default function ComeVuoiGiocare() {
   return (
     <AppLayout paginaAttiva="gioca" sfondoMobile="/images/sfondo-gioca.png">

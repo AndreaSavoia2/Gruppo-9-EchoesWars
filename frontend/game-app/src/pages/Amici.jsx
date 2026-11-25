@@ -14,7 +14,11 @@ import { useAzioneRichiesta } from '../hooks/useAzioneRichiesta'
 import { aggiungiAmico, eliminaAmico, getAmiciLista } from '../api/amici'
 import { getRichieste } from '../api/richieste'
 
-// 9 · 9b · 9c / D8 · /amici
+/**
+ * 9 · 9b · 9c / D8 · /amici
+ *
+ * @returns {JSX.Element}
+ */
 export default function Amici() {
   const { dati: amici, caricamento, errore, ricarica } = useFetch(getAmiciLista)
   const { dati: richieste, ricarica: ricaricaRichieste } = useFetch(getRichieste)

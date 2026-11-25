@@ -1,6 +1,15 @@
 import { Link } from 'react-router'
 
-// Riga cliccabile del Profilo: icona in un quadrato oro, titolo, dettaglio, freccia.
+/**
+ * Riga cliccabile del Profilo: icona in un quadrato oro, titolo, dettaglio, freccia.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.percorso
+ * @param {string} props.icona
+ * @param {string} props.titolo
+ * @param {*} props.dettaglio
+ * @returns {JSX.Element}
+ */
 export default function RigaLink({ percorso, icona, titolo, dettaglio }) {
   return (
     <Link

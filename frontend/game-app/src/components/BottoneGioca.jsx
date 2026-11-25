@@ -1,7 +1,13 @@
 import { Link } from 'react-router'
 
-// Il grande bottone GIOCA: porta alla scelta della modalità (/gioca).
-// Su desktop ha un'immagine decorativa leggerissima dietro.
+/**
+ * Il grande bottone GIOCA: porta alla scelta della modalità (/gioca).
+ * Su desktop ha un'immagine decorativa leggerissima dietro.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} [props.className='']
+ * @returns {JSX.Element}
+ */
 export default function BottoneGioca({ className = '' }) {
   return (
     <Link

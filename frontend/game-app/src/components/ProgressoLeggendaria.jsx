@@ -1,4 +1,11 @@
-// Contatore "Leggendaria garantita": 10 tacche = 10 buste.
+/**
+ * Contatore "Leggendaria garantita": 10 tacche = 10 buste.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.buste
+ * @param {*} props.totale
+ * @returns {JSX.Element}
+ */
 export default function ProgressoLeggendaria({ buste, totale }) {
   const mancano = totale - buste
   // Crea una lista [0, 1, 2, ... 9] per disegnare le tacche

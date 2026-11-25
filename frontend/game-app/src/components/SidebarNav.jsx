@@ -1,8 +1,14 @@
 import { Link } from 'react-router'
 import { vociMenu } from '../data/menu'
 
-// Menu laterale: si vede SOLO su desktop.
-// "hidden" = nascosto · "lg:flex" = da 1024px in su si vede
+/**
+ * Menu laterale: si vede SOLO su desktop.
+ * "hidden" = nascosto · "lg:flex" = da 1024px in su si vede
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.paginaAttiva
+ * @returns {JSX.Element}
+ */
 export default function SidebarNav({ paginaAttiva }) {
   return (
     <nav

@@ -6,7 +6,11 @@ import Bottone from '../components/Bottone'
 import { echi } from '../data/echi'
 import { REGOLE_MAZZO } from '../data/regole'
 
-// 5q · 5r · /collezione/mazzi/nuovo — Passo 1: scegli i 2 Echi
+/**
+ * 5q · 5r · /collezione/mazzi/nuovo — Passo 1: scegli i 2 Echi
+ *
+ * @returns {JSX.Element}
+ */
 export default function NuovoMazzo() {
   const navigate = useNavigate()
   const [scelti, setScelti] = useState([])

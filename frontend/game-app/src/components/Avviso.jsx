@@ -5,7 +5,16 @@ const stili = {
   successo: { box: 'border-successo bg-successo-sfondo', icona: '✓', colore: 'text-successo' },
 }
 
-// barra = true → bordo spesso solo a sinistra (come negli Scambi)
+/**
+ * barra = true → bordo spesso solo a sinistra (come negli Scambi)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} [props.tipo='info']
+ * @param {string} props.icona
+ * @param {boolean} [props.barra=false]
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 export default function Avviso({ tipo = 'info', icona, barra = false, children }) {
   const stile = stili[tipo]
   return (

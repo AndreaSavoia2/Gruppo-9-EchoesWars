@@ -23,7 +23,13 @@ const esiti = {
   },
 }
 
-// G5 / G5b / DG4 / DG4b · Risultato della partita
+/**
+ * G5 / G5b / DG4 / DG4b · Risultato della partita
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.partita
+ * @returns {JSX.Element}
+ */
 export default function Risultato({ partita }) {
   const esito = esiti[partita.esito]
 

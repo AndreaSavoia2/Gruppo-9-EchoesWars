@@ -1,7 +1,15 @@
 import { useEffect, useRef } from 'react'
 
-// Finestra in primo piano con velo scuro dietro (es. "Convertire 10 copie?").
-// Si chiude con: tocco sul velo · tasto Esc · onChiudi chiamato da un bottone dentro.
+/**
+ * Finestra in primo piano con velo scuro dietro (es. "Convertire 10 copie?").
+ * Si chiude con: tocco sul velo · tasto Esc · onChiudi chiamato da un bottone dentro.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.titolo
+ * @param {Function} props.onChiudi
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 export default function Modale({ titolo, onChiudi, children }) {
   const finestra = useRef(null)
 

@@ -1,9 +1,18 @@
 import CartaInCampo from './CartaInCampo'
 import ImmagineCarta from '../carta/ImmagineCarta'
 
-// Un lato del campo di battaglia (dal Figma "Battaglia/Lato giocatore"):
-// pillola con nome + PV, e sotto: mazzo · carta in campo · scarti.
-// inAlto = true per l'avversario (la pillola va sopra il campo)
+/**
+ * Un lato del campo di battaglia (dal Figma "Battaglia/Lato giocatore"):
+ * pillola con nome + PV, e sotto: mazzo · carta in campo · scarti.
+ * inAlto = true per l'avversario (la pillola va sopra il campo)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.nome
+ * @param {*} props.stato
+ * @param {*} props.inAlto
+ * @param {*} props.nascondiCarta
+ * @returns {JSX.Element}
+ */
 export default function LatoGiocatore({ nome, stato, inAlto, nascondiCarta }) {
   const pillola = (
     <p className="flex items-center gap-2.5 rounded-full border-[1.5px] border-oro-bordo bg-oro px-3.5 py-2 leading-[1.4] font-semibold">
@@ -57,7 +66,15 @@ export default function LatoGiocatore({ nome, stato, inAlto, nascondiCarta }) {
   )
 }
 
-// Pila di carte con il numero in un pallino in alto a destra
+/**
+ * Pila di carte con il numero in un pallino in alto a destra
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.etichetta
+ * @param {*} props.numero
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 function Pila({ etichetta, numero, children }) {
   return (
     <div className="relative h-26.5 w-19">

@@ -2,7 +2,11 @@ import { useNavigate } from 'react-router'
 import SceltaMazzo from '../components/SceltaMazzo'
 import { avviaPartitaCasuale } from '../api/partite'
 
-// G3 / DG2 · Partita casuale → scegli il mazzo → la partita parte
+/**
+ * G3 / DG2 · Partita casuale → scegli il mazzo → la partita parte
+ *
+ * @returns {JSX.Element}
+ */
 export default function ScegliMazzoCasuale() {
   const navigate = useNavigate()
 

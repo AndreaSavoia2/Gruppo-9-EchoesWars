@@ -37,11 +37,24 @@ const CARTE = {
 const DURATA = { carica: 500, scossa: 500, apertura: 800 }
 const AUTOMATICHE = { carica: 'scossa', scossa: 'apertura', apertura: 'ventaglio' }
 
+/**
+ * Trasforma posizione, rotazione e scala di una carta nel valore CSS "transform".
+ *
+ * @param {Array} valori - [x, y, rotazione = 0, scala = 1]
+ */
 function trasforma([x, y, rotazione = 0, scala = 1]) {
   return { transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotazione}deg) scale(${scala})` }
 }
 
-// carte: quelle arrivate dal backend · riepilogo: testo · onFine: "Vedi le carte"
+/**
+ * carte: quelle arrivate dal backend · riepilogo: testo · onFine: "Vedi le carte"
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carte
+ * @param {*} props.riepilogo
+ * @param {Function} props.onFine
+ * @returns {JSX.Element}
+ */
 export default function AperturaBusta({ carte, riepilogo, onFine }) {
   const [fase, setFase] = useState('busta')
 
@@ -132,7 +145,15 @@ export default function AperturaBusta({ carte, riepilogo, onFine }) {
   )
 }
 
-// Fase 6 · "Busta aperta!": le carte girate. Rare e leggendarie con il bordo che brilla.
+/**
+ * Fase 6 · "Busta aperta!": le carte girate. Rare e leggendarie con il bordo che brilla.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carte
+ * @param {*} props.riepilogo
+ * @param {Function} props.onFine
+ * @returns {JSX.Element}
+ */
 function Risultato({ carte, riepilogo, onFine }) {
   const bordo = {
     Rara: 'border-3 border-info shadow-[0_0_9px_rgba(74,64,140,0.7)]',

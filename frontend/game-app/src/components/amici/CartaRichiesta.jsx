@@ -7,8 +7,17 @@ const tipi = {
   sfida: { testo: 'Ti sfida a una partita', etichetta: '⚔ Sfida', stile: 'border-info bg-info-sfondo', accetta: 'Accetta e scegli il mazzo' },
 }
 
-// Una richiesta (dal Figma "App/Richiesta"). Il tipo è scritto, non solo colorato.
-// compatta = true → versione piccola del pannello a destra in Amici (desktop)
+/**
+ * Una richiesta (dal Figma "App/Richiesta"). Il tipo è scritto, non solo colorato.
+ * compatta = true → versione piccola del pannello a destra in Amici (desktop)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.richiesta
+ * @param {Function} props.onAccetta
+ * @param {Function} props.onRifiuta
+ * @param {boolean} [props.compatta=false]
+ * @returns {JSX.Element}
+ */
 export default function CartaRichiesta({ richiesta, onAccetta, onRifiuta, compatta = false }) {
   const tipo = tipi[richiesta.tipo]
   return (

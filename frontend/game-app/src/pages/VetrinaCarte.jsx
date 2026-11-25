@@ -1,9 +1,13 @@
 import CartaGioco from '../components/carta/CartaGioco'
 import { CARTE_ESEMPIO } from '../api/demo'
 
-// 🧪 Solo in modalità demo: /carte-demo
-// Mostra le carte di esempio a 3 grandezze diverse, per controllare
-// che cornice, illustrazione e testi restino al loro posto.
+/**
+ * 🧪 Solo in modalità demo: /carte-demo
+ * Mostra le carte di esempio a 3 grandezze diverse, per controllare
+ * che cornice, illustrazione e testi restino al loro posto.
+ *
+ * @returns {JSX.Element}
+ */
 export default function VetrinaCarte() {
   return (
     <main className="min-h-screen bg-sfondo px-5 py-8 lg:px-12">

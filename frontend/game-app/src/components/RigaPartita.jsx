@@ -20,6 +20,17 @@ const stili = {
   },
 }
 
+/**
+ * Riga di una partita nelle liste (Home, Cronologia): esito, avversario e round.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.esito
+ * @param {*} props.avversario
+ * @param {*} props.round
+ * @param {string} props.percorso
+ * @param {boolean} [props.conVs=false]
+ * @returns {JSX.Element}
+ */
 export default function RigaPartita({ esito, avversario, round, percorso, conVs = false }) {
   const stile = stili[esito]
 

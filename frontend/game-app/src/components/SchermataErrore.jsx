@@ -7,13 +7,23 @@ const coloriIcona = {
   avviso: 'border-oro bg-sfondo', //            E3 · Partita interrotta (oro)
 }
 
-// Schermata intera per gli errori "grossi": titolo, spiegazione, icona e bottoni in fondo.
-// I bottoni li passa chi la usa (children), perché cambiano da errore a errore.
-//
-// Esempio:
-//   <SchermataErrore titolo="Sei offline" testo="Controlla..." icona="📶" colore="info">
-//     <Bottone onClick={riprova}>Riprova</Bottone>
-//   </SchermataErrore>
+/**
+ * Schermata intera per gli errori "grossi": titolo, spiegazione, icona e bottoni in fondo.
+ * I bottoni li passa chi la usa (children), perché cambiano da errore a errore.
+ *
+ * Esempio:
+ *   <SchermataErrore titolo="Sei offline" testo="Controlla..." icona="📶" colore="info">
+ *     <Bottone onClick={riprova}>Riprova</Bottone>
+ *   </SchermataErrore>
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.titolo
+ * @param {string} props.testo
+ * @param {string} props.icona
+ * @param {string} [props.colore='errore']
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 export default function SchermataErrore({ titolo, testo, icona, colore = 'errore', children }) {
   return (
     <AppLayout sfondoMobile="/images/sfondo-gioca.png" nascondiMenuMobile>

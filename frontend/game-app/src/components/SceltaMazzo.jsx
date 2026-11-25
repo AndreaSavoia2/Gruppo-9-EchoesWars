@@ -10,12 +10,22 @@ import MessaggioErrore from './MessaggioErrore'
 import { useFetch } from '../hooks/useFetch'
 import { getMazzi } from '../api/mazzi'
 
-// Schermata "Scegli il mazzo": la usano sia la partita casuale che la sfida a un amico.
-// sottotitolo:   testo sotto il titolo (solo desktop)
-// indietro:      { percorso, testo, testoMobile } per il link "‹ ..." in alto
-// avvisoMobile:  testo del riquadro viola sotto il titolo (solo mobile, facoltativo)
-// testoBottone:  es. "Inizia la partita"
-// onConferma:    funzione chiamata col mazzo scelto quando premi il bottone
+/**
+ * Schermata "Scegli il mazzo": la usano sia la partita casuale che la sfida a un amico.
+ * sottotitolo:   testo sotto il titolo (solo desktop)
+ * indietro:      { percorso, testo, testoMobile } per il link "‹ ..." in alto
+ * avvisoMobile:  testo del riquadro viola sotto il titolo (solo mobile, facoltativo)
+ * testoBottone:  es. "Inizia la partita"
+ * onConferma:    funzione chiamata col mazzo scelto quando premi il bottone
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.sottotitolo
+ * @param {*} props.indietro
+ * @param {*} props.avvisoMobile
+ * @param {*} props.testoBottone
+ * @param {Function} props.onConferma
+ * @returns {JSX.Element}
+ */
 export default function SceltaMazzo({ sottotitolo, indietro, avvisoMobile, testoBottone, onConferma }) {
   const { dati, caricamento, errore } = useFetch(getMazzi)
   const mazzi = dati?.mazzi

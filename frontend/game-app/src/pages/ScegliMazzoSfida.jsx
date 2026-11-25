@@ -4,7 +4,11 @@ import SceltaMazzo from '../components/SceltaMazzo'
 import { useFetch } from '../hooks/useFetch'
 import { getSfida, scegliMazzoSfida } from '../api/sfide'
 
-// A2 / DA2 · /sfida/:id/mazzo — la richiesta è partita, intanto scegli il mazzo
+/**
+ * A2 / DA2 · /sfida/:id/mazzo — la richiesta è partita, intanto scegli il mazzo
+ *
+ * @returns {JSX.Element}
+ */
 export default function ScegliMazzoSfida() {
   const { id } = useParams()
   const navigate = useNavigate()

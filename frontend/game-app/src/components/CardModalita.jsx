@@ -1,7 +1,19 @@
 import { Link } from 'react-router'
 
-// Card grande per scegliere la modalità di gioco (versione desktop):
-// immagine, icona + titolo, descrizione, 3 passi numerati, bottone.
+/**
+ * Card grande per scegliere la modalità di gioco (versione desktop):
+ * immagine, icona + titolo, descrizione, 3 passi numerati, bottone.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.percorso
+ * @param {*} props.immagine
+ * @param {string} props.icona
+ * @param {string} props.titolo
+ * @param {*} props.descrizione
+ * @param {*} props.passi
+ * @param {*} props.testoBottone
+ * @returns {JSX.Element}
+ */
 export default function CardModalita({ percorso, immagine, icona, titolo, descrizione, passi, testoBottone }) {
   return (
     <Link

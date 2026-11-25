@@ -29,8 +29,12 @@ const PASSI = [
   },
 ]
 
-// /benvenuto → schermate del primo accesso. Una sola pagina che cambia "passo".
-// Ci arrivi da solo al primo accesso (vedi ControlloApp: utente.primoAccesso = true).
+/**
+ * /benvenuto → schermate del primo accesso. Una sola pagina che cambia "passo".
+ * Ci arrivi da solo al primo accesso (vedi ControlloApp: utente.primoAccesso = true).
+ *
+ * @returns {JSX.Element}
+ */
 export default function PrimoAccesso() {
   const [passo, setPasso] = useState(0) // 0, 1 o 2
   const navigate = useNavigate()

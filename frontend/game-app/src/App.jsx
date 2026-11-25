@@ -34,6 +34,11 @@ import ControlloApp from "./components/ControlloApp";
 const VetrinaCarte = import.meta.env.VITE_DEMO === 'true' ? lazy(() => import('./pages/VetrinaCarte')) : null
 import PaginaInArrivo from "./pages/PaginaInArrivo";
 
+/**
+ * L'app intera: router con tutte le pagine, dati dell'utente e controlli (rete, server, primo accesso).
+ *
+ * @returns {JSX.Element}
+ */
 export default function App() {
   return (
     // BrowserRouter: legge l'indirizzo nella barra del browser

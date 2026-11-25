@@ -1,4 +1,11 @@
-// Barra di avanzamento (dal Figma "App/Barra progresso") con il valore scritto accanto (es. 1/2).
+/**
+ * Barra di avanzamento (dal Figma "App/Barra progresso") con il valore scritto accanto (es. 1/2).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.fatto
+ * @param {*} props.totale
+ * @returns {JSX.Element}
+ */
 export default function BarraProgresso({ fatto, totale }) {
   const percentuale = Math.min(100, (fatto / totale) * 100)
   return (

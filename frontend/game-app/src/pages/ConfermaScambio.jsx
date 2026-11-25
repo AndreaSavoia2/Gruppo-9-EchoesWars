@@ -11,7 +11,11 @@ import { useFetch } from '../hooks/useFetch'
 import { accettaScambio, getScambio, rifiutaScambio } from '../api/scambi'
 import { REGOLE_SCAMBI } from '../data/regole'
 
-// 10h · 10i · /scambi/:id — conferma di una proposta ricevuta, poi "Scambio completato"
+/**
+ * 10h · 10i · /scambi/:id — conferma di una proposta ricevuta, poi "Scambio completato"
+ *
+ * @returns {JSX.Element}
+ */
 export default function ConfermaScambio() {
   const { id } = useParams()
   const navigate = useNavigate()

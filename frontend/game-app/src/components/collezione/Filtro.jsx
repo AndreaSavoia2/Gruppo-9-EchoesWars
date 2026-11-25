@@ -1,10 +1,24 @@
 import { useState } from 'react'
 
-// Un filtro a tendina (dal Figma "Galleria/Filtro" + "Galleria/Menu filtro").
-// etichetta: "Scuola" · opzioni: ["Guerrieri", "Maghi", ...] · scelti: i valori applicati
-// aperto / onApri / onChiudi: il genitore decide quale filtro è aperto (uno alla volta)
-// onApplica(valori): conferma la scelta
-// singola = true → si sceglie UN solo valore (pallini, es. "Ordina"); titolo = testo in cima al menu
+/**
+ * Un filtro a tendina (dal Figma "Galleria/Filtro" + "Galleria/Menu filtro").
+ * etichetta: "Scuola" · opzioni: ["Guerrieri", "Maghi", ...] · scelti: i valori applicati
+ * aperto / onApri / onChiudi: il genitore decide quale filtro è aperto (uno alla volta)
+ * onApplica(valori): conferma la scelta
+ * singola = true → si sceglie UN solo valore (pallini, es. "Ordina"); titolo = testo in cima al menu
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.etichetta
+ * @param {*} [props.titolo=etichetta]
+ * @param {boolean} [props.singola=false]
+ * @param {Array} [props.opzioni=[]]
+ * @param {*} props.scelti
+ * @param {*} props.aperto
+ * @param {Function} props.onApri
+ * @param {Function} props.onChiudi
+ * @param {Function} props.onApplica
+ * @returns {JSX.Element}
+ */
 export default function Filtro({ etichetta, titolo = etichetta, singola = false, opzioni = [], scelti, aperto, onApri, onChiudi, onApplica }) {
   // Scelte "in prova" mentre il menu è aperto: diventano vere solo con "Applica"
   const [bozza, setBozza] = useState(scelti)

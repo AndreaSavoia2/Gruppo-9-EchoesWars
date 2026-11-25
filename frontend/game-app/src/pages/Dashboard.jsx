@@ -12,6 +12,11 @@ import { useUtente } from '../context/UtenteContext'
 import { useFetch } from '../hooks/useFetch'
 import { getDashboard } from '../api/dashboard'
 
+/**
+ * Home dell'app: saluto, scorciatoie, GIOCA, ultime partite e Prove degli Echi.
+ *
+ * @returns {JSX.Element}
+ */
 export default function Dashboard() {
   const { dati: utente, caricamento: caricamentoUtente } = useUtente()
   const { dati, caricamento, errore } = useFetch(getDashboard)
@@ -51,7 +56,13 @@ export default function Dashboard() {
   )
 }
 
-// Colonna destra quando i dati sono arrivati
+/**
+ * Colonna destra quando i dati sono arrivati
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.dati
+ * @returns {JSX.Element}
+ */
 function ColonnaDati({ dati }) {
   const { leggendaria, ultimePartite, prove } = dati
 
@@ -95,7 +106,11 @@ function ColonnaDati({ dati }) {
   )
 }
 
-// Colonna destra mentre aspettiamo il backend: rettangoli che pulsano
+/**
+ * Colonna destra mentre aspettiamo il backend: rettangoli che pulsano
+ *
+ * @returns {JSX.Element}
+ */
 function ColonnaInCaricamento() {
   return (
     <>

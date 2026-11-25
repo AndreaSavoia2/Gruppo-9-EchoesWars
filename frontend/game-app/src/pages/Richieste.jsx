@@ -10,7 +10,11 @@ import { useFetch } from '../hooks/useFetch'
 import { useAzioneRichiesta } from '../hooks/useAzioneRichiesta'
 import { getRichieste } from '../api/richieste'
 
-// R1-R6 / D15 · /richieste?scheda=tutte|amicizia|sfide
+/**
+ * R1-R6 / D15 · /richieste?scheda=tutte|amicizia|sfide
+ *
+ * @returns {JSX.Element}
+ */
 export default function Richieste() {
   const [parametri] = useSearchParams()
   const scheda = parametri.get('scheda') ?? 'tutte'

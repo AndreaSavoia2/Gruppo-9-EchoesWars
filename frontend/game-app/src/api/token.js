@@ -29,7 +29,7 @@ export function leggiToken() {
   }
 }
 
-function salvaToken(token) {
+export function salvaToken(token) {
   try {
     localStorage.setItem(CHIAVE, token)
   } catch {

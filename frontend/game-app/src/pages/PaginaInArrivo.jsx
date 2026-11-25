@@ -2,8 +2,12 @@ import { Link } from 'react-router'
 import AppLayout from '../components/AppLayout'
 import Intestazione from '../components/Intestazione'
 
-// Pagina temporanea per i link verso schermate non ancora fatte.
-// Quando creiamo la pagina vera, aggiungiamo la sua <Route> in App.jsx.
+/**
+ * Pagina temporanea per i link verso schermate non ancora fatte.
+ * Quando creiamo la pagina vera, aggiungiamo la sua <Route> in App.jsx.
+ *
+ * @returns {JSX.Element}
+ */
 export default function PaginaInArrivo() {
   return (
     <AppLayout>

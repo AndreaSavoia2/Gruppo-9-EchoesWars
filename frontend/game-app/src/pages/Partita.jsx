@@ -14,13 +14,17 @@ import { getPartita } from '../api/partite'
 // Ogni quanto richiedere lo stato mentre la partita è in corso
 const ATTESA_MS = 2000
 
-// /partita/:id → il "cuore" del flusso Gioca:
-//   1. partita appena avviata → "Stiamo simulando" (matchmaking)
-//   2. quando è pronta        → parte da sola la battaglia animata (/partita/:id/battaglia)
-//   3. finita la battaglia    → si torna qui e si vede "Hai vinto / Hai perso"
-// Come capisce se è "appena avviata"? Chi avvia la partita ci arriva con
-// navigate(..., { state: { nuova: true } }). Se apri il link in un altro modo
-// (es. "‹ Risultato" dai dettagli) vedi subito il risultato, senza battaglia.
+/**
+ * /partita/:id → il "cuore" del flusso Gioca:
+ *   1. partita appena avviata → "Stiamo simulando" (matchmaking)
+ *   2. quando è pronta        → parte da sola la battaglia animata (/partita/:id/battaglia)
+ *   3. finita la battaglia    → si torna qui e si vede "Hai vinto / Hai perso"
+ * Come capisce se è "appena avviata"? Chi avvia la partita ci arriva con
+ * navigate(..., { state: { nuova: true } }). Se apri il link in un altro modo
+ * (es. "‹ Risultato" dai dettagli) vedi subito il risultato, senza battaglia.
+ *
+ * @returns {JSX.Element}
+ */
 export default function Partita() {
   // useParams legge i pezzi variabili dell'indirizzo: /partita/42 → id = "42"
   const { id } = useParams()

@@ -63,7 +63,8 @@ export function normalizzaCarta(carta) {
 //    → usiamo quell'immagine, e il nome lo prendiamo dal file ("dominio_comune")
 // 2. Il backend non la manda (es. modalità demo)
 //    → la scegliamo noi tra quelle in public/images/cornici, in base a Eco + rarità + scuola
-const SCUOLA_FILE = { Guerrieri: 'warrior', Maghi: 'mage', Furfanti: 'rogue' }
+// (il backend usa i nomi al singolare: Guerriero, Mago, Ladro)
+const SCUOLA_FILE = { Guerrieri: 'warrior', Maghi: 'mage', Furfanti: 'rogue', Guerriero: 'warrior', Mago: 'mage', Ladro: 'rogue' }
 
 export function sceltaCornice({ cornice, eco, rarita, scuola }) {
   if (cornice) {

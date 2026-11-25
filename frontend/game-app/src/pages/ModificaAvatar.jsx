@@ -10,7 +10,11 @@ import { useFetch } from '../hooks/useFetch'
 import { useUtente } from '../context/UtenteContext'
 import { getAvatar, salvaAvatar } from '../api/profilo'
 
-// 11b / D11b · /profilo/avatar
+/**
+ * 11b / D11b · /profilo/avatar
+ *
+ * @returns {JSX.Element}
+ */
 export default function ModificaAvatar() {
   const navigate = useNavigate()
   const { dati: avatar, caricamento, errore } = useFetch(getAvatar)

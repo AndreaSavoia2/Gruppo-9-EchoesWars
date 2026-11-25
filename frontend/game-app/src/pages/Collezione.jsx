@@ -18,7 +18,11 @@ const FILTRI = [
 ]
 const NESSUN_FILTRO = { scuola: [], eco: [], rarita: [], abilita: [] }
 
-// 5 · 5f-5j · 5o / D3 · /collezione — le carte possedute, con i filtri
+/**
+ * 5 · 5f-5j · 5o / D3 · /collezione — le carte possedute, con i filtri
+ *
+ * @returns {JSX.Element}
+ */
 export default function Collezione() {
   const [filtri, setFiltri] = useState(NESSUN_FILTRO)
   const [filtroAperto, setFiltroAperto] = useState(null) // es. 'scuola', oppure null
@@ -128,7 +132,14 @@ export default function Collezione() {
   )
 }
 
-// 5o · Nessuna carta trovata
+/**
+ * 5o · Nessuna carta trovata
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {Function} props.onAzzera
+ * @param {*} props.filtriAttivi
+ * @returns {JSX.Element}
+ */
 function NessunRisultato({ onAzzera, filtriAttivi }) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-2xl border border-oro bg-sfondo p-5 text-center lg:max-w-md">

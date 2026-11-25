@@ -7,6 +7,11 @@ export const echi = [
   { nome: 'Oblio', descrizione: 'Ombra e oblio', icona: '/icons/echi/oblio.png', testo: 'text-oblio', bordo: 'border-oblio', sfondo: 'bg-oblio' },
 ]
 
+/**
+ * Cerca un'Eco per nome (es. "Sapienza").
+ *
+ * @param {string} nome
+ */
 export function trovaEco(nome) {
   return echi.find((eco) => eco.nome === nome)
 }

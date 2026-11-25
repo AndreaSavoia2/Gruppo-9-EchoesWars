@@ -1,7 +1,16 @@
-// Due cerchi "TU" contro l'avversario (Simulazione, Attesa sfida, Sfida accettata).
-// centro:            '• • •' oppure 'VS'
-// conOnde:           su mobile mostra le onde intorno all'avversario (si sta aspettando)
-// avversarioSbiadito: l'avversario è più chiaro (non ha ancora risposto / sta giocando)
+/**
+ * Due cerchi "TU" contro l'avversario (Simulazione, Attesa sfida, Sfida accettata).
+ * centro:            '• • •' oppure 'VS'
+ * conOnde:           su mobile mostra le onde intorno all'avversario (si sta aspettando)
+ * avversarioSbiadito: l'avversario è più chiaro (non ha ancora risposto / sta giocando)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.inizialiAvversario
+ * @param {string} [props.centro='• • •']
+ * @param {boolean} [props.conOnde=true]
+ * @param {boolean} [props.avversarioSbiadito=true]
+ * @returns {JSX.Element}
+ */
 export default function Confronto({ inizialiAvversario, centro = '• • •', conOnde = true, avversarioSbiadito = true }) {
   const vs = centro === 'VS'
   return (
@@ -29,6 +38,14 @@ export default function Confronto({ inizialiAvversario, centro = '• • •', 
   )
 }
 
+/**
+ * Cerchio con le iniziali di un giocatore (sbiadito = ancora in attesa).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.testo
+ * @param {boolean} [props.sbiadito=false]
+ * @returns {JSX.Element}
+ */
 function Avatar({ testo, sbiadito = false }) {
   return (
     <div

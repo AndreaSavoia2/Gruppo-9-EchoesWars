@@ -6,7 +6,11 @@ import MessaggioErrore from '../components/MessaggioErrore'
 import { useFetch } from '../hooks/useFetch'
 import { getAccessi } from '../api/progressi'
 
-// 14 / D14 · /accessi — calendario degli accessi consecutivi
+/**
+ * 14 / D14 · /accessi — calendario degli accessi consecutivi
+ *
+ * @returns {JSX.Element}
+ */
 export default function Accessi() {
   const { dati, caricamento, errore } = useFetch(getAccessi)
 
@@ -90,7 +94,15 @@ export default function Accessi() {
   )
 }
 
-// Un giorno del calendario (dal Figma "App/Giorno accesso"): Fatto · Oggi · Futuro (🎁 se c'è una ricompensa)
+/**
+ * Un giorno del calendario (dal Figma "App/Giorno accesso"): Fatto · Oggi · Futuro (🎁 se c'è una ricompensa)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.numero
+ * @param {*} props.oggi
+ * @param {*} props.regalo
+ * @returns {JSX.Element}
+ */
 function Giorno({ numero, oggi, regalo }) {
   const fatto = numero < oggi
   const eOggi = numero === oggi

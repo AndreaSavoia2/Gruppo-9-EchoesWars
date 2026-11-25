@@ -10,6 +10,13 @@ import { getUtente } from '../api/utente'
 // (o saltato) il benvenuto, così non ci torna mentre il backend si aggiorna.
 const UtenteContext = createContext(null)
 
+/**
+ * Scarica i dati dell'utente una volta sola e li rende disponibili a tutta l'app.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 export function UtenteProvider({ children }) {
   const statoUtente = useFetch(getUtente)
   const [benvenutoVisto, setBenvenutoVisto] = useState(false)
@@ -17,6 +24,9 @@ export function UtenteProvider({ children }) {
   return <UtenteContext.Provider value={valore}>{children}</UtenteContext.Provider>
 }
 
+/**
+ * Legge i dati dell'utente condivisi (dati, caricamento, errore, ricarica...).
+ */
 export function useUtente() {
   return useContext(UtenteContext)
 }

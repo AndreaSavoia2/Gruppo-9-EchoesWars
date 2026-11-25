@@ -5,12 +5,18 @@ import { useOnline } from '../hooks/useOnline'
 import SchermataErrore from './SchermataErrore'
 import Bottone, { BottoneLink } from './Bottone'
 
-// Controlli che valgono per TUTTE le pagine, prima di mostrarle:
-//   1. niente internet           → schermata "Sei offline" (E1)
-//   2. il server non risponde    → schermata "Qualcosa non ha funzionato" (E2)
-//      (lo capiamo dalla richiesta /utente, che parte su ogni pagina)
-//   3. primo accesso dell'utente → porta alle schermate di benvenuto (/benvenuto)
-// Se va tutto bene mostra semplicemente la pagina (children).
+/**
+ * Controlli che valgono per TUTTE le pagine, prima di mostrarle:
+ *   1. niente internet           → schermata "Sei offline" (E1)
+ *   2. il server non risponde    → schermata "Qualcosa non ha funzionato" (E2)
+ *      (lo capiamo dalla richiesta /utente, che parte su ogni pagina)
+ *   3. primo accesso dell'utente → porta alle schermate di benvenuto (/benvenuto)
+ * Se va tutto bene mostra semplicemente la pagina (children).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 export default function ControlloApp({ children }) {
   const { online, ricontrolla } = useOnline()
   const { dati: utente, errore, ricarica, benvenutoVisto } = useUtente()

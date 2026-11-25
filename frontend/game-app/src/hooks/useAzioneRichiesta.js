@@ -2,8 +2,12 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { accettaRichiesta, rifiutaRichiesta } from '../api/richieste'
 
-// Logica condivisa tra Richieste e Amici: accetta / rifiuta e mostra un messaggio.
-// Per le SFIDE "Accetta" porta alla scelta del mazzo.
+/**
+ * Logica condivisa tra Richieste e Amici: accetta / rifiuta e mostra un messaggio.
+ * Per le SFIDE "Accetta" porta alla scelta del mazzo.
+ *
+ * @param {*} ricarica
+ */
 export function useAzioneRichiesta(ricarica) {
   const navigate = useNavigate()
   const [messaggio, setMessaggio] = useState(null) // { tipo: 'successo' | 'info' | 'errore', testo }

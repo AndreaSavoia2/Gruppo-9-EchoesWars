@@ -1,7 +1,15 @@
 import { Link } from 'react-router'
 
-// Bottoncino arrotondato (Richieste, Missioni, Cronologia).
-// notifica = true → mostra il pallino viola in alto a destra.
+/**
+ * Bottoncino arrotondato (Richieste, Missioni, Cronologia).
+ * notifica = true → mostra il pallino viola in alto a destra.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.testo
+ * @param {string} props.percorso
+ * @param {boolean} [props.notifica=false]
+ * @returns {JSX.Element}
+ */
 export default function Chip({ testo, percorso, notifica = false }) {
   return (
     <Link

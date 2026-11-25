@@ -1,8 +1,14 @@
 import { Link } from 'react-router'
 import ImmagineCarta from '../carta/ImmagineCarta'
 
-// Carta della collezione (dal Figma "App/Carta"): immagine + pallino con le copie (×2, ×3).
-// Il pallino appare solo se ne hai più di una.
+/**
+ * Carta della collezione (dal Figma "App/Carta"): immagine + pallino con le copie (×2, ×3).
+ * Il pallino appare solo se ne hai più di una.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carta
+ * @returns {JSX.Element}
+ */
 export default function Carta({ carta }) {
   return (
     <Link to={`/collezione/carta/${carta.id}`} className="relative block aspect-[107/150] w-full">

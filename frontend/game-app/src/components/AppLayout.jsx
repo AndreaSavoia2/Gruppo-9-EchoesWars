@@ -2,12 +2,22 @@ import TopBar from './TopBar'
 import SidebarNav from './SidebarNav'
 import BottomNav from './BottomNav'
 
-// Il "guscio" di tutte le pagine dell'app:
-// sfondo + menu laterale (desktop) + barra in alto + menu in basso (mobile).
-// Ogni pagina ci mette dentro il suo contenuto con {children}.
-// sfondoMobile / sfondoDesktop: alcune pagine hanno un'immagine di sfondo diversa.
-// nascondiMenuMobile: su alcune schermate (es. scelta del mazzo) al posto del menu
-// in basso c'è una barra con il bottone dell'azione.
+/**
+ * Il "guscio" di tutte le pagine dell'app:
+ * sfondo + menu laterale (desktop) + barra in alto + menu in basso (mobile).
+ * Ogni pagina ci mette dentro il suo contenuto con {children}.
+ * sfondoMobile / sfondoDesktop: alcune pagine hanno un'immagine di sfondo diversa.
+ * nascondiMenuMobile: su alcune schermate (es. scelta del mazzo) al posto del menu
+ * in basso c'è una barra con il bottone dell'azione.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.paginaAttiva
+ * @param {boolean} [props.nascondiMenuMobile=false]
+ * @param {string} [props.sfondoMobile='/images/sfondo-app.png']
+ * @param {string} [props.sfondoDesktop='/images/sfondo-desktop.png']
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 export default function AppLayout({
   paginaAttiva,
   nascondiMenuMobile = false,

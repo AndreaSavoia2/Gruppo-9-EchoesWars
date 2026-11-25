@@ -16,7 +16,11 @@ const schede = [
   { id: 'pareggio', etichetta: 'Pareggi', percorso: '/cronologia?esito=pareggio' },
 ]
 
-// 2g / D13 · /cronologia?esito=vittoria|sconfitta|pareggio
+/**
+ * 2g / D13 · /cronologia?esito=vittoria|sconfitta|pareggio
+ *
+ * @returns {JSX.Element}
+ */
 export default function Cronologia() {
   const [parametri] = useSearchParams()
   const esito = parametri.get('esito')

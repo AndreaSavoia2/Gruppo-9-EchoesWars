@@ -12,7 +12,16 @@ const varianti = {
 const base =
   'flex min-h-11 items-center justify-center rounded-full px-5 font-medium disabled:cursor-not-allowed disabled:opacity-50'
 
-// <Bottone> = un vero <button> (per azioni: inviare, confermare...)
+/**
+ * <Bottone> = un vero <button> (per azioni: inviare, confermare...)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} [props.variante='primario']
+ * @param {string} [props.className='w-full']
+ * @param {React.ReactNode} props.children
+ * @param {object} [props.altreProps] - tutte le altre proprietà
+ * @returns {JSX.Element}
+ */
 export default function Bottone({ variante = 'primario', className = 'w-full', children, ...altreProps }) {
   return (
     <button className={`${base} ${varianti[variante]} ${className}`} {...altreProps}>
@@ -21,7 +30,16 @@ export default function Bottone({ variante = 'primario', className = 'w-full', c
   )
 }
 
-// <BottoneLink> = sembra un bottone ma porta a un'altra pagina
+/**
+ * <BottoneLink> = sembra un bottone ma porta a un'altra pagina
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} [props.variante='primario']
+ * @param {string} [props.className='w-full']
+ * @param {React.ReactNode} props.children
+ * @param {object} [props.altreProps] - tutte le altre proprietà
+ * @returns {JSX.Element}
+ */
 export function BottoneLink({ variante = 'primario', className = 'w-full', children, ...altreProps }) {
   return (
     <Link className={`${base} ${varianti[variante]} ${className}`} {...altreProps}>

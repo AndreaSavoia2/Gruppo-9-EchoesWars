@@ -1,12 +1,20 @@
-// Iniziali da mostrare nel cerchio dell'avatar.
-// "@lyra_eco" → "LE"   ·   "Mario Rossi" → "MR"   ·   "ombra" → "OM"
+/**
+ * Iniziali da mostrare nel cerchio dell'avatar.
+ * "@lyra_eco" → "LE"   ·   "Mario Rossi" → "MR"   ·   "ombra" → "OM"
+ *
+ * @param {string} [nome='']
+ */
 export function iniziali(nome = '') {
   const parole = nome.replace('@', '').split(/[\s_.-]+/).filter(Boolean)
   if (parole.length >= 2) return (parole[0][0] + parole[1][0]).toUpperCase()
   return (parole[0] ?? '').slice(0, 2).toUpperCase()
 }
 
-// Data leggibile: "Oggi, 21:30" · "Ieri, 18:05" · "12 nov, 09:10"
+/**
+ * Data leggibile: "Oggi, 21:30" · "Ieri, 18:05" · "12 nov, 09:10"
+ *
+ * @param {*} dataIso
+ */
 export function dataLeggibile(dataIso) {
   if (!dataIso) return ''
   const data = new Date(dataIso)
@@ -22,7 +30,11 @@ export function dataLeggibile(dataIso) {
   return `${data.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}, ${ora}`
 }
 
-// Quanto tempo fa: "oggi" · "ieri" · "3 giorni fa" · "1 settimana fa" · "2 mesi fa"
+/**
+ * Quanto tempo fa: "oggi" · "ieri" · "3 giorni fa" · "1 settimana fa" · "2 mesi fa"
+ *
+ * @param {*} dataIso
+ */
 export function tempoFa(dataIso) {
   if (!dataIso) return null
   const inizioGiorno = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate())
@@ -37,7 +49,12 @@ export function tempoFa(dataIso) {
   return mesi <= 1 ? '1 mese fa' : `${mesi} mesi fa`
 }
 
-// Tempo che manca a una data: "20 h" · "45 min" · "47 h 59 min" (conMinuti = true)
+/**
+ * Tempo che manca a una data: "20 h" · "45 min" · "47 h 59 min" (conMinuti = true)
+ *
+ * @param {*} dataIso
+ * @param {boolean} [conMinuti=false]
+ */
 export function tempoMancante(dataIso, conMinuti = false) {
   const minuti = Math.max(0, Math.round((new Date(dataIso) - Date.now()) / 60_000))
   const ore = Math.floor(minuti / 60)
@@ -45,12 +62,20 @@ export function tempoMancante(dataIso, conMinuti = false) {
   return conMinuti ? `${ore} h ${minuti % 60} min` : `${ore} h`
 }
 
-// Data breve: "3 novembre"
+/**
+ * Data breve: "3 novembre"
+ *
+ * @param {*} dataIso
+ */
 export function dataBreve(dataIso) {
   return new Date(dataIso).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' })
 }
 
-// Da quanto tempo, per le richieste: "adesso" · "2 min fa" · "1 ora fa" · "5 ore fa" · poi come tempoFa ("ieri"...)
+/**
+ * Da quanto tempo, per le richieste: "adesso" · "2 min fa" · "1 ora fa" · "5 ore fa" · poi come tempoFa ("ieri"...)
+ *
+ * @param {*} dataIso
+ */
 export function quantoFa(dataIso) {
   const minuti = Math.max(0, Math.round((Date.now() - new Date(dataIso)) / 60_000))
   if (minuti < 1) return 'adesso'

@@ -14,8 +14,12 @@ import { getAmiciScambio, getCarteAmico, getMieCarteScambio, inviaProposta } fro
 import { REGOLE_SCAMBI } from '../data/regole'
 import { dataBreve } from '../utils/testo'
 
-// 10b-10f · /scambi/nuova — una sola pagina, 5 momenti:
-//   1 amico → 2 la tua carta → 3 la carta che vuoi → 4 riepilogo → 5 inviata
+/**
+ * 10b-10f · /scambi/nuova — una sola pagina, 5 momenti:
+ *   1 amico → 2 la tua carta → 3 la carta che vuoi → 4 riepilogo → 5 inviata
+ *
+ * @returns {JSX.Element}
+ */
 export default function NuovaProposta() {
   const [passo, setPasso] = useState(1)
   const [amico, setAmico] = useState(null)
@@ -134,7 +138,13 @@ export default function NuovaProposta() {
   )
 }
 
-// "Passo 2 di 3 · ..." + barra a 3 pezzi
+/**
+ * "Passo 2 di 3 · ..." + barra a 3 pezzi
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.passo
+ * @returns {JSX.Element}
+ */
 function Progresso({ passo }) {
   const nomi = ['Scegli l’amico', 'Scegli la carta da offrire', 'Scegli la carta che vuoi']
   return (
@@ -151,6 +161,15 @@ function Progresso({ passo }) {
   )
 }
 
+/**
+ * Passo 1 della proposta di scambio: scegli l'amico.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.scelto
+ * @param {Function} props.onScegli
+ * @param {Function} props.onAvanti
+ * @returns {JSX.Element}
+ */
 function PassoAmico({ scelto, onScegli, onAvanti }) {
   const { dati: amici, caricamento, errore } = useFetch(getAmiciScambio)
   return (
@@ -177,6 +196,15 @@ function PassoAmico({ scelto, onScegli, onAvanti }) {
   )
 }
 
+/**
+ * Griglia di carte selezionabili (si può sceglierne una sola).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carte
+ * @param {*} props.scelta
+ * @param {Function} props.onScegli
+ * @returns {JSX.Element}
+ */
 function GrigliaCarte({ carte, scelta, onScegli }) {
   return (
     <ul className="mt-4 grid grid-cols-3 gap-x-3 gap-y-2.5 lg:grid-cols-5">
@@ -189,6 +217,15 @@ function GrigliaCarte({ carte, scelta, onScegli }) {
   )
 }
 
+/**
+ * Passo 2 della proposta di scambio: scegli la tua carta da offrire.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.scelta
+ * @param {Function} props.onScegli
+ * @param {Function} props.onAvanti
+ * @returns {JSX.Element}
+ */
 function PassoMiaCarta({ scelta, onScegli, onAvanti }) {
   const { dati: carte, caricamento, errore } = useFetch(getMieCarteScambio)
   return (
@@ -203,6 +240,17 @@ function PassoMiaCarta({ scelta, onScegli, onAvanti }) {
   )
 }
 
+/**
+ * Passo 3 della proposta di scambio: scegli la carta che chiedi all'amico (stessa rarità).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.amico
+ * @param {*} props.rarita
+ * @param {*} props.scelta
+ * @param {Function} props.onScegli
+ * @param {Function} props.onAvanti
+ * @returns {JSX.Element}
+ */
 function PassoSuaCarta({ amico, rarita, scelta, onScegli, onAvanti }) {
   const carica = useCallback((signal) => getCarteAmico(amico.id, rarita, signal), [amico.id, rarita])
   const { dati: carte, caricamento, errore } = useFetch(carica)

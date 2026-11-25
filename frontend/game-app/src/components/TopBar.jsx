@@ -6,8 +6,12 @@ import Scheletro from './Scheletro'
 // (useGrouping: 'always' serve perché in italiano, di base, 1250 resta senza punto)
 const formatoCrediti = new Intl.NumberFormat('it-IT', { useGrouping: 'always' })
 
-// Barra in alto: avatar, nome utente e crediti.
-// Nome e crediti arrivano dal backend (useUtente).
+/**
+ * Barra in alto: avatar, nome utente e crediti.
+ * Nome e crediti arrivano dal backend (useUtente).
+ *
+ * @returns {JSX.Element}
+ */
 export default function TopBar() {
   const { dati: utente, caricamento } = useUtente()
 

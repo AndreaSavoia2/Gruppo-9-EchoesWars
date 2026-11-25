@@ -16,7 +16,11 @@ import { tempoMancante } from '../utils/testo'
 
 const etichetteStato = { accettata: '✓ Accettato', rifiutata: 'Rifiutato', scaduta: 'Scaduto', annullata: 'Annullato' }
 
-// 10 · 10a · 10g · 10j / D9 · /scambi?scheda=ricevute|inviate|storico
+/**
+ * 10 · 10a · 10g · 10j / D9 · /scambi?scheda=ricevute|inviate|storico
+ *
+ * @returns {JSX.Element}
+ */
 export default function Scambi() {
   const [parametri] = useSearchParams()
   const scheda = parametri.get('scheda') ?? 'ricevute'
@@ -153,7 +157,15 @@ const testoVuoto = {
 
 const riquadro = 'flex flex-col gap-2 rounded-2xl border border-oro-bordo bg-sfondo px-4 py-3.5'
 
-// Proposta che hai ricevuto: "Ti offre" ⇄ "Vuole"
+/**
+ * Proposta che hai ricevuto: "Ti offre" ⇄ "Vuole"
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.proposta
+ * @param {*} props.inPausa
+ * @param {Function} props.onRifiuta
+ * @returns {JSX.Element}
+ */
 function PropostaRicevuta({ proposta, inPausa, onRifiuta }) {
   const navigate = useNavigate()
   return (
@@ -179,7 +191,14 @@ function PropostaRicevuta({ proposta, inPausa, onRifiuta }) {
   )
 }
 
-// 10g · Proposta che hai inviato: "Offri" ⇄ "Chiedi"
+/**
+ * 10g · Proposta che hai inviato: "Offri" ⇄ "Chiedi"
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.proposta
+ * @param {Function} props.onAnnulla
+ * @returns {JSX.Element}
+ */
 function PropostaInviata({ proposta, onAnnulla }) {
   return (
     <article className="flex flex-col gap-3">
@@ -197,6 +216,13 @@ function PropostaInviata({ proposta, onAnnulla }) {
   )
 }
 
+/**
+ * Una proposta già conclusa, nello storico degli scambi.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.proposta
+ * @returns {JSX.Element}
+ */
 function PropostaStorico({ proposta }) {
   return (
     <article className={riquadro}>
@@ -211,7 +237,14 @@ function PropostaStorico({ proposta }) {
   )
 }
 
-// 10a · Il mercato si sblocca dopo N partite
+/**
+ * 10a · Il mercato si sblocca dopo N partite
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.partite
+ * @param {*} props.richieste
+ * @returns {JSX.Element}
+ */
 function MercatoBloccato({ partite, richieste }) {
   const tacche = Array.from({ length: richieste }, (_, i) => i)
   return (

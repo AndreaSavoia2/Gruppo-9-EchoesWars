@@ -1,7 +1,16 @@
 import { Link } from 'react-router'
 
-// Schede a "pillola" (Carte · Mazzi · Buste, Ricevute · Inviate · Storico...).
-// schede: [{ id, etichetta, percorso }] · attiva: id della scheda selezionata
+/**
+ * Schede a "pillola" (Carte · Mazzi · Buste, Ricevute · Inviate · Storico...).
+ * schede: [{ id, etichetta, percorso }] · attiva: id della scheda selezionata
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.schede
+ * @param {*} props.attiva
+ * @param {string} props.etichetta
+ * @param {string} [props.className='lg:w-105']
+ * @returns {JSX.Element}
+ */
 export default function Schede({ schede, attiva, etichetta, className = 'lg:w-105' }) {
   return (
     <nav aria-label={etichetta} className={`flex w-full rounded-full bg-sfondo-secondario p-1 ${className}`}>

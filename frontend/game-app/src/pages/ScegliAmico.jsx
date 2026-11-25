@@ -10,7 +10,11 @@ import { useFetch } from '../hooks/useFetch'
 import { getAmici, inviaSfida } from '../api/sfide'
 import { tempoFa } from '../utils/testo'
 
-// A1 / DA1 · /gioca/amico — scegli quale amico sfidare
+/**
+ * A1 / DA1 · /gioca/amico — scegli quale amico sfidare
+ *
+ * @returns {JSX.Element}
+ */
 export default function ScegliAmico() {
   const navigate = useNavigate()
   const { dati: amici, caricamento, errore } = useFetch(getAmici)

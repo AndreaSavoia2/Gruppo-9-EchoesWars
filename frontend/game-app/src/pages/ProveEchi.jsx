@@ -12,7 +12,11 @@ import { getProve, riscuotiProva } from '../api/progressi'
 
 const VISIBILI = 4 // quante prove mostrare prima di "Mostra tutte"
 
-// 13 · 13e / D10 · /missioni
+/**
+ * 13 · 13e / D10 · /missioni
+ *
+ * @returns {JSX.Element}
+ */
 export default function ProveEchi() {
   const { dati, caricamento, errore, ricarica } = useFetch(getProve)
   const { ricarica: ricaricaUtente } = useUtente()

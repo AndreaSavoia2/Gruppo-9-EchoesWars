@@ -17,7 +17,11 @@ const FILTRI = [
 ]
 const NESSUN_FILTRO = { scuola: [], eco: [], ordina: [] }
 
-// 5c · 5k · 5l · 5m · 5p / D4 · /collezione/mazzi — i tuoi mazzi
+/**
+ * 5c · 5k · 5l · 5m · 5p / D4 · /collezione/mazzi — i tuoi mazzi
+ *
+ * @returns {JSX.Element}
+ */
 export default function Mazzi() {
   const [filtri, setFiltri] = useState(NESSUN_FILTRO)
   const [filtroAperto, setFiltroAperto] = useState(null)
@@ -135,7 +139,11 @@ export default function Mazzi() {
   )
 }
 
-// 5p · Non hai ancora un mazzo
+/**
+ * 5p · Non hai ancora un mazzo
+ *
+ * @returns {JSX.Element}
+ */
 function NessunMazzo() {
   return (
     <div className="flex flex-col items-center gap-3 rounded-2xl border border-oro bg-sfondo px-5 py-7 text-center lg:max-w-md">

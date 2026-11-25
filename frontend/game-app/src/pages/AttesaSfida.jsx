@@ -12,7 +12,11 @@ import { iniziali } from '../utils/testo'
 const ATTESA_MS = 2000 // ogni quanto chiedere se l'amico ha risposto
 const CONTO_ALLA_ROVESCIA = 3 // secondi prima di far partire la partita
 
-// A3 / A4 / DA3 / DA4 · /sfida/:id — aspetta la risposta dell'amico
+/**
+ * A3 / A4 / DA3 / DA4 · /sfida/:id — aspetta la risposta dell'amico
+ *
+ * @returns {JSX.Element}
+ */
 export default function AttesaSfida() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -79,7 +83,13 @@ export default function AttesaSfida() {
   )
 }
 
-// Mostra i secondi che mancano alla scadenza e si aggiorna da solo ogni secondo
+/**
+ * Mostra i secondi che mancano alla scadenza e si aggiorna da solo ogni secondo
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.scadeIl
+ * @returns {JSX.Element}
+ */
 function SecondiRimasti({ scadeIl }) {
   const [secondi, setSecondi] = useState(() => secondiA(scadeIl))
 
@@ -91,12 +101,22 @@ function SecondiRimasti({ scadeIl }) {
   return secondi
 }
 
-// Quanti secondi mancano a una certa data (mai sotto zero)
+/**
+ * Quanti secondi mancano a una certa data (mai sotto zero)
+ *
+ * @param {*} dataIso
+ */
 function secondiA(dataIso) {
   return Math.max(0, Math.ceil((new Date(dataIso) - Date.now()) / 1000))
 }
 
-// A4 / DA4 · "@amico ha accettato!" + conto alla rovescia, poi parte la partita
+/**
+ * A4 / DA4 · "@amico ha accettato!" + conto alla rovescia, poi parte la partita
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.sfida
+ * @returns {JSX.Element}
+ */
 function SfidaAccettata({ sfida }) {
   const navigate = useNavigate()
   const [secondi, setSecondi] = useState(CONTO_ALLA_ROVESCIA)
@@ -131,7 +151,13 @@ function SfidaAccettata({ sfida }) {
   )
 }
 
-// 2i "Sfida rifiutata" · 2j "Nessuna risposta"
+/**
+ * 2i "Sfida rifiutata" · 2j "Nessuna risposta"
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.sfida
+ * @returns {JSX.Element}
+ */
 function SfidaFinita({ sfida }) {
   const navigate = useNavigate()
   const rifiutata = sfida.stato === 'rifiutata'

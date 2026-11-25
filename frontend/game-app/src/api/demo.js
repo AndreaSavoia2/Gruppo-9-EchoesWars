@@ -186,6 +186,10 @@ function leggiPartita(partita) {
   return { ...dati, stato: 'conclusa' }
 }
 
+// Le Eco di un mazzo nel formato del backend: [{ id, nameIt }]
+const ID_ECHI_DEMO = { Dominio: 1, Sapienza: 2, Oblio: 3, Inganno: 4 }
+const fazioni = (m) => m.scuole.map((nome) => ({ id: ID_ECHI_DEMO[nome], nameIt: nome }))
+
 // ---------- Il "centralino": percorso → risposta ----------
 // Riceve le stesse cose di una fetch vera e restituisce i dati (o lancia un errore 404).
 export async function rispostaDemo(metodo, percorso, corpo) {
@@ -197,7 +201,20 @@ export async function rispostaDemo(metodo, percorso, corpo) {
 
   const concluse = () => stato.partite.filter((p) => Date.now() - p.iniziataAlle >= ATTESA_MATCHMAKING_MS)
 
-  if (richiesta === 'GET /utente') return { ...stato.utente }
+  // ---- Risposte nello STESSO formato del backend Spring (senza "incarto") ----
+  if (indirizzo === '/auth/me') {
+    return { id: 'demo', username: stato.utente.nome, email: 'demo@esempio.it', role: 'ROLE_USER', selectedAvatarId: null }
+  }
+  if (indirizzo === '/private/credits/balance') return { balance: stato.utente.crediti }
+
+  // Mazzi: lista (senza totali) e dettaglio di ogni mazzo
+  if (indirizzo === '/private/decks') {
+    return mazzi.map((m) => ({ id: m.id, name: m.nome, status: 'READY', factions: fazioni(m) }))
+  }
+  if (pezzi[0] === 'private' && pezzi[1] === 'decks' && pezzi[2]) {
+    const m = mazzi.find((x) => x.id === Number(pezzi[2]))
+    if (m) return { id: m.id, name: m.nome, status: 'READY', totalCards: m.carte, totalCost: m.punti, factions: fazioni(m), cards: [] }
+  }
 
   if (richiesta === 'GET /dashboard') {
     return {
@@ -209,8 +226,6 @@ export async function rispostaDemo(metodo, percorso, corpo) {
       prove: { completate: 3, totali: 12, inEvidenza: [{ id: 1, titolo: 'Vinci 10 partite', ricompensa: '20 crediti', fatto: 4, totale: 10 }] },
     }
   }
-
-  if (richiesta === 'GET /mazzi') return { totale: mazzi.length, massimo: 20, mazzi }
 
   if (richiesta === 'POST /partite') return { id: avviaPartita(corpo?.mazzoId).id }
 

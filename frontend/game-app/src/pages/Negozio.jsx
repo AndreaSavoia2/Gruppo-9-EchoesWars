@@ -12,7 +12,11 @@ import { compra, getNegozio } from '../api/negozio'
 
 const numero = new Intl.NumberFormat('it-IT', { useGrouping: 'always' })
 
-// 7 / D7 · /negozio
+/**
+ * 7 / D7 · /negozio
+ *
+ * @returns {JSX.Element}
+ */
 export default function Negozio() {
   const { dati, caricamento, errore, ricarica } = useFetch(getNegozio)
   const { dati: utente, ricarica: ricaricaUtente } = useUtente()
@@ -107,6 +111,14 @@ export default function Negozio() {
   )
 }
 
+/**
+ * Riquadro "Il tuo credito" con le regole per guadagnare crediti.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.crediti
+ * @param {*} props.regole
+ * @returns {JSX.Element}
+ */
 function Credito({ crediti, regole }) {
   return (
     <section className="flex flex-col gap-2 rounded-2xl border border-oro-bordo bg-sfondo-secondario px-4 py-3.5 lg:border-oro lg:bg-sfondo lg:p-6">

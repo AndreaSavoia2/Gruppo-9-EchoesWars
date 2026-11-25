@@ -1,19 +1,34 @@
 import { apiGet, apiPost } from './client'
 
-// ⚠️ DA CONFERMARE col backend: percorsi e forma dei dati.
-
-// Richieste ricevute (amicizia e sfide).
-// Risposta: [ { "id": 5, "tipo": "sfida", "da": { "nome": "@kael" }, "ricevutaIl": "2026-11-22T21:28:00Z" } ]
-//            tipo = "amicizia" oppure "sfida"
-export function getRichieste(signal) {
-  return apiGet('/richieste', signal)
+/**
+ * Richieste ricevute.
+ * ✅ COLLEGATO (solo amicizia): GET /private/friendships/requests/received
+ *   → [{ id, requesterUsername, status, requestedAt, ... }]
+ * ⚠️ Le richieste di SFIDA non ci sono ancora nel backend.
+ * Restituisce: [ { "id": 5, "tipo": "amicizia", "da": { "nome": "@kael" }, "ricevutaIl": "2026-11-22T21:28:00" } ]
+ * @param {AbortSignal} signal
+ */
+export async function getRichieste(signal) {
+  const ricevute = (await apiGet('/private/friendships/requests/received', signal)) ?? []
+  return ricevute
+    .filter((r) => r.status === 'PENDING')
+    .map((r) => ({
+      id: r.id,
+      tipo: 'amicizia',
+      da: { nome: `@${r.requesterUsername}` },
+      ricevutaIl: r.requestedAt,
+    }))
 }
 
-// Accetta. Per una SFIDA invia anche il mazzo: { "mazzoId": 1 } e risponde { "partitaId": 42 }
+/**
+ * ⚠️ NON ANCORA NEL BACKEND: accetta una richiesta.
+ * Per una SFIDA invia anche il mazzo: { "mazzoId": 1 } e risponde { "partitaId": 42 }
+ */
 export function accettaRichiesta(id, mazzoId) {
   return apiPost(`/richieste/${id}/accetta`, mazzoId ? { mazzoId } : undefined)
 }
 
+/** ⚠️ NON ANCORA NEL BACKEND: rifiuta una richiesta. */
 export function rifiutaRichiesta(id) {
   return apiPost(`/richieste/${id}/rifiuta`)
 }

@@ -1,5 +1,16 @@
-// Riga da scegliere (dal Figma "App/Opzione"): icona, titolo, dettaglio, freccia.
-// Selezionata = sfondo oro + bordo spesso + spunta (non solo il colore).
+/**
+ * Riga da scegliere (dal Figma "App/Opzione"): icona, titolo, dettaglio, freccia.
+ * Selezionata = sfondo oro + bordo spesso + spunta (non solo il colore).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.titolo
+ * @param {*} props.dettaglio
+ * @param {*} props.scelto
+ * @param {Function} props.onScegli
+ * @param {string} [props.icona='/icons/persona.svg']
+ * @param {*} [props.iconaDesktop=icona]
+ * @returns {JSX.Element}
+ */
 export default function RigaSelezionabile({ titolo, dettaglio, scelto, onScegli, icona = '/icons/persona.svg', iconaDesktop = icona }) {
   return (
     <button

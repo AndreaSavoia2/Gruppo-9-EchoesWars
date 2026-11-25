@@ -2,7 +2,15 @@ import { coloreRarita } from '../../data/rarita'
 
 const motivi = { mazzo: '🔒 In mazzo', riservata: '⏳ Riservata' }
 
-// Carta da scegliere nella "Nuova proposta". Bloccata = velo scuro + motivo, non si può toccare.
+/**
+ * Carta da scegliere nella "Nuova proposta". Bloccata = velo scuro + motivo, non si può toccare.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carta
+ * @param {*} props.scelta
+ * @param {Function} props.onScegli
+ * @returns {JSX.Element}
+ */
 export default function CartaSelezionabile({ carta, scelta, onScegli }) {
   const bloccata = Boolean(carta.bloccata)
   return (

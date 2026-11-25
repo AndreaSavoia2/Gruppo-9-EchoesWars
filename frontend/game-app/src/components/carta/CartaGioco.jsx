@@ -1,31 +1,38 @@
 import { useLayoutEffect, useRef } from 'react'
 import { CORNICI, normalizzaCarta, sceltaCornice } from '../../data/carte'
 
-// 🃏 Una carta del gioco, costruita a STRATI (come nel file card.html del team):
-//
-//   strato 1 (sotto): l'illustrazione        → cambia per ogni carta
-//   strato 2:         la cornice (immagine)  → una per Eco + rarità (+ scuola)
-//   strato 3 (sopra): i testi                → costo, nome, scuola, eco, descrizione, ATK, DEF
-//
-// Perché a strati e non un'unica immagine? Con 100 carte servono solo poche cornici
-// + 100 illustrazioni, e i testi (nome, valori) arrivano dal backend: se cambia
-// un numero non bisogna ridisegnare l'immagine.
-//
-// La carta si adatta a QUALSIASI larghezza: tutte le misure sono in "punti carta"
-// (la carta è 750 × 1050 punti) e 1 punto = larghezza della carta / 750.
-// Basta dare la larghezza con className, es. <CartaGioco carta={...} className="w-40" />
-//
-// Dati attesi (⚠️ DA CONFERMARE col backend):
-// {
-//   "codice": "DOM01", "nome": "Cadetto",
-//   "atk": 5, "def": 4, "costo": 3,
-//   "eco": "DOMINION", "scuola": "WARRIOR", "rarita": "COMMON",   // anche in italiano va bene
-//   "effetto": "PIERCING",          // oppure null
-//   "descrizione": "Giovane recluta…",   // usata quando non c'è un effetto
-//   "illustrazione": "https://…/illustrazioni/DOM01.webp",  // oppure null (mostra un segnaposto)
-//   "cornice": "https://…/cornici/dominio_comune.webp"     // il NOME del file decide le zone
-// }
-// def: se in battaglia la DEF è scesa, passa la DEF attuale (es. { ...carta, def: 1 }).
+/**
+ * 🃏 Una carta del gioco, costruita a STRATI (come nel file card.html del team):
+ *
+ *   strato 1 (sotto): l'illustrazione        → cambia per ogni carta
+ *   strato 2:         la cornice (immagine)  → una per Eco + rarità (+ scuola)
+ *   strato 3 (sopra): i testi                → costo, nome, scuola, eco, descrizione, ATK, DEF
+ *
+ * Perché a strati e non un'unica immagine? Con 100 carte servono solo poche cornici
+ * + 100 illustrazioni, e i testi (nome, valori) arrivano dal backend: se cambia
+ * un numero non bisogna ridisegnare l'immagine.
+ *
+ * La carta si adatta a QUALSIASI larghezza: tutte le misure sono in "punti carta"
+ * (la carta è 750 × 1050 punti) e 1 punto = larghezza della carta / 750.
+ * Basta dare la larghezza con className, es. <CartaGioco carta={...} className="w-40" />
+ *
+ * Dati attesi (⚠️ DA CONFERMARE col backend):
+ * {
+ *   "codice": "DOM01", "nome": "Cadetto",
+ *   "atk": 5, "def": 4, "costo": 3,
+ *   "eco": "DOMINION", "scuola": "WARRIOR", "rarita": "COMMON",   // anche in italiano va bene
+ *   "effetto": "PIERCING",          // oppure null
+ *   "descrizione": "Giovane recluta…",   // usata quando non c'è un effetto
+ *   "illustrazione": "https://…/illustrazioni/DOM01.webp",  // oppure null (mostra un segnaposto)
+ *   "cornice": "https://…/cornici/dominio_comune.webp"     // il NOME del file decide le zone
+ * }
+ * def: se in battaglia la DEF è scesa, passa la DEF attuale (es. { ...carta, def: 1 }).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carta
+ * @param {string} [props.className='w-full']
+ * @returns {JSX.Element}
+ */
 export default function CartaGioco({ carta: cartaGrezza, className = 'w-full' }) {
   const carta = normalizzaCarta(cartaGrezza)
   const cornice = sceltaCornice(carta) // { nome, src }
@@ -110,13 +117,31 @@ export default function CartaGioco({ carta: cartaGrezza, className = 'w-full' })
   )
 }
 
-// n punti carta → misura CSS
+/**
+ * n punti carta → misura CSS
+ *
+ * @param {*} n
+ */
 const u = (n) => `calc(${n} * var(--u))`
 
-// Rettangolo da (x0, y0) a (x1, y1) in punti carta → stile CSS
+/**
+ * Rettangolo da (x0, y0) a (x1, y1) in punti carta → stile CSS
+ *
+ * @param {*} x0
+ * @param {*} y0
+ * @param {*} x1
+ * @param {*} y1
+ */
 const zona = (x0, y0, x1, y1) => ({ left: u(x0), top: u(y0), width: u(x1 - x0), height: u(y1 - y0) })
 
-// Numeri grandi bianchi: costo, ATK, DEF
+/**
+ * Numeri grandi bianchi: costo, ATK, DEF
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.style
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 function Valore({ style, children }) {
   return (
     <div
@@ -128,7 +153,14 @@ function Valore({ style, children }) {
   )
 }
 
-// Scritte nella fascia colorata: "Scuola: …" e "Eco: …"
+/**
+ * Scritte nella fascia colorata: "Scuola: …" e "Eco: …"
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.style
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 function Fascia({ style, children }) {
   return (
     <div
@@ -141,7 +173,11 @@ function Fascia({ style, children }) {
   )
 }
 
-// Rimpicciolisce il testo un punto alla volta finché non esce più dal suo spazio
+/**
+ * Rimpicciolisce il testo un punto alla volta finché non esce più dal suo spazio
+ *
+ * @param {*} carta
+ */
 function restringiTesti(carta) {
   if (!carta.clientWidth) return // carta nascosta: riproveremo quando si vede
   carta.querySelectorAll('[data-adatta]').forEach((el) => {

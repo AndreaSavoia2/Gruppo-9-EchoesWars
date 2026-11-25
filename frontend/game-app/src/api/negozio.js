@@ -1,23 +1,41 @@
 import { apiGet, apiPost } from './client'
+import { getBuste } from './buste'
 
-// ⚠️ DA CONFERMARE col backend: percorsi e forma dei dati.
+// ⚠️ DA FARE NEL BACKEND: il prezzo non arriva nella lista dei pacchetti.
+// Nel database il "Pacchetto Base" costa 300 crediti: lo usiamo finché il backend non lo manda.
+const PREZZO_PROVVISORIO = 300
 
-// Risposta attesa:
-// {
-//   "prodotti": [ { "id": 1, "nome": "Busta standard", "immagine": "https://.../busta.png",
-//                   "descrizione": "5 carte: 3 comuni, 1 rara, 1 casuale",
-//                   "dettaglio": "Comune 85% · Rara 13% · Leggendaria 2%",   // probabilità (facoltativo)
-//                   "prezzo": 100 } ],
-//   "regoleCrediti": "Vittoria +10 · Pareggio +5 · Sconfitta +2 (max 40 al giorno)",
-//   "busteDaAprire": 3,
-//   "leggendaria": { "buste": 7, "totale": 10 }
-// }
-export function getNegozio(signal) {
-  return apiGet('/negozio', signal)
+/**
+ * I prodotti del negozio, le buste da aprire e il progresso verso la leggendaria.
+ * ✅ COLLEGATO:
+ *   GET /private/packs                     → [{ id, code, nameIt, descriptionIt, ... }]
+ *   GET /private/packs/purchases/unopened  → buste comprate e non ancora aperte
+ * @param {AbortSignal} signal
+ */
+export async function getNegozio(signal) {
+  const [pacchetti, buste] = await Promise.all([apiGet('/private/packs', signal), getBuste(signal)])
+  return {
+    prodotti: (pacchetti ?? []).map((p) => ({
+      id: p.id,
+      nome: p.nameIt,
+      immagine: '/images/busta.png',
+      descrizione: p.descriptionIt,
+      dettaglio: null,
+      prezzo: p.priceCredits ?? PREZZO_PROVVISORIO,
+    })),
+    // ⚠️ Testo fisso dalle regole del gioco (il backend non lo manda)
+    regoleCrediti: 'Vittoria +10 · Pareggio +5 · Sconfitta +2',
+    busteDaAprire: buste.disponibili,
+    leggendaria: buste.leggendaria,
+  }
 }
 
-// Compra un prodotto. Invia: { "prodottoId": 1 }
-// Risposta: { "busteDaAprire": 4 }    (i crediti nuovi li rilegge la barra in alto)
+/**
+ * Compra un pacchetto.
+ * ✅ COLLEGATO: POST /private/packs/{id}/purchases → { purchaseId, remainingBalance, ... }
+ * (i crediti nuovi li rilegge la barra in alto)
+ * @param {number} prodottoId - id del pacchetto
+ */
 export function compra(prodottoId) {
-  return apiPost('/negozio/compra', { prodottoId })
+  return apiPost(`/private/packs/${prodottoId}/purchases`)
 }

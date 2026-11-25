@@ -1,8 +1,14 @@
 import { Link } from 'react-router'
 import { vociMenu, ordineMobile } from '../data/menu'
 
-// Menu in basso: si vede SOLO su mobile.
-// "lg:hidden" = da 1024px in su sparisce
+/**
+ * Menu in basso: si vede SOLO su mobile.
+ * "lg:hidden" = da 1024px in su sparisce
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.paginaAttiva
+ * @returns {JSX.Element}
+ */
 export default function BottomNav({ paginaAttiva }) {
   // Rimettiamo le voci nell'ordine mobile (Gioca al centro)
   const voci = ordineMobile.map((id) => vociMenu.find((voce) => voce.id === id))

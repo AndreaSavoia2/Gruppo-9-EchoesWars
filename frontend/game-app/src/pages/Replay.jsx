@@ -11,11 +11,17 @@ import { getReplay } from '../api/partite'
 // Quanto dura ogni momento del round (in millisecondi)
 const DURATA = { carte: 1500, scontro: 1500, esito: 2000 }
 
-// G7 / G7b / G7c / DG6 · battaglia automatica a schermo intero. Si usa in 2 punti:
-//   /partita/:id/battaglia → subito dopo il matchmaking (modo="battaglia")
-//       fine → schermata "Hai vinto / Hai perso"   ·   Esci → Home
-//   /partita/:id/replay    → "Rivedi partita" dai dettagli (modo="replay")
-//       fine → torna ai dettagli                     ·   Esci → torna ai dettagli
+/**
+ * G7 / G7b / G7c / DG6 · battaglia automatica a schermo intero. Si usa in 2 punti:
+ *   /partita/:id/battaglia → subito dopo il matchmaking (modo="battaglia")
+ *       fine → schermata "Hai vinto / Hai perso"   ·   Esci → Home
+ *   /partita/:id/replay    → "Rivedi partita" dai dettagli (modo="replay")
+ *       fine → torna ai dettagli                     ·   Esci → torna ai dettagli
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} [props.modo='replay']
+ * @returns {JSX.Element}
+ */
 export default function Replay({ modo = 'replay' }) {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -119,7 +125,13 @@ export default function Replay({ modo = 'replay' }) {
   )
 }
 
-// Le due carte si scontrano al centro, con i danni subiti
+/**
+ * Le due carte si scontrano al centro, con i danni subiti
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.round
+ * @returns {JSX.Element}
+ */
 function Scontro({ round }) {
   const { avversario, tu } = round
   return (
@@ -136,6 +148,14 @@ function Scontro({ round }) {
   )
 }
 
+/**
+ * Numero rosso del danno subito durante lo scontro (es. −3).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.valore
+ * @param {string} props.className
+ * @returns {JSX.Element}
+ */
 function Danno({ valore, className }) {
   return (
     <span

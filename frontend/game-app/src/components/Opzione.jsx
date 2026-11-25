@@ -1,6 +1,15 @@
 import { Link } from 'react-router'
 
-// Riga cliccabile con icona, titolo, descrizione e freccia (versione mobile).
+/**
+ * Riga cliccabile con icona, titolo, descrizione e freccia (versione mobile).
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.percorso
+ * @param {string} props.icona
+ * @param {string} props.titolo
+ * @param {*} props.descrizione
+ * @returns {JSX.Element}
+ */
 export default function Opzione({ percorso, icona, titolo, descrizione }) {
   return (
     <Link

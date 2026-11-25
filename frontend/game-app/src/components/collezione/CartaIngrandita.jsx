@@ -1,8 +1,15 @@
 import { useEffect, useRef } from 'react'
 import ImmagineCarta from '../carta/ImmagineCarta'
 
-// 6e / D6c · Carta ingrandita: velo scuro + bottone "Chiudi" + carta grande + nome.
-// Si chiude con: bottone Chiudi · tocco sul velo · tasto Esc.
+/**
+ * 6e / D6c · Carta ingrandita: velo scuro + bottone "Chiudi" + carta grande + nome.
+ * Si chiude con: bottone Chiudi · tocco sul velo · tasto Esc.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carta
+ * @param {Function} props.onChiudi
+ * @returns {JSX.Element}
+ */
 export default function CartaIngrandita({ carta, onChiudi }) {
   const chiudi = useRef(null)
 

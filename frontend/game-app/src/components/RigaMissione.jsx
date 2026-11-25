@@ -1,7 +1,19 @@
 import BarraProgresso from './BarraProgresso'
 
-// Una "Prova degli Echi" (dal Figma "App/Riga missione").
-// Stati: In corso · Completata (bottone Riscuoti) · Riscossa (✓ verde)
+/**
+ * Una "Prova degli Echi" (dal Figma "App/Riga missione").
+ * Stati: In corso · Completata (bottone Riscuoti) · Riscossa (✓ verde)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {string} props.titolo
+ * @param {*} props.ricompensa
+ * @param {*} props.fatto
+ * @param {*} props.totale
+ * @param {boolean} [props.riscossa=false]
+ * @param {Function} props.onRiscuoti
+ * @param {boolean} [props.inCorso=false]
+ * @returns {JSX.Element}
+ */
 export default function RigaMissione({ titolo, ricompensa, fatto, totale, riscossa = false, onRiscuoti, inCorso = false }) {
   const completata = fatto >= totale
   return (

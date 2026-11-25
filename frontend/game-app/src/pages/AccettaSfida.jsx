@@ -2,7 +2,11 @@ import { useNavigate, useParams, useSearchParams } from 'react-router'
 import SceltaMazzo from '../components/SceltaMazzo'
 import { accettaRichiesta } from '../api/richieste'
 
-// R7 / D15b · /richieste/:id/mazzo — hai accettato una sfida: scegli il mazzo e si parte
+/**
+ * R7 / D15b · /richieste/:id/mazzo — hai accettato una sfida: scegli il mazzo e si parte
+ *
+ * @returns {JSX.Element}
+ */
 export default function AccettaSfida() {
   const { id } = useParams()
   const [parametri] = useSearchParams()

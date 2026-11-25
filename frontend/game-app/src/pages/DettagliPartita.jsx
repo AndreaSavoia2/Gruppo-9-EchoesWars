@@ -15,7 +15,11 @@ const esiti = {
   sconfitta: { testo: 'Sconfitta', icona: '/icons/sconfitta.svg', emoji: '✕', stile: 'border-errore bg-errore-sfondo text-errore' },
 }
 
-// G6 / DG5 · /partita/:id/dettagli
+/**
+ * G6 / DG5 · /partita/:id/dettagli
+ *
+ * @returns {JSX.Element}
+ */
 export default function DettagliPartita() {
   const { id } = useParams()
   const caricaPartita = useCallback((signal) => getPartita(id, signal), [id])
@@ -43,6 +47,13 @@ export default function DettagliPartita() {
   )
 }
 
+/**
+ * Contenuto del dettaglio partita: esito, giocatori, statistiche e bottoni.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.partita
+ * @returns {JSX.Element}
+ */
 function Contenuto({ partita }) {
   const esito = esiti[partita.esito]
   const { avversario } = partita
@@ -102,6 +113,15 @@ function Contenuto({ partita }) {
   )
 }
 
+/**
+ * Un giocatore nel riquadro "VS": iniziali, nome e mazzo usato.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.iniziali
+ * @param {string} props.nome
+ * @param {*} props.mazzo
+ * @returns {JSX.Element}
+ */
 function Giocatore({ iniziali, nome, mazzo }) {
   return (
     <div className="flex w-35 flex-col items-center gap-1 text-center leading-[1.4] lg:w-auto">

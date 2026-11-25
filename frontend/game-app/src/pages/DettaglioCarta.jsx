@@ -21,7 +21,11 @@ const coloreEco = {
   Oblio: 'border-oblio text-oblio',
 }
 
-// 6 · 6c · 6d · 6e / D6 · D6b · D6c · /collezione/carta/:id
+/**
+ * 6 · 6c · 6d · 6e / D6 · D6b · D6c · /collezione/carta/:id
+ *
+ * @returns {JSX.Element}
+ */
 export default function DettaglioCarta() {
   const { id } = useParams()
   const caricaCarta = useCallback((signal) => getCarta(id, signal), [id])
@@ -167,6 +171,15 @@ export default function DettaglioCarta() {
   )
 }
 
+/**
+ * Etichetta della carta (Eco, Scuola, Rarità): testo diverso su mobile e desktop.
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.mobile
+ * @param {*} props.desktop
+ * @param {string} props.colore
+ * @returns {JSX.Element}
+ */
 function Etichetta({ mobile, desktop, colore }) {
   return (
     <li>
@@ -180,7 +193,13 @@ function Etichetta({ mobile, desktop, colore }) {
   )
 }
 
-// ATK · DEF · Costo (+ Effetto solo su mobile)
+/**
+ * ATK · DEF · Costo (+ Effetto solo su mobile)
+ *
+ * @param {object} props - le proprietà del componente
+ * @param {*} props.carta
+ * @returns {JSX.Element}
+ */
 function Valori({ carta }) {
   const valori = [
     ['ATK', carta.atk],
@@ -206,6 +225,11 @@ function Valori({ carta }) {
   )
 }
 
+/**
+ * Avviso rosso: le copie convertite vengono eliminate per sempre.
+ *
+ * @returns {JSX.Element}
+ */
 function Avviso() {
   return (
     <p className="flex w-full gap-2.5 rounded-xl border border-errore bg-errore-sfondo px-3.5 py-3 text-didascalia leading-[1.4] font-medium">

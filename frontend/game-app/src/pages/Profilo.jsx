@@ -16,8 +16,8 @@ export default function Profilo() {
   const [confermaEsci, setConfermaEsci] = useState(false)
   const chiudi = useCallback(() => setConfermaEsci(false), [])
 
-  function esciDallAccount() {
-    esci()
+  async function esciDallAccount() {
+    await esci() // avvisa il backend e cancella il token
     // Torna al login statico (o, se non è configurato, alla Home dell'app)
     if (!vaiAlLogin('uscito')) window.location.href = '/'
   }
@@ -32,7 +32,10 @@ export default function Profilo() {
         { titolo: 'Lingua', dettaglio: profilo.lingua, icona: '/icons/globo.svg', percorso: '/profilo/lingua' },
         {
           titolo: 'Accessi consecutivi',
-          dettaglio: `Giorno ${accessi.giorno} di ${accessi.totale} · prossima ricompensa al ${accessi.prossimaRicompensa.giorno}`,
+          // ⚠️ Gli accessi consecutivi non ci sono ancora nel backend (accessi = null)
+          dettaglio: accessi
+            ? `Giorno ${accessi.giorno} di ${accessi.totale} · prossima ricompensa al ${accessi.prossimaRicompensa.giorno}`
+            : 'Presto disponibile',
           icona: '/icons/orologio.svg',
           percorso: '/accessi',
           solo: 'mobile',
@@ -69,10 +72,14 @@ export default function Profilo() {
               {/* 💻 Desktop: riquadro Accessi consecutivi */}
               <section className="hidden flex-col items-start gap-2.5 rounded-2xl border border-oro bg-sfondo p-6 lg:flex">
                 <h2 className="font-titolo text-h2">Accessi consecutivi</h2>
-                <p>
-                  Sei al giorno {accessi.giorno} di {accessi.totale}. Prossima ricompensa al giorno {accessi.prossimaRicompensa.giorno}:{' '}
-                  {accessi.prossimaRicompensa.nome}.
-                </p>
+                {accessi ? (
+                  <p>
+                    Sei al giorno {accessi.giorno} di {accessi.totale}. Prossima ricompensa al giorno{' '}
+                    {accessi.prossimaRicompensa.giorno}: {accessi.prossimaRicompensa.nome}.
+                  </p>
+                ) : (
+                  <p>Presto disponibile.</p>
+                )}
                 <BottoneLink to="/accessi" variante="secondario" className="min-h-12 w-auto">
                   Vedi le ricompense
                 </BottoneLink>
