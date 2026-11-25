@@ -48,6 +48,7 @@ La parte dopo `#` **non viene mai mandata a nessun server** e l'app React la can
   const messaggi = {
     scaduto: 'La sessione è scaduta: accedi di nuovo.',
     uscito: 'Sei uscito dall’account.',
+    password: 'Password cambiata: accedi con la nuova password.',
   }
   if (messaggi[motivo]) mostraMessaggio(messaggi[motivo])
 
@@ -105,6 +106,7 @@ La registrazione è `POST /api/v1/auth/register` con `{ "username": "...", "emai
 | Si apre l'app senza token | porta alla pagina di login statica |
 | Il backend risponde **401** (token scaduto o falso) | cancella il token e porta al login con `?motivo=scaduto` |
 | L'utente preme **Esci** nel Profilo | cancella il token e porta al login con `?motivo=uscito` |
+| L'utente **cambia la password** | il backend chiude le sessioni: l'app porta al login con `?motivo=password` |
 | Ogni richiesta al backend | aggiunge l'header `Authorization: Bearer <token>` |
 
 Nell'app React l'indirizzo della pagina di login si imposta nel file `.env`:
