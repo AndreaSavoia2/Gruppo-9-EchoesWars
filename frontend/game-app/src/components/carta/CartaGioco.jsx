@@ -59,7 +59,7 @@ export default function CartaGioco({ carta: cartaGrezza, className = 'w-full' })
   return (
     <article
       ref={radice}
-      aria-label={`${carta.nome}: costo ${carta.costo}, ATK ${carta.atk}, DEF ${carta.def}`}
+      aria-label={frasePerScreenReader(carta)}
       className={`relative aspect-[750/1050] shrink-0 font-['EB_Garamond',serif] text-[#3a2916] select-none [container-type:inline-size] ${className}`}
       style={{ '--u': 'calc(100cqw / 750)' }}
     >
@@ -115,6 +115,25 @@ export default function CartaGioco({ carta: cartaGrezza, className = 'w-full' })
       </div>
     </article>
   )
+}
+
+/**
+ * La frase che lo screen reader legge per la carta, tutta insieme e in ordine.
+ * Esempio: "Cadetto, carta Comune. Eco Dominio, scuola Guerriero. Costo 3, ATK 5, DEF 4.
+ *           Nessun effetto. Giovane recluta del Dominio…"
+ * @param {object} carta - carta già normalizzata (nomi in italiano)
+ * @returns {string}
+ */
+export function frasePerScreenReader(carta) {
+  const parti = [
+    `${carta.nome}${carta.rarita ? `, carta ${carta.rarita}` : ''}.`,
+    [carta.eco && `Eco ${carta.eco}`, carta.scuola && `scuola ${carta.scuola}`].filter(Boolean).join(', ') + '.',
+    `Costo ${carta.costo}, ATK ${carta.atk}, DEF ${carta.def}.`,
+    carta.effetto ? `Effetto ${carta.effetto.nome}: ${carta.effetto.testo}` : 'Nessun effetto.',
+    !carta.effetto && carta.descrizione ? carta.descrizione : '',
+  ]
+  // Toglie i pezzi vuoti (es. ". " se mancano Eco e scuola)
+  return parti.filter((parte) => parte && parte !== '.').join(' ')
 }
 
 /**
