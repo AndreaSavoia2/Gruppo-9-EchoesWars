@@ -55,7 +55,7 @@ public record CardResponse(
 
         @Schema(
                 description = "Unique catalog code of the card.",
-                example = "DOM_01",
+                example = "DOM01",
                 accessMode = Schema.AccessMode.READ_ONLY,
                 requiredMode = Schema.RequiredMode.REQUIRED
         )

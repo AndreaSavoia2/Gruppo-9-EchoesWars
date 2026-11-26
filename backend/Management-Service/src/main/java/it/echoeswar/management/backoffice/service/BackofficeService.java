@@ -65,7 +65,7 @@ public class BackofficeService {
      *
      * <p>The method resolves the faction, school and tier referenced by the request,
      * generates the card code on the server (first three letters of the faction code,
-     * followed by an incremental number, e.g. {@code DOM_01}), and finally builds
+     * followed by an incremental number, e.g. {@code DOM01}), and finally builds
      * and persists the card. String fields are normalized through
      * {@link FormatterString#normalizeLowerCase(String)} before being saved.</p>
      *
@@ -257,18 +257,16 @@ public class BackofficeService {
 
     /**
      * Generates the next sequential card code for the given faction.
-     * <p>
-     * The prefix is made of the first three characters of the faction code, in uppercase.
-     * The number is the highest existing number for that prefix plus one, zero-padded to at least
-     * two digits (e.g. {@code DOM_01}, {@code DOM_02}, ...).
+     * The prefix is the first three letters of the faction code, followed directly
+     * by a zero-padded number (e.g. {@code DOM01}, {@code OBL11}).
      *
-     * @param faction the faction the card belongs to
-     * @return the next available card code for the faction
+     * @param faction faction the card belongs to
+     * @return the next available card code
      */
     private String generateCardCode(Faction faction) {
         String prefix = faction.getCode().name().substring(0, 3).toUpperCase();
         int next = cardRepository.findMaxNumberByPrefix(prefix) + 1;
-        return String.format("%s_%02d", prefix, next);
+        return String.format("%s%02d", prefix, next);   // DOM01, DOM02, ..., DOM100
     }
 
 }
