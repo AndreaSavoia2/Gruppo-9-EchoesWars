@@ -1,72 +1,97 @@
-// 🔑 Gestione del token JWT (il "braccialetto" che dimostra chi è l'utente).
+// 🔑 JWT token handling (the "wristband" that proves who the user is).
 //
-// Il token lo CREA il backend Spring (/api/login).
-// Il login è una pagina STATICA (fatta da un'altra persona): dopo il login
-// porta l'utente qui, all'app React, con il token nell'indirizzo:
+// The token is CREATED by the Spring backend (/api/login).
+// The login is a STATIC page (made by another person): after the login
+// it brings the user here, to the React app, with the token in the address:
 //
 //     http://localhost:5173/#token=eyJhbGciOi...
 //
-// Appena l'app parte, prendiTokenDallIndirizzo():
-//   1. legge il token dall'indirizzo
-//   2. lo salva nel "cassetto" del browser (localStorage)
-//   3. lo CANCELLA dall'indirizzo (così non resta nella cronologia del browser)
-// Il pezzo dopo "#" non viene mai mandato a nessun server: resta nel browser.
+// As soon as the app starts, takeTokenFromUrl():
+//   1. reads the token from the address
+//   2. saves it in the browser "drawer" (localStorage)
+//   3. DELETES it from the address (so it does not stay in the browser history)
+// The part after "#" is never sent to any server: it stays in the browser.
 //
-// Il contratto completo da dare a chi fa le pagine statiche è in docs/login-e-token.md
+// The full contract for whoever builds the static pages is in docs/login-and-token.md
 
-const CHIAVE = 'echoeswar_token' // nome del "cassetto" in localStorage
+const STORAGE_KEY = 'echoeswar_token' // name of the "drawer" in localStorage
 
-// Indirizzo della pagina di login statica (dal file .env).
-// Se non c'è (es. stai sviluppando senza login), l'app non fa redirect.
-const URL_LOGIN = import.meta.env.VITE_LOGIN_URL
+// Address of the static login page (from the .env file).
+// If it is missing (e.g. you are developing without login), the app does not redirect.
+const LOGIN_URL = import.meta.env.VITE_LOGIN_URL
 
-// localStorage può dare errore (es. navigazione privata con dati bloccati): try/catch
-export function leggiToken() {
+// localStorage can throw (e.g. private browsing with blocked data): try/catch
+/**
+ * Reads the saved token.
+ * @returns {string|null}
+ */
+export function readToken() {
   try {
-    return localStorage.getItem(CHIAVE)
+    return localStorage.getItem(STORAGE_KEY)
   } catch {
     return null
   }
 }
 
-function salvaToken(token) {
+/**
+ * Saves the token in localStorage.
+ * @param {string} token
+ * @returns {void}
+ */
+export function saveToken(token) {
   try {
-    localStorage.setItem(CHIAVE, token)
+    localStorage.setItem(STORAGE_KEY, token)
   } catch {
-    // niente da fare: il token resterà valido solo finché la pagina è aperta
+    // nothing to do: the token will only stay valid while the page is open
   }
 }
 
-export function cancellaToken() {
+/**
+ * Deletes the token from localStorage.
+ * @returns {void}
+ */
+export function clearToken() {
   try {
-    localStorage.removeItem(CHIAVE)
+    localStorage.removeItem(STORAGE_KEY)
   } catch {
-    // niente da fare
+    // nothing to do
   }
 }
 
-// Da chiamare UNA volta all'avvio dell'app (in main.jsx)
-export function prendiTokenDallIndirizzo() {
-  // "#token=abc&altro=1" → URLSearchParams lo legge come una query
-  const parametri = new URLSearchParams(window.location.hash.slice(1))
-  const token = parametri.get('token')
+/**
+ * To be called ONCE when the app starts (in main.jsx):
+ * takes the token from "#token=..." in the address, saves it and removes it from the address.
+ * @returns {void}
+ */
+export function takeTokenFromUrl() {
+  // "#token=abc&other=1" → URLSearchParams reads it like a query
+  const params = new URLSearchParams(window.location.hash.slice(1))
+  const token = params.get('token')
   if (!token) return
 
-  salvaToken(token)
-  // Toglie "#token=..." dall'indirizzo senza ricaricare la pagina
+  saveToken(token)
+  // Removes "#token=..." from the address without reloading the page
   window.history.replaceState(null, '', window.location.pathname + window.location.search)
 }
 
-// Porta alla pagina di login statica.
-// motivo: 'scaduto' (token non più valido) o 'uscito' (ha premuto Esci) → la pagina statica
-// può mostrare un messaggio tipo "Sessione scaduta, accedi di nuovo".
-export function vaiAlLogin(motivo) {
-  if (!URL_LOGIN) return false // nessun login configurato: restiamo qui
-  window.location.href = motivo ? `${URL_LOGIN}?motivo=${motivo}` : URL_LOGIN
+/**
+ * Goes to the static login page.
+ * reason: 'scaduto' (token no longer valid) or 'uscito' (pressed Log out) → the static page
+ * can show a message like "Sessione scaduta, accedi di nuovo". These two values and the "motivo"
+ * parameter are agreed with the static login page, so they stay in Italian.
+ * @param {'scaduto'|'uscito'} reason
+ * @returns {boolean} false if no login page is configured (we stay in the app)
+ */
+export function goToLogin(reason) {
+  if (!LOGIN_URL) return false // no login configured: we stay here
+  window.location.href = reason ? `${LOGIN_URL}?motivo=${reason}` : LOGIN_URL
   return true
 }
 
-// C'è un login configurato ma l'utente non ha il token? → va fatto il login
-export function serveLogin() {
-  return Boolean(URL_LOGIN) && !leggiToken()
+/**
+ * A login is configured but the user has no token? → they have to log in.
+ * @returns {boolean}
+ */
+export function needsLogin() {
+  return Boolean(LOGIN_URL) && !readToken()
 }

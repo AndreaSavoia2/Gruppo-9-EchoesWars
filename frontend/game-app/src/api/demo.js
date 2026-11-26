@@ -1,21 +1,21 @@
-// 🧪 MODALITÀ DEMO — backend finto, solo per provare l'app SENZA il backend vero.
-// Si accende con VITE_DEMO=true (comando: npm run demo). Con il backend vero NON viene usato.
+// 🧪 DEMO MODE — fake backend, only to try the app WITHOUT the real backend.
+// It is turned on with VITE_DEMO=true (command: npm run demo). With the real backend it is NOT used.
 //
-// Copre il flusso "partita casuale":
-//   Home → Gioca → Scegli il mazzo → Matchmaking → Battaglia → Hai vinto/perso → Dettagli
-// Le altre pagine (Collezione, Scambi...) in demo mostrano il messaggio di errore: è normale.
+// It covers the "random match" flow:
+//   Home → Play → Choose the deck → Matchmaking → Battle → You won/lost → Details
+// The other pages (Collection, Trades...) show the error message in demo: that is expected.
 //
-// I dati vivono in memoria: ricaricando la pagina (F5) si riparte da zero.
+// The data lives in memory: reloading the page (F5) starts again from scratch.
 
-const ATTESA_MATCHMAKING_MS = 3000 // quanto dura "Stiamo simulando la partita"
-const PV_INIZIALI = 10
-const ROUND_MAX = 100
-const CREDITI = { vittoria: 10, pareggio: 5, sconfitta: 2 }
+const MATCHMAKING_WAIT_MS = 3000 // how long "Stiamo simulando la partita" (simulating the match) lasts
+const STARTING_HP = 10
+const MAX_ROUNDS = 100
+const CREDITS = { victory: 10, draw: 5, defeat: 2 }
 
-// Le 8 carte di esempio del file card.html del team (cornice + illustrazione).
-// Solo il Cadetto ha già l'illustrazione: le altre mostrano il segnaposto "ILLUSTRAZIONE".
-// [codice, nome, atk, def, costo, eco, scuola, rarità, effetto, descrizione]
-export const CARTE_ESEMPIO = [
+// The 8 sample cards from the team's card.html file (frame + illustration).
+// Every card uses its local illustration in public/images/illustrations (named after the code).
+// [code, name, atk, def, cost, echo, school, rarity, effect, description]
+export const SAMPLE_CARDS = [
   ['DOM01', 'Cadetto', 5, 4, 3, 'DOMINION', 'WARRIOR', 'COMMON', null, 'Giovane recluta del Dominio, ancora inesperta ma pronta a difendere la Corona con il suo giuramento appena pronunciato.'],
   ['DOM06', 'Martello del Re', 7, 4, 5, 'DOMINION', 'WARRIOR', 'LEGENDARY', 'PIERCING', null],
   ['SAP02', 'Custode dei Tomi', 3, 8, 4, 'WISDOM', 'MAGE', 'RARE', 'ANALYSIS', null],
@@ -24,213 +24,265 @@ export const CARTE_ESEMPIO = [
   ['OBL11', 'Boia del Crepuscolo', 6, 4, 4, 'OBLIVION', 'WARRIOR', 'LEGENDARY', 'BERSERKER', null],
   ['ING04', 'Lama Velata', 5, 5, 4, 'DECEPTION', 'ROGUE', 'RARE', 'DRAIN', null],
   ['ING01', 'Borseggiatore del Velo', 3, 4, 2, 'DECEPTION', 'ROGUE', 'COMMON', null, 'Agile e invisibile tra la folla, svuota le tasche prima che la vittima si accorga di qualcosa.'],
-].map(([codice, nome, atk, def, costo, eco, scuola, rarita, effetto, descrizione]) => ({
-  codice, nome, atk, def, costo, eco, scuola, rarita, effetto, descrizione,
-  illustrazione: codice === 'DOM01' ? '/images/illustrazioni/DOM01.webp' : null,
+].map(([code, name, atk, def, cost, echo, school, rarity, effect, description]) => ({
+  code, name, atk, def, cost, echo, school, rarity, effect, description,
+  illustration: `/images/illustrations/${code}.webp`,
 }))
 
-// ---------- Dati del giocatore ----------
-const stato = {
-  utente: { nome: 'Flavio', crediti: 1250, avatar: null, primoAccesso: false },
-  partite: [], // le partite giocate in questa sessione
+// ---------- Player data ----------
+const status = {
+  user: { name: 'Flavio', credits: 1250, avatar: null, firstLogin: false },
+  matches: [], // the matches played in this session
 }
 
-const mazzi = [
-  { id: 1, nome: 'Mazzo del tramonto', valido: true, motivo: null, carte: 30, carteMax: 30, punti: 96, puntiMax: 98, scuole: ['Sapienza', 'Oblio'] },
-  { id: 2, nome: 'Lama e Velo', valido: true, motivo: null, carte: 30, carteMax: 30, punti: 92, puntiMax: 98, scuole: ['Inganno'] },
-  { id: 3, nome: 'Furia Rossa', valido: true, motivo: null, carte: 30, carteMax: 30, punti: 97, puntiMax: 98, scuole: ['Dominio'] },
-  { id: 4, nome: 'Custodi', valido: false, motivo: '28/30 carte', carte: 28, carteMax: 30, punti: 80, puntiMax: 98, scuole: [] },
+const decks = [
+  { id: 1, name: 'Mazzo del tramonto', valid: true, reason: null, cardCount: 30, maxCards: 30, points: 96, maxPoints: 98, schools: ['Sapienza', 'Oblio'] },
+  { id: 2, name: 'Lama e Velo', valid: true, reason: null, cardCount: 30, maxCards: 30, points: 92, maxPoints: 98, schools: ['Inganno'] },
+  { id: 3, name: 'Furia Rossa', valid: true, reason: null, cardCount: 30, maxCards: 30, points: 97, maxPoints: 98, schools: ['Dominio'] },
+  { id: 4, name: 'Custodi', valid: false, reason: '28/30 carte', cardCount: 28, maxCards: 30, points: 80, maxPoints: 98, schools: [] },
 ]
 
-const avversari = ['@lyra_eco', '@ombra_sette', '@kael', '@nyx']
+const opponents = ['@lyra_eco', '@ombra_sette', '@kael', '@nyx']
 
-// ---------- La battaglia (versione semplificata delle regole) ----------
-// Ogni round:
-//   1. chi non ha una carta in campo pesca dal mazzo
-//   2. le due carte si colpiscono NELLO STESSO MOMENTO: DEF = DEF − ATK avversario
-//   3. una carta con DEF sotto 0 è distrutta e va negli scarti;
-//      il danno in più (es. DEF −2 → 2) lo perde il giocatore in PV
-//   4. si continua finché qualcuno arriva a 0 PV, finiscono le carte o si arriva al round 100
+// ---------- The battle (simplified version of the rules) ----------
+// Every round:
+//   1. whoever has no card on the field draws from the deck
+//   2. the two cards hit each other AT THE SAME TIME: DEF = DEF − opponent ATK
+//   3. a card with DEF below 0 is destroyed and goes to the discards;
+//      the extra damage (e.g. DEF −2 → 2) is lost by the player as HP
+//   4. it goes on until someone reaches 0 HP, the cards run out or round 100 is reached
 
-// Un numero a caso tra min e max (compresi)
-const caso = (min, max) => min + Math.floor(Math.random() * (max - min + 1))
+// A random number between min and max (included)
+const randomPick = (min, max) => min + Math.floor(Math.random() * (max - min + 1))
 
-// Un mazzo di 30 carte pescate a caso tra quelle di esempio
-// ({ ...carta } = una COPIA: così la DEF che scende in battaglia non cambia l'originale)
-function creaMazzo() {
+/**
+ * A deck of 30 cards drawn at random from the sample ones.
+ * ({ ...card } = a COPY: this way the DEF that drops in battle does not change the original)
+ * @returns {object[]}
+ */
+function createDeck() {
   return Array.from({ length: 30 }, () => {
-    const carta = CARTE_ESEMPIO[caso(0, CARTE_ESEMPIO.length - 1)]
-    return { ...carta, defStampata: carta.def } // defStampata = la DEF scritta sulla carta
+    const card = SAMPLE_CARDS[randomPick(0, SAMPLE_CARDS.length - 1)]
+    return { ...card, printedDef: card.def } // printedDef = the DEF written on the card
   })
 }
 
-// "Fotografia" di un lato del campo, nel formato che si aspetta la pagina Battaglia
-function foto(lato) {
+/**
+ * "Snapshot" of one side of the field, in the format expected by the Battle page.
+ * @param {object} side - hp, deck, discards and card on the field of one player
+ * @returns {object}
+ */
+function snapshot(side) {
   return {
-    pv: Math.max(lato.pv, 0),
-    carteMazzo: lato.mazzo.length,
-    carteScarti: lato.scarti.length,
-    // Tutti i dati della carta: la pagina la disegna a strati (cornice + illustrazione + testi)
-    ultimaScartata: lato.scarti.at(-1) ? { ...lato.scarti.at(-1), def: lato.scarti.at(-1).defStampata } : null,
-    carta: lato.campo ? { ...lato.campo } : null, // con la DEF attuale
+    hp: Math.max(side.hp, 0),
+    deckCount: side.deck.length,
+    discardCount: side.discards.length,
+    // All the card data: the page draws it in layers (frame + illustration + texts)
+    lastDiscarded: side.discards.at(-1) ? { ...side.discards.at(-1), def: side.discards.at(-1).printedDef } : null,
+    card: side.field ? { ...side.field } : null, // with the current DEF
   }
 }
 
-function simulaBattaglia(nomeAvversario) {
-  const tu = { pv: PV_INIZIALI, mazzo: creaMazzo(), scarti: [], campo: null }
-  const avv = { pv: PV_INIZIALI, mazzo: creaMazzo(), scarti: [], campo: null }
+/**
+ * Plays a whole match with the simplified rules and records every round for the replay.
+ * @param {string} opponentName
+ * @returns {object} final result + the rounds of the replay
+ */
+function simulateBattle(opponentName) {
+  const you = { hp: STARTING_HP, deck: createDeck(), discards: [], field: null }
+  const opp = { hp: STARTING_HP, deck: createDeck(), discards: [], field: null }
   const round = []
 
-  for (let numero = 1; numero <= ROUND_MAX; numero++) {
-    // 1. pesca (se serve)
-    if (!tu.campo) tu.campo = tu.mazzo.pop() ?? null
-    if (!avv.campo) avv.campo = avv.mazzo.pop() ?? null
-    if (!tu.campo || !avv.campo) break // carte finite
+  for (let count = 1; count <= MAX_ROUNDS; count++) {
+    // 1. draw (if needed)
+    if (!you.field) you.field = you.deck.pop() ?? null
+    if (!opp.field) opp.field = opp.deck.pop() ?? null
+    if (!you.field || !opp.field) break // no cards left
 
-    const inizio = { tu: foto(tu), avversario: foto(avv) }
+    const beginning = { you: snapshot(you), opponent: snapshot(opp) }
 
-    // 2. scontro: si colpiscono insieme
-    const dannoTu = avv.campo.atk // danno che riceve la TUA carta
-    const dannoAvversario = tu.campo.atk
-    tu.campo.def -= dannoTu
-    avv.campo.def -= dannoAvversario
+    // 2. clash: they hit each other together
+    const yourDamage = opp.field.atk // damage taken by YOUR card
+    const opponentDamage = you.field.atk
+    you.field.def -= yourDamage
+    opp.field.def -= opponentDamage
 
-    // 3. carte distrutte e danno in eccesso
-    const eccessoTu = distruggiSeServe(tu)
-    const eccessoAvv = distruggiSeServe(avv)
+    // 3. destroyed cards and excess damage
+    const yourExcess = destroyIfNeeded(you)
+    const oppExcess = destroyIfNeeded(opp)
 
     round.push({
-      numero,
-      ...inizio,
-      dannoTu,
-      dannoAvversario,
-      esito: testoEsito(eccessoTu, eccessoAvv, nomeAvversario),
-      dopo: { tu: foto(tu), avversario: foto(avv) },
+      count,
+      ...beginning,
+      yourDamage,
+      opponentDamage,
+      outcome: outcomeText(yourExcess, oppExcess, opponentName),
+      after: { you: snapshot(you), opponent: snapshot(opp) },
     })
 
-    // 4. qualcuno è a 0 PV?
-    if (tu.pv <= 0 || avv.pv <= 0) break
+    // 4. is anybody at 0 HP?
+    if (you.hp <= 0 || opp.hp <= 0) break
   }
 
-  return { round, tu, avv }
+  return { round, you, opp }
 }
 
-// Se la carta in campo ha DEF sotto 0: va negli scarti e il giocatore perde PV.
-// Restituisce null se la carta è ancora viva, altrimenti i PV persi.
-function distruggiSeServe(lato) {
-  if (lato.campo.def >= 0) return null
-  const eccesso = -lato.campo.def
-  lato.pv -= eccesso
-  lato.scarti.push(lato.campo)
-  lato.campo = null
-  return eccesso
+/**
+ * If the card on the field has DEF below 0: it goes to the discards and the player loses HP.
+ * @param {object} side
+ * @returns {number|null} null if the card is still alive, otherwise the lost HP
+ */
+function destroyIfNeeded(side) {
+  if (side.field.def >= 0) return null
+  const excess = -side.field.def
+  side.hp -= excess
+  side.discards.push(side.field)
+  side.field = null
+  return excess
 }
 
-function testoEsito(eccessoTu, eccessoAvv, nomeAvversario) {
-  const persi = (n) => (n > 0 ? `perdi ${n} PV` : 'nessun PV perso')
-  if (eccessoTu !== null && eccessoAvv !== null) {
-    return { titolo: 'Entrambe le carte sono distrutte', dettaglio: `Tu: ${persi(eccessoTu)} · ${nomeAvversario}: −${eccessoAvv} PV` }
+/**
+ * End of round message shown in the battle (in Italian, it is read by the user).
+ * @param {number|null} yourExcess - HP lost by you (null = your card survived)
+ * @param {number|null} oppExcess - HP lost by the opponent (null = their card survived)
+ * @param {string} opponentName
+ * @returns {{ title: string, detail: string }|null}
+ */
+function outcomeText(yourExcess, oppExcess, opponentName) {
+  const lost = (n) => (n > 0 ? `perdi ${n} PV` : 'nessun PV perso')
+  if (yourExcess !== null && oppExcess !== null) {
+    return { title: 'Entrambe le carte sono distrutte', detail: `Tu: ${lost(yourExcess)} · ${opponentName}: −${oppExcess} PV` }
   }
-  if (eccessoTu !== null) return { titolo: 'La tua carta è distrutta', dettaglio: `Danno in eccesso: ${persi(eccessoTu)}` }
-  if (eccessoAvv !== null) {
-    return { titolo: 'Carta avversaria distrutta', dettaglio: `Danno in eccesso: ${nomeAvversario} perde ${eccessoAvv} PV` }
+  if (yourExcess !== null) return { title: 'La tua carta è distrutta', detail: `Danno in eccesso: ${lost(yourExcess)}` }
+  if (oppExcess !== null) {
+    return { title: 'Carta avversaria distrutta', detail: `Danno in eccesso: ${opponentName} perde ${oppExcess} PV` }
   }
-  return null // nessuna carta distrutta: niente messaggio
+  return null // no card destroyed: no message
 }
 
-// ---------- Creare una partita ----------
-function avviaPartita(mazzoId) {
-  const mazzo = mazzi.find((m) => m.id === mazzoId) ?? mazzi[0]
-  const nomeAvversario = avversari[caso(0, avversari.length - 1)]
-  const { round, tu, avv } = simulaBattaglia(nomeAvversario)
+// ---------- Creating a match ----------
+/**
+ * Creates a new demo match and simulates it straight away.
+ * @param {string|number} deckId
+ * @returns {object} the match saved in memory
+ */
+function startMatch(deckId) {
+  const deck = decks.find((m) => m.id === deckId) ?? decks[0]
+  const opponentName = opponents[randomPick(0, opponents.length - 1)]
+  const { round, you, opp } = simulateBattle(opponentName)
 
-  const esito = tu.pv > avv.pv ? 'vittoria' : tu.pv < avv.pv ? 'sconfitta' : 'pareggio'
-  const ultimo = round.at(-1)
-  const partita = {
-    id: stato.partite.length + 1,
-    iniziataAlle: Date.now(),
-    creditiDati: false,
-    mioMazzo: mazzo.nome,
-    avversario: { nome: nomeAvversario, mazzo: mazzi[caso(0, 2)].nome },
-    esito,
-    pvMiei: Math.max(tu.pv, 0),
-    pvAvversario: Math.max(avv.pv, 0),
-    creditiGuadagnati: CREDITI[esito],
-    round: ultimo.numero,
-    roundMax: ROUND_MAX,
-    giocataIl: new Date().toISOString(),
-    carteRimasteMie: tu.mazzo.length,
-    carteRimasteAvversario: avv.mazzo.length,
-    motivoFine: tu.pv <= 0 || avv.pv <= 0 ? 'PV a 0' : ultimo.numero === ROUND_MAX ? 'Round 100' : 'Carte finite',
-    replay: { roundMax: ROUND_MAX, avversario: { nome: nomeAvversario }, round },
+  const outcome = you.hp > opp.hp ? 'victory' : you.hp < opp.hp ? 'defeat' : 'draw'
+  const last = round.at(-1)
+  const match = {
+    id: status.matches.length + 1,
+    startedAt: Date.now(),
+    creditsGiven: false,
+    myDeck: deck.name,
+    opponent: { name: opponentName, deck: decks[randomPick(0, 2)].name },
+    outcome,
+    myHp: Math.max(you.hp, 0),
+    opponentHp: Math.max(opp.hp, 0),
+    creditsEarned: CREDITS[outcome],
+    round: last.count,
+    roundMax: MAX_ROUNDS,
+    playedOn: new Date().toISOString(),
+    myCardsLeft: you.deck.length,
+    opponentCardsLeft: opp.deck.length,
+    endReason: you.hp <= 0 || opp.hp <= 0 ? 'PV a 0' : last.count === MAX_ROUNDS ? 'Round 100' : 'Carte finite',
+    replay: { roundMax: MAX_ROUNDS, opponent: { name: opponentName }, round },
   }
-  stato.partite.unshift(partita)
-  return partita
+  status.matches.unshift(match)
+  return match
 }
 
-// Come risponde GET /partite/:id: "in_corso" per i primi secondi, poi "conclusa"
-function leggiPartita(partita) {
-  const base = { id: partita.id, mioMazzo: partita.mioMazzo, avversario: partita.avversario }
-  if (Date.now() - partita.iniziataAlle < ATTESA_MATCHMAKING_MS) return { ...base, stato: 'in_corso' }
+/**
+ * How GET /matches/:id answers: "in_progress" for the first seconds, then "finished".
+ * @param {object} match - the match saved in memory
+ * @returns {object}
+ */
+function readMatch(match) {
+  const base = { id: match.id, myDeck: match.myDeck, opponent: match.opponent }
+  if (Date.now() - match.startedAt < MATCHMAKING_WAIT_MS) return { ...base, status: 'in_progress' }
 
-  // La prima volta che risulta conclusa: aggiungi i crediti all'utente
-  if (!partita.creditiDati) {
-    stato.utente.crediti += partita.creditiGuadagnati
-    partita.creditiDati = true
+  // The first time it turns out finished: add the credits to the user
+  if (!match.creditsGiven) {
+    status.user.credits += match.creditsEarned
+    match.creditsGiven = true
   }
-  // Mandiamo tutto tranne i campi "interni" della demo (replay, orario, crediti dati)
-  const dati = { ...partita }
-  delete dati.replay
-  delete dati.iniziataAlle
-  delete dati.creditiDati
-  return { ...dati, stato: 'conclusa' }
+  // We send everything except the "internal" demo fields (replay, time, credits given)
+  const data = { ...match }
+  delete data.replay
+  delete data.startedAt
+  delete data.creditsGiven
+  return { ...data, status: 'finished' }
 }
 
-// ---------- Il "centralino": percorso → risposta ----------
-// Riceve le stesse cose di una fetch vera e restituisce i dati (o lancia un errore 404).
-export async function rispostaDemo(metodo, percorso, corpo) {
-  await new Promise((fatto) => setTimeout(fatto, 250)) // piccolo ritardo, come una rete vera
-  const [indirizzo, query] = percorso.split('?')
-  const parametri = new URLSearchParams(query)
-  const pezzi = indirizzo.split('/').filter(Boolean) // "/partite/3/replay" → ["partite", "3", "replay"]
-  const richiesta = `${metodo} /${pezzi[0] ?? ''}`
+// The Echoes of a deck in the backend format: [{ id, nameIt }]
+const DEMO_ECHO_IDS = { Dominio: 1, Sapienza: 2, Oblio: 3, Inganno: 4 }
+const factionList = (m) => m.schools.map((name) => ({ id: DEMO_ECHO_IDS[name], nameIt: name }))
 
-  const concluse = () => stato.partite.filter((p) => Date.now() - p.iniziataAlle >= ATTESA_MATCHMAKING_MS)
+// ---------- The "switchboard": path → response ----------
+/**
+ * Receives the same things as a real fetch and returns the data (or throws a 404 error).
+ * @param {string} method - 'GET', 'POST'...
+ * @param {string} path - e.g. "/matches/3/replay"
+ * @param {object} [body]
+ * @returns {Promise<any>}
+ */
+export async function demoResponse(method, path, body) {
+  await new Promise((resolve) => setTimeout(resolve, 250)) // small delay, like a real network
+  const [address, query] = path.split('?')
+  const params = new URLSearchParams(query)
+  const pieces = address.split('/').filter(Boolean) // "/matches/3/replay" → ["matches", "3", "replay"]
+  const request = `${method} /${pieces[0] ?? ''}`
 
-  if (richiesta === 'GET /utente') return { ...stato.utente }
+  const finishedOnes = () => status.matches.filter((p) => Date.now() - p.startedAt >= MATCHMAKING_WAIT_MS)
 
-  if (richiesta === 'GET /dashboard') {
+  // ---- Responses in the SAME format as the Spring backend (without the "envelope") ----
+  if (address === '/auth/me') {
+    return { id: 'demo', username: status.user.name, email: 'demo@esempio.it', role: 'ROLE_USER', selectedAvatarId: null }
+  }
+  if (address === '/private/credits/balance') return { balance: status.user.credits }
+
+  // Decks: list (without totals) and detail of every deck
+  if (address === '/private/decks') {
+    return decks.map((m) => ({ id: m.id, name: m.name, status: 'READY', factions: factionList(m) }))
+  }
+  if (pieces[0] === 'private' && pieces[1] === 'decks' && pieces[2]) {
+    const m = decks.find((x) => x.id === Number(pieces[2]))
+    if (m) return { id: m.id, name: m.name, status: 'READY', totalCards: m.cardCount, totalCost: m.points, factions: factionList(m), cards: [] }
+  }
+
+  if (request === 'GET /dashboard') {
     return {
-      richiesteNuove: 0,
-      leggendaria: { buste: 7, totale: 10 },
-      ultimePartite: concluse()
+      newRequests: 0,
+      legendary: { packs: 7, total: 10 },
+      recentMatches: finishedOnes()
         .slice(0, 3)
-        .map((p) => ({ id: p.id, esito: p.esito, avversario: p.avversario.nome, round: p.round })),
-      prove: { completate: 3, totali: 12, inEvidenza: [{ id: 1, titolo: 'Vinci 10 partite', ricompensa: '20 crediti', fatto: 4, totale: 10 }] },
+        .map((p) => ({ id: p.id, outcome: p.outcome, opponent: p.opponent.name, round: p.round })),
+      trials: { completedCount: 3, totals: 12, highlighted: [{ id: 1, title: 'Vinci 10 partite', reward: '20 crediti', progress: 4, total: 10 }] },
     }
   }
 
-  if (richiesta === 'GET /mazzi') return { totale: mazzi.length, massimo: 20, mazzi }
+  if (request === 'POST /matches') return { id: startMatch(body?.deckId).id }
 
-  if (richiesta === 'POST /partite') return { id: avviaPartita(corpo?.mazzoId).id }
-
-  if (richiesta === 'GET /partite' && pezzi.length === 1) {
-    // Cronologia: /partite?esito=vittoria
-    const esito = parametri.get('esito')
-    return concluse()
-      .filter((p) => !esito || p.esito === esito)
-      .map((p) => ({ id: p.id, esito: p.esito, avversario: p.avversario.nome, round: p.round }))
+  if (request === 'GET /matches' && pieces.length === 1) {
+    // History: /matches?outcome=victory
+    const outcome = params.get('outcome')
+    return finishedOnes()
+      .filter((p) => !outcome || p.outcome === outcome)
+      .map((p) => ({ id: p.id, outcome: p.outcome, opponent: p.opponent.name, round: p.round }))
   }
 
-  if (pezzi[0] === 'partite') {
-    const partita = stato.partite.find((p) => p.id === Number(pezzi[1]))
-    if (partita && metodo === 'GET' && pezzi[2] === 'replay') return partita.replay
-    if (partita && metodo === 'GET' && !pezzi[2]) return leggiPartita(partita)
+  if (pieces[0] === 'matches') {
+    const match = status.matches.find((p) => p.id === Number(pieces[1]))
+    if (match && method === 'GET' && pieces[2] === 'replay') return match.replay
+    if (match && method === 'GET' && !pieces[2]) return readMatch(match)
   }
 
-  // Tutto il resto non esiste in demo → stesso errore di un 404 vero
-  const errore = new Error(`[demo] ${metodo} ${percorso} non esiste in modalità demo`)
-  errore.tipo = 'richiesta'
-  errore.stato = 404
-  throw errore
+  // Everything else does not exist in demo → same error as a real 404
+  const error = new Error(`[demo] ${method} ${path} non esiste in modalità demo`)
+  error.kind = 'request'
+  error.status = 404
+  throw error
 }

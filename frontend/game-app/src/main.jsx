@@ -2,16 +2,20 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { prendiTokenDallIndirizzo, serveLogin, vaiAlLogin } from './api/token'
+import { takeTokenFromUrl, needsLogin, goToLogin } from './api/token'
+import { applyLanguage } from './utils/language'
 
-// 🔑 Prima di tutto: se arriviamo dal login statico, salva il token (#token=...)
-prendiTokenDallIndirizzo()
+// 🌍 The language chosen by the user goes into the lang attribute of the page
+applyLanguage()
 
-// Senza token (e con un login configurato in .env) → subito alla pagina di login.
-// In modalità demo (npm run demo) il login non serve.
+// 🔑 First of all: if we come from the static login, save the token (#token=...)
+takeTokenFromUrl()
+
+// Without a token (and with a login configured in .env) → straight to the login page.
+// In demo mode (npm run demo) no login is needed.
 const demo = import.meta.env.VITE_DEMO === 'true'
-if (!demo && serveLogin()) {
-  vaiAlLogin()
+if (!demo && needsLogin()) {
+  goToLogin()
 } else {
 
   createRoot(document.getElementById('root')).render(

@@ -1,34 +1,39 @@
 import { useCallback, useEffect, useState } from 'react'
 
-// Hook riutilizzabile: chiama una funzione di fetch e ti dà 4 cose:
-//   dati        → la risposta del backend (null finché non arriva)
-//   caricamento → true mentre aspettiamo la PRIMA risposta
-//   errore      → l'errore, se qualcosa va storto
-//   ricarica    → funzione per rifare la richiesta (es. dopo una modifica)
-//
-// Uso: const { dati, caricamento, errore, ricarica } = useFetch(getDashboard)
-export function useFetch(funzioneFetch) {
-  const [stato, setStato] = useState({ dati: null, caricamento: true, errore: null })
-  // Ogni volta che "versione" cambia, la richiesta viene rifatta
-  const [versione, setVersione] = useState(0)
+/**
+ * Reusable hook: calls a fetch function and gives you 4 things:
+ *   data    → the backend response (null until it arrives)
+ *   loading → true while we wait for the FIRST response
+ *   error   → the error, if something goes wrong
+ *   reload  → function to repeat the request (e.g. after a change)
+ *
+ * Usage: const { data, loading, error, reload } = useFetch(getDashboard)
+ *
+ * @param {(signal: AbortSignal) => Promise<any>} fetcher - must be stable (useCallback or a module function)
+ * @returns {{ data: any, loading: boolean, error: Error|null, reload: Function }}
+ */
+export function useFetch(fetcher) {
+  const [status, setStatus] = useState({ data: null, loading: true, error: null })
+  // Every time "version" changes, the request is made again
+  const [version, setVersion] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
 
-    funzioneFetch(controller.signal)
-      .then((dati) => setStato({ dati, caricamento: false, errore: null }))
-      .catch((errore) => {
-        // AbortError = richiesta annullata da noi: non è un vero errore
-        if (errore.name !== 'AbortError') {
-          setStato({ dati: null, caricamento: false, errore })
+    fetcher(controller.signal)
+      .then((data) => setStatus({ data, loading: false, error: null }))
+      .catch((error) => {
+        // AbortError = request cancelled by us: it is not a real error
+        if (error.name !== 'AbortError') {
+          setStatus({ data: null, loading: false, error })
         }
       })
 
-    // Se il componente sparisce, annulla la richiesta
+    // If the component disappears, cancel the request
     return () => controller.abort()
-  }, [funzioneFetch, versione])
+  }, [fetcher, version])
 
-  const ricarica = useCallback(() => setVersione((v) => v + 1), [])
+  const reload = useCallback(() => setVersion((v) => v + 1), [])
 
-  return { ...stato, ricarica }
+  return { ...status, reload }
 }

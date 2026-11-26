@@ -2,44 +2,54 @@ import TopBar from './TopBar'
 import SidebarNav from './SidebarNav'
 import BottomNav from './BottomNav'
 
-// Il "guscio" di tutte le pagine dell'app:
-// sfondo + menu laterale (desktop) + barra in alto + menu in basso (mobile).
-// Ogni pagina ci mette dentro il suo contenuto con {children}.
-// sfondoMobile / sfondoDesktop: alcune pagine hanno un'immagine di sfondo diversa.
-// nascondiMenuMobile: su alcune schermate (es. scelta del mazzo) al posto del menu
-// in basso c'è una barra con il bottone dell'azione.
+/**
+ * The "shell" of every page of the app:
+ * background + side menu (desktop) + top bar + bottom menu (mobile).
+ * Every page puts its content inside with {children}.
+ * mobileBackground / desktopBackground: some pages have a different background image.
+ * hideMobileMenu: on some screens (e.g. deck choice) instead of the bottom
+ * menu there is a bar with the action button.
+ *
+ * @param {object} props - the component props
+ * @param {string} props.activePage - id of the current menu entry
+ * @param {boolean} [props.hideMobileMenu=false]
+ * @param {string|null} [props.mobileBackground='/images/app-background.png']
+ * @param {string} [props.desktopBackground='/images/desktop-background.png']
+ * @param {React.ReactNode} props.children
+ * @returns {JSX.Element}
+ */
 export default function AppLayout({
-  paginaAttiva,
-  nascondiMenuMobile = false,
-  sfondoMobile = '/images/sfondo-app.png',
-  sfondoDesktop = '/images/sfondo-desktop.png',
+  activePage,
+  hideMobileMenu = false,
+  mobileBackground = '/images/app-background.png',
+  desktopBackground = '/images/desktop-background.png',
   children,
 }) {
   return (
     <div className="relative isolate min-h-screen lg:flex">
-      {/* Sfondo decorativo: immagine diversa per mobile e desktop + velo crema */}
+      {/* Decorative background: different image for mobile and desktop + cream veil */}
       <div aria-hidden="true" className="fixed inset-0 -z-10">
         <picture>
-          <source media="(min-width: 1024px)" srcSet={sfondoDesktop} />
-          {/* sfondoMobile = null → su mobile niente immagine, solo il colore crema */}
+          <source media="(min-width: 1024px)" srcSet={desktopBackground} />
+          {/* mobileBackground = null → no image on mobile, only the cream colour */}
           <img
-            src={sfondoMobile ?? sfondoDesktop}
+            src={mobileBackground ?? desktopBackground}
             alt=""
-            className={`size-full object-cover ${sfondoMobile ? '' : 'hidden lg:block'}`}
+            className={`size-full object-cover ${mobileBackground ? '' : 'hidden lg:block'}`}
           />
         </picture>
-        <div className="absolute inset-0 bg-sfondo/92" />
+        <div className="absolute inset-0 bg-background/92" />
       </div>
 
-      <SidebarNav paginaAttiva={paginaAttiva} />
+      <SidebarNav activePage={activePage} />
 
       <div className="flex min-h-screen flex-1 flex-col">
         <TopBar />
-        {/* pb-28 su mobile: lascia spazio al menu in basso */}
+        {/* pb-28 on mobile: leaves room for the bottom menu */}
         <main className="flex flex-1 flex-col px-5 pt-8 pb-28 lg:px-12 lg:py-8">{children}</main>
       </div>
 
-      {!nascondiMenuMobile && <BottomNav paginaAttiva={paginaAttiva} />}
+      {!hideMobileMenu && <BottomNav activePage={activePage} />}
     </div>
   )
 }

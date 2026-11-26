@@ -1,60 +1,60 @@
 @import "tailwindcss";
 
-/* Tema: i valori presi dalle variabili del Figma */
+/* Theme: the values taken from the Figma variables */
 @theme {
   /* Font */
-  --font-titolo: "Cinzel", serif;
-  --font-testo: "Inter", sans-serif;
+  --font-title: "Cinzel", serif;
+  --font-ink: "Inter", sans-serif;
 
-  /* Sfondi */
-  --color-sfondo: #fff9f0;            /* background/primary */
-  --color-sfondo-secondario: #f7f1e5; /* background/secondary */
-  --color-oro: #e5c98b;               /* background/decorativo-stati */
-  --color-oro-bordo: #b88a43;         /* border/button */
-  --color-oro-attivo: rgba(242, 177, 52, 0.4); /* voce attiva del menu */
+  /* Backgrounds */
+  --color-background: #fff9f0;            /* background/primary */
+  --color-background-secondary: #f7f1e5; /* background/secondary */
+  --color-gold: #e5c98b;               /* background/decorative-states */
+  --color-gold-border: #b88a43;         /* border/button */
+  --color-gold-active: rgba(242, 177, 52, 0.4); /* active menu entry */
 
-  /* Testi e accenti */
-  --color-testo: #22252c;             /* text/on-primary */
-  --color-testo-secondario: #91633e;  /* text/on-secondary */
-  --color-neutro: #5f6b7a;            /* neutral-strong (rarità Comune) */
-  --color-teal: #5fd3c4;              /* icona crediti */
-  --color-notifica: #4a3f8c;          /* puntino notifica */
+  /* Texts and accents */
+  --color-ink: #22252c;             /* text/on-primary */
+  --color-ink-secondary: #91633e;  /* text/on-secondary */
+  --color-neutral: #5f6b7a;            /* neutral-strong (Common rarity) */
+  --color-teal: #5fd3c4;              /* credits icon */
+  --color-notification: #4a3f8c;          /* notification dot */
   --color-info: #4a3f8c;              /* feedback/info */
-  --color-info-sfondo: #e9e6f5;       /* feedback/info-bg */
+  --color-info-background: #e9e6f5;       /* feedback/info-bg */
 
-  /* Colori delle 4 Eco (fazioni) */
-  --color-dominio: #b93428;
-  --color-sapienza: #1765b5;
-  --color-inganno: #237a43;
-  --color-oblio: #000000;
+  /* Colours of the 4 Echoes (factions) */
+  --color-dominion: #b93428;
+  --color-wisdom: #1765b5;
+  --color-deception: #237a43;
+  --color-oblivion: #000000;
 
-  /* Esiti partita */
-  --color-successo: #5b6b1e;          /* feedback/success */
-  --color-successo-sfondo: #eef0dc;   /* feedback/success-bg */
-  --color-errore: #8b1e3f;            /* feedback/error */
-  --color-errore-sfondo: #f6e4e7;     /* feedback/error-bg */
+  /* Match outcomes */
+  --color-success: #5b6b1e;          /* feedback/success */
+  --color-success-background: #eef0dc;   /* feedback/success-bg */
+  --color-error: #8b1e3f;            /* feedback/error */
+  --color-error-background: #f6e4e7;     /* feedback/error-bg */
 
-  /* Dimensioni testo */
+  /* Text sizes */
   --text-h2: 28px;
-  --text-sottotitolo: 18px;
-  --text-corpo: 16px;
-  --text-didascalia: 14px;
+  --text-subtitle: 18px;
+  --text-body: 16px;
+  --text-caption: 14px;
 }
 
-/* Stile base della pagina */
+/* Base page style */
 body {
-  font-family: var(--font-testo);
-  color: var(--color-testo);
-  background-color: var(--color-sfondo);
+  font-family: var(--font-ink);
+  color: var(--color-ink);
+  background-color: var(--color-background);
 }
 
-/* Animazioni dell'apertura busta */
-@keyframes scossa {
+/* Pack opening animations */
+@keyframes shake {
   0%, 100% { translate: 0 0; }
   25% { translate: -6px 0; }
   75% { translate: 6px 0; }
 }
-@keyframes comparsa {
+@keyframes appear {
   from { opacity: 0; scale: 0.8; }
   to { opacity: 1; scale: 1; }
 }

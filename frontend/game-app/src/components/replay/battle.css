@@ -1,0 +1,161 @@
+/* =========================================================================
+   Animated battle · plain CSS (no Tailwind)
+   All the classes start with "battle-" so they do not clash with the others.
+   --battle-speed: 1 = normal, 2 = double speed (set by Replay.jsx)
+   ========================================================================= */
+
+/* Distance between the centre of the deck (or of the discards) and the centre of the card on the field:
+   half pile (38px) + gap (18px) + half field (66px) */
+.battle-field { --battle-distance: 122px; }
+
+/* ---------- 1 · Draw: flies from the deck and flips ---------- */
+.battle-draw {
+  perspective: 900px;
+  animation: battle-fly calc(0.5s / var(--battle-speed, 1)) cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.battle-draw .battle-faces {
+  display: block;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: battle-flip calc(0.5s / var(--battle-speed, 1)) ease both;
+  animation-delay: calc(0.45s / var(--battle-speed, 1));
+}
+.battle-face { display: block; backface-visibility: hidden; }
+.battle-face-back {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-gold-border);
+  background: var(--color-background-secondary);
+  transform: rotateY(180deg);
+}
+.battle-face-back img { width: 34%; }
+
+@keyframes battle-fly {
+  from { transform: translateX(calc(-1 * var(--battle-distance))) scale(0.56) rotate(-8deg); }
+  to { transform: none; }
+}
+@keyframes battle-flip {
+  from { transform: rotateY(180deg); }
+  to { transform: rotateY(0); }
+}
+
+/* The round number appears with a small jump */
+.battle-pop { animation: battle-pop calc(0.35s / var(--battle-speed, 1)) ease-out both; }
+@keyframes battle-pop {
+  from { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.08); opacity: 1; }
+}
+
+/* ---------- 2 · Attack: the cards dash towards each other ---------- */
+.battle-attack-down { animation: battle-attack-down calc(0.55s / var(--battle-speed, 1)) ease-in-out; }
+.battle-attack-up { animation: battle-attack-up calc(0.55s / var(--battle-speed, 1)) ease-in-out; }
+@keyframes battle-attack-down {
+  35% { translate: 0 -14px; }
+  60% { translate: 0 40px; scale: 1.06; }
+}
+@keyframes battle-attack-up {
+  35% { translate: 0 14px; }
+  60% { translate: 0 -40px; scale: 1.06; }
+}
+
+/* ---------- 3 · Impact: flash in the middle and shaking field ---------- */
+.battle-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220px;
+  height: 220px;
+  margin: -110px 0 0 -110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffbe8 0%, rgb(255 243 176 / 0.5) 35%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  animation: battle-flash calc(0.45s / var(--battle-speed, 1)) ease-out both;
+  animation-delay: calc(0.3s / var(--battle-speed, 1));
+}
+@keyframes battle-flash {
+  0% { opacity: 0; transform: scale(0.4); }
+  25% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
+.battle-shake { animation: battle-shake calc(0.32s / var(--battle-speed, 1)) ease-in-out; animation-delay: calc(0.3s / var(--battle-speed, 1)); }
+@keyframes battle-shake {
+  25% { translate: -6px 3px; }
+  50% { translate: 5px -4px; }
+  75% { translate: -3px 2px; }
+}
+
+/* ---------- 4 · Damage that pops out and fades away ---------- */
+.battle-damage {
+  animation: battle-damage calc(1.1s / var(--battle-speed, 1)) ease-out both;
+  animation-delay: calc(0.35s / var(--battle-speed, 1));
+}
+@keyframes battle-damage {
+  0% { opacity: 0; scale: 0.4; translate: 0 0; }
+  20% { opacity: 1; scale: 1.3; }
+  70% { opacity: 1; scale: 1; }
+  100% { opacity: 0; translate: 0 -40px; }
+}
+
+/* ---------- 5 · DEF dropping: red while counting ---------- */
+.battle-def-hit {
+  background: var(--color-error);
+  animation: battle-beat calc(0.17s / var(--battle-speed, 1)) ease-in-out infinite;
+}
+@keyframes battle-beat { 50% { scale: 1.15; } }
+
+/* ---------- 6 · Destroyed card: it goes dark, shakes and goes to the discards ---------- */
+.battle-destroyed {
+  pointer-events: none;
+  animation:
+    battle-fade-out calc(0.38s / var(--battle-speed, 1)) ease-in-out both,
+    battle-to-discards calc(0.55s / var(--battle-speed, 1)) ease-in both;
+  animation-delay: calc(0.6s / var(--battle-speed, 1)), calc(1s / var(--battle-speed, 1));
+}
+@keyframes battle-fade-out {
+  25% { translate: -5px 0; rotate: -2deg; }
+  50% { translate: 5px 0; rotate: 2deg; }
+  to { filter: grayscale(1) brightness(0.5); }
+}
+@keyframes battle-to-discards {
+  from { filter: grayscale(1) brightness(0.5); }
+  to {
+    filter: grayscale(1) brightness(0.4) blur(2px);
+    transform: translateX(var(--battle-distance)) scale(0.5) rotate(10deg);
+    opacity: 0;
+  }
+}
+
+/* ---------- 7 · HP lost: the heart pulses, under 3 HP the pill lights up ---------- */
+.battle-hp-hit { animation: battle-hp calc(0.45s / var(--battle-speed, 1)) ease-out; animation-delay: calc(1.2s / var(--battle-speed, 1)); }
+@keyframes battle-hp { 50% { scale: 1.35; filter: brightness(1.5); } }
+.battle-hp-low { box-shadow: 0 0 0 3px rgb(255 91 122 / 0.6); }
+
+/* Outcome message appearing */
+.battle-outcome { animation: battle-pop calc(0.35s / var(--battle-speed, 1)) ease-out both; }
+
+/* ---------- 8 · Pause: all the animations stop ---------- */
+.battle-paused,
+.battle-paused * { animation-play-state: paused !important; }
+
+/* ♿ Whoever asked for "reduce motion": no flying, dashing and shaking.
+   The information stays: numbers, messages and colours. */
+@media (prefers-reduced-motion: reduce) {
+  .battle-draw,
+  .battle-draw .battle-faces,
+  .battle-attack-down,
+  .battle-attack-up,
+  .battle-shake,
+  .battle-def-hit,
+  .battle-hp-hit,
+  .battle-pop,
+  .battle-outcome { animation: none; }
+  .battle-flash { display: none; }
+  .battle-damage { animation: battle-fade 1s ease-out both; }
+  .battle-destroyed { animation: battle-fade-away 0.6s ease-out both; animation-delay: 0.6s; }
+}
+@keyframes battle-fade { 0%, 100% { opacity: 0; } 20%, 80% { opacity: 1; } }
+@keyframes battle-fade-away { to { opacity: 0; } }

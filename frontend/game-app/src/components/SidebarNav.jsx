@@ -1,32 +1,38 @@
 import { Link } from 'react-router'
-import { vociMenu } from '../data/menu'
+import { menuItems } from '../data/menu'
 
-// Menu laterale: si vede SOLO su desktop.
-// "hidden" = nascosto · "lg:flex" = da 1024px in su si vede
-export default function SidebarNav({ paginaAttiva }) {
+/**
+ * Side menu: visible ONLY on desktop.
+ * "hidden" = hidden · "lg:flex" = visible from 1024px up
+ *
+ * @param {object} props - the component props
+ * @param {string} props.activePage - id of the current menu entry
+ * @returns {JSX.Element}
+ */
+export default function SidebarNav({ activePage }) {
   return (
     <nav
       aria-label="Menu principale"
-      className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col gap-2 border-r border-oro bg-sfondo px-4 py-7 lg:flex"
+      className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col gap-2 border-r border-gold bg-background px-4 py-7 lg:flex"
     >
-      <p className="mb-6 font-titolo text-h2">Echoes&apos; War</p>
+      <p className="mb-6 font-title text-h2">Echoes&apos; War</p>
 
       <ul className="flex flex-col gap-1.5">
-        {vociMenu.map((voce) => {
-          const attiva = voce.id === paginaAttiva
+        {menuItems.map((entry) => {
+          const active = entry.id === activePage
           return (
-            <li key={voce.id}>
+            <li key={entry.id}>
               <Link
-                to={voce.percorso}
-                aria-current={attiva ? 'page' : undefined}
+                to={entry.path}
+                aria-current={active ? 'page' : undefined}
                 className={`flex h-12 items-center gap-3 rounded-xl px-3.5 ${
-                  attiva ? 'bg-oro-attivo font-semibold' : 'font-medium hover:bg-oro/30'
+                  active ? 'bg-gold-active font-semibold' : 'font-medium hover:bg-gold/30'
                 }`}
               >
-                {/* Barretta verticale: solo sulla voce attiva */}
-                {attiva && <span className="h-6 w-1 rounded-sm bg-testo" />}
-                <img src={voce.icona} alt="" className="size-6 object-cover" />
-                {voce.etichetta}
+                {/* Small vertical bar: only on the active entry */}
+                {active && <span className="h-6 w-1 rounded-sm bg-ink" />}
+                <img src={entry.icon} alt="" className="size-6 object-cover" />
+                {entry.label}
               </Link>
             </li>
           )
