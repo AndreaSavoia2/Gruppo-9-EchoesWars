@@ -47,10 +47,6 @@ public class User extends AuditableEntity {
     private String password;
 
     @Builder.Default
-    @Column(name = "level", nullable = false)
-    private int level = 0;
-
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "account_status", nullable = false, length = 32)
     private AccountStatus accountStatus = AccountStatus.ACTIVE;
