@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.URL;
  * <p>The faction, school and tier are referenced by identifier: the service
  * resolves them and rejects the request if one of them does not exist.</p>
  *
- * @param code           unique catalog code of the card
  * @param nameIt         card name in Italian
  * @param nameEn         card name in English
  * @param descriptionIt  card description in Italian (optional)
@@ -30,12 +29,6 @@ import org.hibernate.validator.constraints.URL;
         description = "Payload for creating a card, referencing faction, school and tier by identifier"
 )
 public record CardRequest(
-
-        @Schema(description = "Unique catalog code of the card", example = "DOMINION_001",
-        requiredMode = Schema.RequiredMode.REQUIRED)
-        @NotBlank
-        @Size(max = 100)
-        String code,
 
         @Schema(description = "Card name in Italian", example = "Guardiano",
         requiredMode = Schema.RequiredMode.REQUIRED)

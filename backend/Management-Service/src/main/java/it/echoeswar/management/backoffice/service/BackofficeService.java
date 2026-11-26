@@ -63,24 +63,20 @@ public class BackofficeService {
     /**
      * Creates a new card in the catalog.
      *
-     * <p>The method first verifies that no card with the same code exists
-     * (case-insensitive), then resolves the faction, school and tier
-     * referenced by the request, and finally builds and persists the card.
-     * String fields are normalized through {@link FormatterString#normalizeLowerCase(String)} (String)
-     * before being saved.</p>
+     * <p>The method resolves the faction, school and tier referenced by the request,
+     * generates the card code on the server (first three letters of the faction code,
+     * followed by an incremental number, e.g. {@code DOM_01}), and finally builds
+     * and persists the card. String fields are normalized through
+     * {@link FormatterString#normalizeLowerCase(String)} before being saved.</p>
      *
      * @param request the payload containing the card data and the identifiers
      *                of the related faction, school and tier
      * @return the {@link CardResponse} representing the newly created card
-     * @throws ResourceConflictException if a card with the same code already exists
      * @throws ResourceNotFoundException if the faction, school or tier
      *                                   referenced by the request does not exist
      */
     @Transactional
     public CardResponse createCard(CardRequest request){
-        if(cardRepository.existsByCodeIgnoreCase(request.code())){
-            throw new ResourceConflictException("Card code already exists: " + request.code());
-        }
 
         Faction faction = factionRepository.findById(request.echoesId())
                 .orElseThrow(() -> new ResourceNotFoundException("Faction", "id", request.echoesId()));
@@ -90,7 +86,7 @@ public class BackofficeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tier", "id", request.tierId()));
 
         Card card = Card.builder()
-                .code(FormatterString.normalizeLowerCase(request.code()))
+                .code(generateCardCode(faction))
                 .nameIt(FormatterString.normalizeLowerCase(request.nameIt()))
                 .nameEn(FormatterString.normalizeLowerCase(request.nameEn()))
                 .descriptionIt(FormatterString.normalizeLowerCase(request.descriptionIt()))
@@ -124,14 +120,8 @@ public class BackofficeService {
     @Transactional
     public PackResponse createPack(PackRequest request){
 
-//        if(gamePackageRepository.existsByCodeIgnoreCase(request.code())){
-//            throw new ResourceConflictException("Pack code already exists: " + request.code());
-//        }
-
-
-
         GamePackage gamePackage = GamePackage.builder()
-                .code(FormatterString.normalizeLowerCase(generateCode()))
+                .code(generatePackCode())
                 .nameIt(FormatterString.normalizeLowerCase(request.nameIt()))
                 .nameEn(FormatterString.normalizeLowerCase(request.nameEn()))
                 .descriptionIt(FormatterString.normalizeLowerCase(request.descriptionIt()))
@@ -167,7 +157,18 @@ public class BackofficeService {
 
     }
 
-    //Modificare il pacchetto con delle nuove regole
+    /**
+     * Updates the pull rules of a game package by publishing a new package version.
+     * <p>
+     * The latest version of the package is looked up and a new {@link PackageVersion} is created
+     * with an incremented version number, the requested price in credits and the current publication
+     * timestamp. A new {@link PackagePullRule} linked to that version is then built from the request,
+     * validated and persisted. Previous versions are left untouched.
+     *
+     * @param request the request containing the package id, the new price and the new pull rule parameters
+     * @return {@code "complete"} when the update has been performed successfully
+     * @throws ResourceNotFoundException if no version exists for the given package id
+     */
     @Transactional
     public String updatePullRulePack(PackUpdateVersionRequest request){
 
@@ -249,9 +250,25 @@ public class BackofficeService {
      *
      * @return the next available game package code
      */
-    private String generateCode() {
+    private String generatePackCode() {
         int next = gamePackageRepository.findMaxNumber() + 1;
         return String.format("%s_%02d", CODE_PREFIX, next);   // PACK_01, ..., PACK_99, PACK_100
+    }
+
+    /**
+     * Generates the next sequential card code for the given faction.
+     * <p>
+     * The prefix is made of the first three characters of the faction code, in uppercase.
+     * The number is the highest existing number for that prefix plus one, zero-padded to at least
+     * two digits (e.g. {@code DOM_01}, {@code DOM_02}, ...).
+     *
+     * @param faction the faction the card belongs to
+     * @return the next available card code for the faction
+     */
+    private String generateCardCode(Faction faction) {
+        String prefix = faction.getCode().name().substring(0, 3).toUpperCase();
+        int next = cardRepository.findMaxNumberByPrefix(prefix) + 1;
+        return String.format("%s_%02d", prefix, next);
     }
 
 }

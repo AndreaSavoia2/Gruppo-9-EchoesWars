@@ -2,6 +2,7 @@ package it.echoeswar.management.catalog.service;
 
 
 import it.echoeswar.management.catalog.entity.Card;
+import it.echoeswar.management.catalog.entity.Faction;
 import it.echoeswar.management.catalog.payload.response.CardResponse;
 import it.echoeswar.management.catalog.repository.CardRepository;
 import it.echoeswar.management.common.utils.BuildPageableResponse;
@@ -48,6 +49,5 @@ public class CardService {
         return BuildPageableResponse.buildPage(
                 cardRepository.findAll(pageable).map(CardResponse::from));
     }
-
 
 }

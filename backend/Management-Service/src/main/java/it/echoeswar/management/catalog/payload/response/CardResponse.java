@@ -3,6 +3,7 @@ package it.echoeswar.management.catalog.payload.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.echoeswar.management.catalog.entity.Card;
+import it.echoeswar.management.catalog.entity.Effect;
 import it.echoeswar.management.collection.entity.UserCard;
 import it.echoeswar.management.common.utils.FormatterString;
 import lombok.Builder;
@@ -32,6 +33,10 @@ import lombok.Builder;
  * @param schoolNameIt   school name in Italian
  * @param schoolNameEn   school name in English
  * @param tierLevel      level of the tier associated with the card
+ * @param effectNameIt        effect name in Italian, when the card has an effect
+ * @param effectNameEn        effect name in English, when the card has an effect
+ * @param effectDescriptionIt effect description in Italian, when the card has an effect
+ * @param effectDescriptionEn effect description in English, when the card has an effect
  */
 @Builder
 @Schema(
@@ -50,7 +55,7 @@ public record CardResponse(
 
         @Schema(
                 description = "Unique catalog code of the card.",
-                example = "DOMINION_001",
+                example = "DOM_01",
                 accessMode = Schema.AccessMode.READ_ONLY,
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
@@ -203,6 +208,38 @@ public record CardResponse(
         )
         int tierLevel,
 
+        @Schema(
+                description = "Effect name in Italian, when the card has an effect.",
+                example = "Scudo protettivo",
+                nullable = true,
+                accessMode = Schema.AccessMode.READ_ONLY
+        )
+        String effectNameIt,
+
+        @Schema(
+                description = "Effect name in English, when the card has an effect.",
+                example = "Protective shield",
+                nullable = true,
+                accessMode = Schema.AccessMode.READ_ONLY
+        )
+        String effectNameEn,
+
+        @Schema(
+                description = "Effect description in Italian, when the card has an effect.",
+                example = "Riduce di 2 il danno subito dagli alleati.",
+                nullable = true,
+                accessMode = Schema.AccessMode.READ_ONLY
+        )
+        String effectDescriptionIt,
+
+        @Schema(
+                description = "Effect description in English, when the card has an effect.",
+                example = "Reduces damage taken by allies by 2.",
+                nullable = true,
+                accessMode = Schema.AccessMode.READ_ONLY
+        )
+        String effectDescriptionEn,
+
         @JsonInclude(JsonInclude.Include.NON_NULL)
         @Schema(
                 description = "Number of copies of this card in the context represented by the response, "
@@ -248,6 +285,7 @@ public record CardResponse(
      * @return a flattened response populated from the given card
      */
     public static CardResponse from(Card card, Integer quantity) {
+        Effect effect = card.getEffect();
         return CardResponse.builder()
                 .id(card.getId())
                 .code(FormatterString.capitalizeFirstLetter(card.getCode()))
@@ -267,6 +305,10 @@ public record CardResponse(
                 .schoolNameIt(FormatterString.capitalizeFirstLetter(card.getSchool().getNameIt()))
                 .schoolNameEn(FormatterString.capitalizeFirstLetter(card.getSchool().getNameEn()))
                 .tierLevel(card.getTier().getLevel())
+                .effectNameIt(effect == null ? null : FormatterString.capitalizeFirstLetter(effect.getNameIt()))
+                .effectNameEn(effect == null ? null : FormatterString.capitalizeFirstLetter(effect.getNameEn()))
+                .effectDescriptionIt(effect == null ? null : FormatterString.capitalizeFirstLetter(effect.getDescriptionIt()))
+                .effectDescriptionEn(effect == null ? null : FormatterString.capitalizeFirstLetter(effect.getDescriptionEn()))
                 .quantity(quantity)
                 .build();
     }
