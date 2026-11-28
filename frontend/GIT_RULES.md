@@ -1,6 +1,6 @@
 # Regole GitHub – Frontend EchoesWars
 
-Nov 24, 2026 · @Alessia
+Nov 24, 2026 · @Alessia — aggiornato Nov 28, 2026
 
 ## 1. Dove lavora ognuno
 
@@ -8,12 +8,13 @@ Tutto il codice frontend sta nella cartella `frontend/`, accanto alla cartella `
 
 | Cartella | Chi | Cosa contiene | Tecnologie |
 | --- | --- | --- | --- |
-| `frontend/game-app/` | Flavio | Piattaforma di gioco (parte loggata) | React + Tailwind |
-| `frontend/website/` | Alessia | Pagine statiche del sito | HTML + JS + Tailwind |
-| `frontend/backoffice/` | Leonardo | Gestione catalogo carte e pacchetti | HTML + JS + Tailwind |
-| `frontend/shared/` | Tutti (con accordo) | Colori, font, logo, immagini delle carte | CSS |
+| `frontend/game-app/` | Flavio | Piattaforma di gioco (parte loggata) | React + Vite + CSS/SCSS |
+| `frontend/website/` | Alessia | Pagine statiche del sito | HTML + CSS/SCSS + JS (Vite) |
+| `frontend/backoffice/` | Leonardo | Gestione catalogo carte e pacchetti | HTML + CSS/SCSS + JS |
+| `frontend/shared/` | Tutti (con accordo) | Variabili dei colori, tipografia, font, reset, logo, icone, cornici delle carte | CSS/SCSS |
 
 - Se devi modificare `shared/`, avvisa prima gli altri: quei file li usano tutti.
+- In `shared/` va solo quello che usano **almeno due parti** (es. i bottoni usati sia dal sito sia dall'app). Prima di creare uno stile nuovo, controlla se esiste già in `shared/`.
 - Non toccare mai la cartella `backend/`.
 
 ## 2. Le parole da conoscere
@@ -26,7 +27,6 @@ Tutto il codice frontend sta nella cartella `frontend/`, accanto alla cartella `
 - **Pull Request (PR):** la richiesta di unire il tuo branch a un altro. Un compagno controlla le modifiche prima di accettarle.
 - **Merge:** l'unione vera e propria, che avviene quando la PR viene accettata.
 - **Conflitto:** succede quando due persone modificano le stesse righe dello stesso file. Va risolto a mano scegliendo quale versione tenere.
-- **Issue:** un compito da fare, scritto su GitHub Projects (es. "Pagina FAQ"). Ha un numero, es. #12.
 
 ## 3. I branch
 
@@ -39,8 +39,9 @@ Il frontend ha un branch comune, **`frontend`**, che raccoglie il lavoro di tutt
 | `fe-game/nome-feature` | Una funzione della piattaforma di gioco | Flavio |
 | `fe-site/nome-feature` | Una pagina o funzione del sito statico | Alessia |
 | `fe-backoffice/nome-feature` | Una schermata del backoffice | Leonardo |
+| `fe-shared/nome-modifica` | Una modifica ai file condivisi in `shared/` | Chiunque, dopo aver avvisato gli altri |
 
-- **Un branch per ogni funzione**, non uno per persona. Esempi: `fe-game/collezione`, `fe-site/faq`, `fe-backoffice/lista-carte`.
+- **Un branch per ogni funzione**, non uno per persona. Esempi: `fe-game/collezione`, `fe-site/faq`, `fe-backoffice/lista-carte`, `fe-shared/variabili-colori`.
 - **Nomi in minuscolo**, parole separate da trattini, senza spazi né accenti.
 - **Usa sempre il prefisso `fe-`.** Nomi come `feature/backoffice` sono già usati dal backend.
 
@@ -48,14 +49,14 @@ Il frontend ha un branch comune, **`frontend`**, che raccoglie il lavoro di tutt
 
 Ogni nuova funzione segue sempre questi passi. Esempio: la pagina FAQ.
 
-1. **Prendi l'issue.** Su GitHub Projects apri la card "Pagina FAQ" (es. #12), spostala in *In progress*.
-2. **Aggiorna `frontend`.** Spostati sul branch `frontend` e fai *pull*, così parti dall'ultima versione.
-3. **Crea il tuo branch** partendo da `frontend`: `fe-site/faq`.
-4. **Lavora e fai commit spesso**, uno per ogni piccola modifica completata.
-5. **Fai push** del branch su GitHub, anche più volte al giorno. Così il lavoro è salvato anche online.
-6. **Apri la Pull Request** da `fe-site/faq` verso `frontend` (vedi sezione 6).
-7. **Aspetta la review.** Se ti chiedono correzioni, falle sullo stesso branch e fai di nuovo push: la PR si aggiorna da sola.
-8. **Merge e pulizia.** Dopo l'approvazione si fa il merge, si cancella il branch e la card passa in *Done*.
+1. **Aggiorna `frontend`.** Spostati sul branch `frontend` e fai *pull*, così parti dall'ultima versione.
+2. **Crea il tuo branch** partendo da `frontend`: `fe-site/faq`.
+3. **Lavora e fai commit spesso**, uno per ogni piccola modifica completata.
+4. **Fai push** del branch su GitHub, anche più volte al giorno. Così il lavoro è salvato anche online.
+5. **Apri la Pull Request** da `fe-site/faq` verso `frontend` (vedi sezione 6).
+6. **Aspetta la review.** Se ti chiedono correzioni, falle sullo stesso branch e fai di nuovo push: la PR si aggiorna da sola.
+7. **Merge e pulizia.** Dopo l'approvazione si fa il merge e si cancella il branch.
+8. **Avvisa gli altri** se hai modificato `shared/`: ognuno deve fare *pull* di `frontend` e portare le modifiche nel proprio branch.
 
 Quando `frontend` è stabile e testato, verrà aperta una PR da `frontend` verso `main`.
 
@@ -87,8 +88,10 @@ Una PR serve a far controllare il tuo lavoro prima che entri in `frontend`. Ness
 2. Controlla le due tendine in alto: **base** = `frontend`, **compare** = il tuo branch. Attenzione a non scegliere `main` o `backend`.
 3. **Titolo:** come un commit, es. `feat: pagina FAQ`.
 4. **Descrizione:** cosa hai fatto, come l'hai provato, uno screenshot se è una parte grafica.
-5. Scrivi **`Closes #12`** (il numero dell'issue): quando la PR viene unita, l'issue si chiude da sola.
-6. A destra, in **Reviewers**, scegli Alessia.
+5. A destra, in **Reviewers**, scegli:
+   - **Alessia** per le PR di `fe-game/` e `fe-backoffice/`;
+   - **Flavio o Leonardo** per le PR di Alessia (nessuno controlla la propria PR);
+   - **tutti gli altri** per le PR di `fe-shared/`, perché quei file li usano tutti.
 
 **Regole della review**
 
@@ -115,4 +118,4 @@ Una PR serve a far controllare il tuo lavoro prima che entri in `frontend`. Ness
 - [ ] Non ci sono errori nella console del browser.
 - [ ] Le funzioni JS hanno il commento JSDoc.
 - [ ] I commit sono in italiano e con il prefisso giusto.
-- [ ] La PR va verso `frontend` e contiene `Closes #numero-issue`.
+- [ ] La PR va verso `frontend` e ha una descrizione di cosa ho fatto.
